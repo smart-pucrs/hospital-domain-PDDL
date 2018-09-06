@@ -1,9 +1,11 @@
-(define (problem problema)
-(:domain hospital)
-(:objects Paciente - patient)
-  (:init
-    (patient Paciente)
-    (uti Paciente)
-  )  
-  (:goal (do-not-allocate Paciente))
+(define (problem hospital-problem)
+(:domain hospitaldomain)
+(:objects  
+	pessoa - patient
+	cama - bed
+)
+(:init 
+	(bedfree cama)
+)
+(:goal (and (alocated pessoa)))
 )
