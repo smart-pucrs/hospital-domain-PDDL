@@ -9,8 +9,10 @@ type
 
 	 TIME_type: real(7,2);
 
-	patient : Enum {pessoa};
-	bed : Enum {cama};
+	patient : Enum {pacientemedicinainternaminimo,pacientemedicinainternaintensivo};
+	bed : Enum {camamedicinainternaminimo,camamedicinainternaintensivo};
+	care : Enum {minimo,intensivo};
+	specialty : Enum {medicinainterna};
 
 const 
 	 T:0.1;
@@ -22,63 +24,123 @@ var
 	 g_n: integer;
 	 f_n: integer;
 	 TIME[pddlname:"upmurphi_global_clock";]:TIME_type;
-	distance[pddlname:"distance";] : Array [bed] of Array [bed] of  real_type;
-	maxspeed[pddlname:"maxspeed";] : Array [patient] of  real_type;
-	speed[pddlname:"speed";] : Array [patient] of  real_type;
-	traveltime[pddlname:"traveltime";] : Array [patient] of  real_type;
+	age[pddlname:"age";] : Array [patient] of  real_type;
 
 
-	at[pddlname: "at";] : Array [patient] of Array [bed] of  boolean;
+	bedcare[pddlname: "bedcare";] : Array [bed] of Array [care] of  boolean;
+	bedmedicinainterna[pddlname: "bedmedicinainterna";] : Array [bed] of  boolean;
+	bedspecialty[pddlname: "bedspecialty";] : Array [bed] of Array [specialty] of  boolean;
 	bedfree[pddlname: "bedfree";] : Array [bed] of  boolean;
 	busybed[pddlname: "busybed";] : Array [bed] of  boolean;
-	alocated[pddlname: "alocated";] : Array [patient] of  boolean;
+	in_[pddlname: "in";] : Array [patient] of Array [bed] of  boolean;
+	allocated[pddlname: "allocated";] : Array [patient] of  boolean;
+	patientcare[pddlname: "patientcare";] : Array [patient] of Array [care] of  boolean;
+	patientspecialty[pddlname: "patientspecialty";] : Array [patient] of Array [specialty] of  boolean;
+	patientmedicinainterna[pddlname: "patientmedicinainterna";] : Array [patient] of  boolean;
 
 
 -- External function declaration 
 
 externfun ext_assignment(value : real_type) : real_type;
-procedure set_at( patient : patient ; bed : bed ;  value : boolean);
+procedure set_bedcare( varbed : bed ; varcare : care ;  value : boolean);
 BEGIN
-	at[patient][bed] := value;
+	bedcare[varbed][varcare] := value;
 END;
 
-function get_at( patient : patient ; bed : bed): boolean;
+function get_bedcare( varbed : bed ; varcare : care): boolean;
 BEGIN
-	return 	at[patient][bed];
+	return 	bedcare[varbed][varcare];
 END;
 
-procedure set_bedfree( bed : bed ;  value : boolean);
+procedure set_bedmedicinainterna( varbed : bed ;  value : boolean);
 BEGIN
-	bedfree[bed] := value;
+	bedmedicinainterna[varbed] := value;
 END;
 
-function get_bedfree( bed : bed): boolean;
+function get_bedmedicinainterna( varbed : bed): boolean;
 BEGIN
-	return 	bedfree[bed];
+	return 	bedmedicinainterna[varbed];
 END;
 
-procedure set_busybed( bed : bed ;  value : boolean);
+procedure set_bedspecialty( varbed : bed ; varspecialty : specialty ;  value : boolean);
 BEGIN
-	busybed[bed] := value;
+	bedspecialty[varbed][varspecialty] := value;
 END;
 
-function get_busybed( bed : bed): boolean;
+function get_bedspecialty( varbed : bed ; varspecialty : specialty): boolean;
 BEGIN
-	return 	busybed[bed];
+	return 	bedspecialty[varbed][varspecialty];
 END;
 
-procedure set_alocated( patient : patient ;  value : boolean);
+procedure set_bedfree( varbed : bed ;  value : boolean);
 BEGIN
-	alocated[patient] := value;
+	bedfree[varbed] := value;
 END;
 
-function get_alocated( patient : patient): boolean;
+function get_bedfree( varbed : bed): boolean;
 BEGIN
-	return 	alocated[patient];
+	return 	bedfree[varbed];
 END;
 
+procedure set_busybed( varbed : bed ;  value : boolean);
+BEGIN
+	busybed[varbed] := value;
+END;
 
+function get_busybed( varbed : bed): boolean;
+BEGIN
+	return 	busybed[varbed];
+END;
 
+procedure set_in_( p : patient ; varbed : bed ;  value : boolean);
+BEGIN
+	in_[p][varbed] := value;
+END;
+
+function get_in_( p : patient ; varbed : bed): boolean;
+BEGIN
+	return 	in_[p][varbed];
+END;
+
+procedure set_allocated( p : patient ;  value : boolean);
+BEGIN
+	allocated[p] := value;
+END;
+
+function get_allocated( p : patient): boolean;
+BEGIN
+	return 	allocated[p];
+END;
+
+procedure set_patientcare( p : patient ; varcare : care ;  value : boolean);
+BEGIN
+	patientcare[p][varcare] := value;
+END;
+
+function get_patientcare( p : patient ; varcare : care): boolean;
+BEGIN
+	return 	patientcare[p][varcare];
+END;
+
+procedure set_patientspecialty( p : patient ; varspecialty : specialty ;  value : boolean);
+BEGIN
+	patientspecialty[p][varspecialty] := value;
+END;
+
+function get_patientspecialty( p : patient ; varspecialty : specialty): boolean;
+BEGIN
+	return 	patientspecialty[p][varspecialty];
+END;
+
+procedure set_patientmedicinainterna( p : patient ;  value : boolean);
+BEGIN
+	patientmedicinainterna[p] := value;
+END;
+
+function get_patientmedicinainterna( p : patient): boolean;
+BEGIN
+	return 	patientmedicinainterna[p];
+END;
 
 
 
@@ -127,16 +189,18 @@ while (!end_while) do
 endif;END; -- close while loop 
 END;
 
-ruleset patient:patient do 
- ruleset bed:bed do 
- action rule " allocate " 
-(!(alocated[patient])) & (bedfree[bed]) ==> 
-pddlname: " allocate"; 
+ruleset p:patient do 
+ ruleset varbed:bed do 
+ ruleset varcare:care do 
+ action rule " allocatemedicinainterna " 
+(!(allocated[p])) & (bedfree[varbed]) & (bedmedicinainterna[varbed]) & (bedcare[varbed][varcare]) & (patientcare[p][varcare]) & (patientmedicinainterna[p]) ==> 
+pddlname: " allocatemedicinainterna"; 
 BEGIN
-at[patient][bed]:= true; 
-busybed[bed]:= true; 
-alocated[patient]:= true; 
+in_[p][varbed]:= true; 
+allocated[p]:= true; 
+busybed[varbed]:= true; 
 
+END; 
 END; 
 END; 
 END;
@@ -155,33 +219,58 @@ END;
 startstate "start" 
 BEGIN 
 TIME := 0.0;
-for patient : patient do 
-  for bed : bed do 
-    set_at(patient,bed, false);
+for varbed : bed do 
+  for varcare : care do 
+    set_bedcare(varbed,varcare, false);
 END; END;  -- close for
-   for bed : bed do 
-     set_bedfree(bed, false);
+   for varbed : bed do 
+     set_bedmedicinainterna(varbed, false);
 END;  -- close for
-   for bed : bed do 
-     set_busybed(bed, false);
-END;  -- close for
-   for patient : patient do 
-     set_alocated(patient, false);
-END;  -- close for
-   for patient : patient do 
-     maxspeed[patient] := 0.0 ;
-END;  -- close for
-   for patient : patient do 
-     speed[patient] := 0.0 ;
-END;  -- close for
-   for patient : patient do 
-     traveltime[patient] := 0.0 ;
-END;  -- close for
-   for p : bed do 
-     for bed : bed do 
-       distance[p][bed] := 0.0 ;
+   for varbed : bed do 
+     for varspecialty : specialty do 
+       set_bedspecialty(varbed,varspecialty, false);
 END; END;  -- close for
-bedfree[cama]:= true; 
+   for varbed : bed do 
+     set_bedfree(varbed, false);
+END;  -- close for
+   for varbed : bed do 
+     set_busybed(varbed, false);
+END;  -- close for
+   for p : patient do 
+     for varbed : bed do 
+       set_in_(p,varbed, false);
+END; END;  -- close for
+   for p : patient do 
+     set_allocated(p, false);
+END;  -- close for
+   for p : patient do 
+     for varcare : care do 
+       set_patientcare(p,varcare, false);
+END; END;  -- close for
+   for p : patient do 
+     for varspecialty : specialty do 
+       set_patientspecialty(p,varspecialty, false);
+END; END;  -- close for
+   for p : patient do 
+     set_patientmedicinainterna(p, false);
+END;  -- close for
+   for p : patient do 
+     age[p] := 0.0 ;
+END;  -- close for
+bedfree[camamedicinainternaminimo]:= true; 
+bedfree[camamedicinainternaintensivo]:= true; 
+patientspecialty[pacientemedicinainternaminimo][medicinainterna]:= true; 
+patientspecialty[pacientemedicinainternaintensivo][medicinainterna]:= true; 
+patientmedicinainterna[pacientemedicinainternaminimo]:= true; 
+patientmedicinainterna[pacientemedicinainternaintensivo]:= true; 
+patientcare[pacientemedicinainternaminimo][minimo]:= true; 
+patientcare[pacientemedicinainternaintensivo][intensivo]:= true; 
+bedcare[camamedicinainternaminimo][minimo]:= true; 
+bedcare[camamedicinainternaintensivo][intensivo]:= true; 
+bedspecialty[camamedicinainternaminimo][medicinainterna]:= true; 
+bedspecialty[camamedicinainternaintensivo][medicinainterna]:= true; 
+bedmedicinainterna[camamedicinainternaminimo]:= true; 
+bedmedicinainterna[camamedicinainternaintensivo]:= true; 
 all_event_true := true;
 g_n := 0;
 h_n := 0;
@@ -189,7 +278,7 @@ f_n := 0;
 END; -- close startstate
 
 goal "enjoy" 
- (alocated[pessoa])& !DAs_ongoing_in_goal_state(); 
+ (allocated[pacientemedicinainternaminimo]) & (allocated[pacientemedicinainternaintensivo])& !DAs_ongoing_in_goal_state(); 
 
 invariant "todo bien" 
  all_event_true & !DAs_violate_duration();

@@ -1,32 +1,32 @@
 (define (domain hospitaldomain)
-(:requirements :fluents :continuous-effects :negative-preconditions :duration-inequalities :time :typing)
-(:predicates (at ?patient - patient ?bed - bed) (bedfree ?bed - bed) (busybed ?bed - bed) (alocated ?patient - patient))
-(:types patient bed)
-(:functions (maxspeed ?patient - patient) (speed ?patient - patient) (traveltime ?patient - patient) (distance ?p ?bed - bed))
+  (:requirements :fluents :negative-preconditions :typing )
+  (:types bed patient specialty care )
+  
+  (:predicates     
+    (bedcare ?varbed - bed ?varcare - care)
+    (bedmedicinainterna ?varbed - bed)
+    (bedspecialty ?varbed - bed ?varspecialty - specialty)  
+    (bedfree ?varbed - bed)
+    (busybed ?varbed - bed)
+    (in ?p - patient ?varbed - bed)
+    (allocated ?p - patient)
+    (patientcare ?p - patient ?varcare - care)
+    (patientspecialty ?p - patient ?varspecialty - specialty)
+    (patientmedicinainterna ?p - patient)
+  )
 
+  (:functions (age ?p - patient))
 
-;; Set the accelerator value over time. Uses time as a 
-;; way of avoiding modelling acceleration as a numeric
-;; parameter.
-
-;(:durative-action allocating
-;:parameters (?patient - patient)
-;:duration (and (not (alocated ?patient)))
-;:condition (and )
-;:effect (and (at end (increase (custallocation ?patient) ?duration)))
-;)
-
-;; Then drive with the accelerator setting.
-
-(:action allocate
-:parameters (?patient - patient ?bed - bed)
-:precondition (and (not (alocated ?patient)) (bedfree ?bed))
-:effect (and (at ?patient ?bed) (busybed ?bed) (alocated ?patient))
-)
-
-
-
-
-
-
+  (:action allocatemedicinainterna
+    :parameters (?p - patient ?varbed - bed ?varcare - care )
+    :precondition (and (not (allocated ?p)) 
+                       (bedfree ?varbed) 
+                       (bedmedicinainterna ?varbed) 
+                       (bedcare ?varbed ?varcare)
+                       (patientcare ?p ?varcare)
+                       (patientmedicinainterna ?p)
+                       )
+    :effect (and (in ?p ?varbed) (allocated ?p) 
+                 (busybed ?varbed))
+  )
 )

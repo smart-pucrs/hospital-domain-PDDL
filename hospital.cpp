@@ -14,7 +14,7 @@
 #define PROBLEM_FILENAME "problem.pddl"
 #define DISCRETIZATION 0.100000
 #define VAL_PATHNAME "/home/debo/planejador/DiNo/src/DiNo/../VAL-master/validate"
-#define BITS_IN_WORLD 243
+#define BITS_IN_WORLD 207
 #define HASHC
 #define HAS_CLOCK
 const char * const modelmessages[] = { " Time Discretisation = 0.1"," Digits for representing the integer part of a real =  5"," Digits for representing the fractional part of a real =  4" };
@@ -120,9 +120,9 @@ class mu_1_patient: public mu__byte
     else return ( s << "Undefined" );
   };
 
-  mu_1_patient (const char *name, int os): mu__byte(1, 1, 1, name, os) {};
-  mu_1_patient (void): mu__byte(1, 1, 1) {};
-  mu_1_patient (int val): mu__byte(1, 1, 1, "Parameter or function result.", 0)
+  mu_1_patient (const char *name, int os): mu__byte(1, 2, 2, name, os) {};
+  mu_1_patient (void): mu__byte(1, 2, 2) {};
+  mu_1_patient (int val): mu__byte(1, 2, 2, "Parameter or function result.", 0)
   {
      operator=(val);
   };
@@ -145,7 +145,7 @@ class mu_1_patient: public mu__byte
   };
 };
 
-const char *mu_1_patient::values[] = {"pessoa",NULL };
+const char *mu_1_patient::values[] = {"pacientemedicinainternaminimo","pacientemedicinainternaintensivo",NULL };
 
 /*** end of enum declaration ***/
 mu_1_patient mu_1_patient_undefined_var;
@@ -159,17 +159,17 @@ class mu_1_bed: public mu__byte
   friend ostream& operator<< (ostream& s, mu_1_bed& val)
   {
     if (val.defined())
-      return ( s << mu_1_bed::values[ int(val) - 2] );
+      return ( s << mu_1_bed::values[ int(val) - 3] );
     else return ( s << "Undefined" );
   };
 
-  mu_1_bed (const char *name, int os): mu__byte(2, 2, 1, name, os) {};
-  mu_1_bed (void): mu__byte(2, 2, 1) {};
-  mu_1_bed (int val): mu__byte(2, 2, 1, "Parameter or function result.", 0)
+  mu_1_bed (const char *name, int os): mu__byte(3, 4, 2, name, os) {};
+  mu_1_bed (void): mu__byte(3, 4, 2) {};
+  mu_1_bed (int val): mu__byte(3, 4, 2, "Parameter or function result.", 0)
   {
      operator=(val);
   };
-  const char * Name() { return values[ value() -2]; };
+  const char * Name() { return values[ value() -3]; };
   virtual void Permute(PermSet& Perm, int i);
   virtual void SimpleCanonicalize(PermSet& Perm);
   virtual void Canonicalize(PermSet& Perm);
@@ -182,21 +182,107 @@ class mu_1_bed: public mu__byte
   virtual void print(FILE *target, const char *separator)
   {
     if (defined())
-    fprintf(target,"%s: %s%s",name,values[ value() -2],separator); 
+    fprintf(target,"%s: %s%s",name,values[ value() -3],separator); 
     else
     fprintf(target,"%s: Undefined%s",name,separator); 
   };
 };
 
-const char *mu_1_bed::values[] = {"cama",NULL };
+const char *mu_1_bed::values[] = {"camamedicinainternaminimo","camamedicinainternaintensivo",NULL };
 
 /*** end of enum declaration ***/
 mu_1_bed mu_1_bed_undefined_var;
 
+class mu_1_care: public mu__byte
+{
+ public:
+  inline int operator=(int val) { return value(val); };
+  inline int operator=(const mu_1_care& val) { return value(val.value()); };
+  static const char *values[];
+  friend ostream& operator<< (ostream& s, mu_1_care& val)
+  {
+    if (val.defined())
+      return ( s << mu_1_care::values[ int(val) - 5] );
+    else return ( s << "Undefined" );
+  };
+
+  mu_1_care (const char *name, int os): mu__byte(5, 6, 2, name, os) {};
+  mu_1_care (void): mu__byte(5, 6, 2) {};
+  mu_1_care (int val): mu__byte(5, 6, 2, "Parameter or function result.", 0)
+  {
+     operator=(val);
+  };
+  const char * Name() { return values[ value() -5]; };
+  virtual void Permute(PermSet& Perm, int i);
+  virtual void SimpleCanonicalize(PermSet& Perm);
+  virtual void Canonicalize(PermSet& Perm);
+  virtual void SimpleLimit(PermSet& Perm);
+  virtual void ArrayLimit(PermSet& Perm);
+  virtual void Limit(PermSet& Perm);
+  virtual void MultisetLimit(PermSet& Perm);
+  virtual void MultisetSort() {};
+  void print_statistic() {};
+  virtual void print(FILE *target, const char *separator)
+  {
+    if (defined())
+    fprintf(target,"%s: %s%s",name,values[ value() -5],separator); 
+    else
+    fprintf(target,"%s: Undefined%s",name,separator); 
+  };
+};
+
+const char *mu_1_care::values[] = {"minimo","intensivo",NULL };
+
+/*** end of enum declaration ***/
+mu_1_care mu_1_care_undefined_var;
+
+class mu_1_specialty: public mu__byte
+{
+ public:
+  inline int operator=(int val) { return value(val); };
+  inline int operator=(const mu_1_specialty& val) { return value(val.value()); };
+  static const char *values[];
+  friend ostream& operator<< (ostream& s, mu_1_specialty& val)
+  {
+    if (val.defined())
+      return ( s << mu_1_specialty::values[ int(val) - 7] );
+    else return ( s << "Undefined" );
+  };
+
+  mu_1_specialty (const char *name, int os): mu__byte(7, 7, 1, name, os) {};
+  mu_1_specialty (void): mu__byte(7, 7, 1) {};
+  mu_1_specialty (int val): mu__byte(7, 7, 1, "Parameter or function result.", 0)
+  {
+     operator=(val);
+  };
+  const char * Name() { return values[ value() -7]; };
+  virtual void Permute(PermSet& Perm, int i);
+  virtual void SimpleCanonicalize(PermSet& Perm);
+  virtual void Canonicalize(PermSet& Perm);
+  virtual void SimpleLimit(PermSet& Perm);
+  virtual void ArrayLimit(PermSet& Perm);
+  virtual void Limit(PermSet& Perm);
+  virtual void MultisetLimit(PermSet& Perm);
+  virtual void MultisetSort() {};
+  void print_statistic() {};
+  virtual void print(FILE *target, const char *separator)
+  {
+    if (defined())
+    fprintf(target,"%s: %s%s",name,values[ value() -7],separator); 
+    else
+    fprintf(target,"%s: Undefined%s",name,separator); 
+  };
+};
+
+const char *mu_1_specialty::values[] = {"medicinainterna",NULL };
+
+/*** end of enum declaration ***/
+mu_1_specialty mu_1_specialty_undefined_var;
+
 class mu_1__type_0/*:public mu_1__type_super*/
 {
  public:
-  mu_1_real_type array[ 1 ]; 
+  mu_1_real_type array[ 2 ]; 
 #define awesome_mu_00_mu_1_real_type_mu_1__type_0 1 
  public:
   char *name;
@@ -210,8 +296,8 @@ class mu_1__type_0/*:public mu_1__type_super*/
   mu_1_real_type& operator[] (int index) /* const */
   {
 #ifndef NO_RUN_TIME_CHECKING
-    if ( ( index >= 2 ) && ( index <= 2 ) )
-      return array[ index - 2 ];
+    if ( ( index >= 1 ) && ( index <= 2 ) )
+      return array[ index - 1 ];
     else {
       if (index==UNDEFVAL) 
 	Error.Error("Indexing to %s using an undefined value.", name);
@@ -220,19 +306,20 @@ class mu_1__type_0/*:public mu_1__type_super*/
       return array[0];
     }
 #else
-    return array[ index - 2 ];
+    return array[ index - 1 ];
 #endif
   };
   mu_1__type_0& operator= (const mu_1__type_0& from)
   {
-      array[0].value(from.array[0].value());
+    for (int i = 0; i < 2; i++)
+      array[i].value(from.array[i].value());
     return *this;
   }
 
 friend int CompareWeight(mu_1__type_0& a, mu_1__type_0& b)
   {
     int w;
-    for (int i=0; i<1; i++) {
+    for (int i=0; i<2; i++) {
       w = CompareWeight(a.array[i], b.array[i]);
       if (w!=0) return w;
     }
@@ -241,7 +328,7 @@ friend int CompareWeight(mu_1__type_0& a, mu_1__type_0& b)
 friend int Compare(mu_1__type_0& a, mu_1__type_0& b)
   {
     int w;
-    for (int i=0; i<1; i++) {
+    for (int i=0; i<2; i++) {
       w = Compare(a.array[i], b.array[i]);
       if (w!=0) return w;
     }
@@ -256,23 +343,23 @@ friend int Compare(mu_1__type_0& a, mu_1__type_0& b)
   virtual void MultisetLimit(PermSet& Perm);
   virtual void MultisetSort()
   {
-    for (int i=0; i<1; i++)
+    for (int i=0; i<2; i++)
       array[i].MultisetSort();
   }
   void print_statistic()
   {
-    for (int i=0; i<1; i++)
+    for (int i=0; i<2; i++)
       array[i].print_statistic();
   }
-  void clear() { for (int i = 0; i < 1; i++) array[i].clear(); };
+  void clear() { for (int i = 0; i < 2; i++) array[i].clear(); };
 
-  void undefine() { for (int i = 0; i < 1; i++) array[i].undefine(); };
+  void undefine() { for (int i = 0; i < 2; i++) array[i].undefine(); };
 
-  void reset() { for (int i = 0; i < 1; i++) array[i].reset(); };
+  void reset() { for (int i = 0; i < 2; i++) array[i].reset(); };
 
   void to_state(state *thestate)
   {
-    for (int i = 0; i < 1; i++)
+    for (int i = 0; i < 2; i++)
       array[i].to_state(thestate);
   };
 
@@ -337,12 +424,12 @@ friend int Compare(mu_1__type_0& a, mu_1__type_0& b)
 }
   void print(FILE *target, const char *separator)
   {
-    for (int i = 0; i < 1; i++)
+    for (int i = 0; i < 2; i++)
       array[i].print(target,separator); };
 
   void print_diff(state *prevstate, FILE *target, const char *separator)
   {
-    for (int i = 0; i < 1; i++)
+    for (int i = 0; i < 2; i++)
       array[i].print_diff(prevstate,target,separator);
   };
 };
@@ -368,7 +455,8 @@ friend int Compare(mu_1__type_0& a, mu_1__type_0& b)
     int i=0;
     name = (char *)n;
 
-if (n) array[i].set_self_ar(n,"cama", i * 40 + os); else array[i].set_self_ar(NULL, NULL, 0); i++;
+if (n) array[i].set_self_ar(n,"pacientemedicinainternaminimo", i * 40 + os); else array[i].set_self_ar(NULL, NULL, 0); i++;
+if (n) array[i].set_self_ar(n,"pacientemedicinainternaintensivo", i * 40 + os); else array[i].set_self_ar(NULL, NULL, 0); i++;
   }
 mu_1__type_0::~mu_1__type_0()
 {
@@ -379,8 +467,8 @@ mu_1__type_0 mu_1__type_0_undefined_var;
 class mu_1__type_1/*:public mu_1__type_super*/
 {
  public:
-  mu_1__type_0 array[ 1 ]; 
-#define awesome_mu_00_mu_1__type_0_mu_1__type_1 1 
+  mu_0_boolean array[ 2 ]; 
+#define awesome_mu_00_mu_0_boolean_mu_1__type_1 1 
  public:
   char *name;
   char longname[BUFFER_SIZE/4];
@@ -390,11 +478,11 @@ class mu_1__type_1/*:public mu_1__type_super*/
   mu_1__type_1 (const char *n, int os) { set_self(n, os); };
   mu_1__type_1 ( void ) {};
   virtual ~mu_1__type_1 ();
-  mu_1__type_0& operator[] (int index) /* const */
+  mu_0_boolean& operator[] (int index) /* const */
   {
 #ifndef NO_RUN_TIME_CHECKING
-    if ( ( index >= 2 ) && ( index <= 2 ) )
-      return array[ index - 2 ];
+    if ( ( index >= 5 ) && ( index <= 6 ) )
+      return array[ index - 5 ];
     else {
       if (index==UNDEFVAL) 
 	Error.Error("Indexing to %s using an undefined value.", name);
@@ -403,19 +491,20 @@ class mu_1__type_1/*:public mu_1__type_super*/
       return array[0];
     }
 #else
-    return array[ index - 2 ];
+    return array[ index - 5 ];
 #endif
   };
   mu_1__type_1& operator= (const mu_1__type_1& from)
   {
-      array[0] = from.array[0];
+    for (int i = 0; i < 2; i++)
+      array[i].value(from.array[i].value());
     return *this;
   }
 
 friend int CompareWeight(mu_1__type_1& a, mu_1__type_1& b)
   {
     int w;
-    for (int i=0; i<1; i++) {
+    for (int i=0; i<2; i++) {
       w = CompareWeight(a.array[i], b.array[i]);
       if (w!=0) return w;
     }
@@ -424,7 +513,7 @@ friend int CompareWeight(mu_1__type_1& a, mu_1__type_1& b)
 friend int Compare(mu_1__type_1& a, mu_1__type_1& b)
   {
     int w;
-    for (int i=0; i<1; i++) {
+    for (int i=0; i<2; i++) {
       w = Compare(a.array[i], b.array[i]);
       if (w!=0) return w;
     }
@@ -439,23 +528,23 @@ friend int Compare(mu_1__type_1& a, mu_1__type_1& b)
   virtual void MultisetLimit(PermSet& Perm);
   virtual void MultisetSort()
   {
-    for (int i=0; i<1; i++)
+    for (int i=0; i<2; i++)
       array[i].MultisetSort();
   }
   void print_statistic()
   {
-    for (int i=0; i<1; i++)
+    for (int i=0; i<2; i++)
       array[i].print_statistic();
   }
-  void clear() { for (int i = 0; i < 1; i++) array[i].clear(); };
+  void clear() { for (int i = 0; i < 2; i++) array[i].clear(); };
 
-  void undefine() { for (int i = 0; i < 1; i++) array[i].undefine(); };
+  void undefine() { for (int i = 0; i < 2; i++) array[i].undefine(); };
 
-  void reset() { for (int i = 0; i < 1; i++) array[i].reset(); };
+  void reset() { for (int i = 0; i < 2; i++) array[i].reset(); };
 
   void to_state(state *thestate)
   {
-    for (int i = 0; i < 1; i++)
+    for (int i = 0; i < 2; i++)
       array[i].to_state(thestate);
   };
 
@@ -520,12 +609,12 @@ friend int Compare(mu_1__type_1& a, mu_1__type_1& b)
 }
   void print(FILE *target, const char *separator)
   {
-    for (int i = 0; i < 1; i++)
+    for (int i = 0; i < 2; i++)
       array[i].print(target,separator); };
 
   void print_diff(state *prevstate, FILE *target, const char *separator)
   {
-    for (int i = 0; i < 1; i++)
+    for (int i = 0; i < 2; i++)
       array[i].print_diff(prevstate,target,separator);
   };
 };
@@ -551,7 +640,8 @@ friend int Compare(mu_1__type_1& a, mu_1__type_1& b)
     int i=0;
     name = (char *)n;
 
-if (n) array[i].set_self_ar(n,"cama", i * 40 + os); else array[i].set_self_ar(NULL, NULL, 0); i++;
+if (n) array[i].set_self_ar(n,"minimo", i * 2 + os); else array[i].set_self_ar(NULL, NULL, 0); i++;
+if (n) array[i].set_self_ar(n,"intensivo", i * 2 + os); else array[i].set_self_ar(NULL, NULL, 0); i++;
   }
 mu_1__type_1::~mu_1__type_1()
 {
@@ -562,8 +652,8 @@ mu_1__type_1 mu_1__type_1_undefined_var;
 class mu_1__type_2/*:public mu_1__type_super*/
 {
  public:
-  mu_1_real_type array[ 1 ]; 
-#define awesome_mu_00_mu_1_real_type_mu_1__type_2 1 
+  mu_1__type_1 array[ 2 ]; 
+#define awesome_mu_00_mu_1__type_1_mu_1__type_2 1 
  public:
   char *name;
   char longname[BUFFER_SIZE/4];
@@ -573,11 +663,11 @@ class mu_1__type_2/*:public mu_1__type_super*/
   mu_1__type_2 (const char *n, int os) { set_self(n, os); };
   mu_1__type_2 ( void ) {};
   virtual ~mu_1__type_2 ();
-  mu_1_real_type& operator[] (int index) /* const */
+  mu_1__type_1& operator[] (int index) /* const */
   {
 #ifndef NO_RUN_TIME_CHECKING
-    if ( ( index >= 1 ) && ( index <= 1 ) )
-      return array[ index - 1 ];
+    if ( ( index >= 3 ) && ( index <= 4 ) )
+      return array[ index - 3 ];
     else {
       if (index==UNDEFVAL) 
 	Error.Error("Indexing to %s using an undefined value.", name);
@@ -586,19 +676,20 @@ class mu_1__type_2/*:public mu_1__type_super*/
       return array[0];
     }
 #else
-    return array[ index - 1 ];
+    return array[ index - 3 ];
 #endif
   };
   mu_1__type_2& operator= (const mu_1__type_2& from)
   {
-      array[0].value(from.array[0].value());
+    for (int i = 0; i < 2; i++)
+      array[i] = from.array[i];
     return *this;
   }
 
 friend int CompareWeight(mu_1__type_2& a, mu_1__type_2& b)
   {
     int w;
-    for (int i=0; i<1; i++) {
+    for (int i=0; i<2; i++) {
       w = CompareWeight(a.array[i], b.array[i]);
       if (w!=0) return w;
     }
@@ -607,7 +698,7 @@ friend int CompareWeight(mu_1__type_2& a, mu_1__type_2& b)
 friend int Compare(mu_1__type_2& a, mu_1__type_2& b)
   {
     int w;
-    for (int i=0; i<1; i++) {
+    for (int i=0; i<2; i++) {
       w = Compare(a.array[i], b.array[i]);
       if (w!=0) return w;
     }
@@ -622,23 +713,23 @@ friend int Compare(mu_1__type_2& a, mu_1__type_2& b)
   virtual void MultisetLimit(PermSet& Perm);
   virtual void MultisetSort()
   {
-    for (int i=0; i<1; i++)
+    for (int i=0; i<2; i++)
       array[i].MultisetSort();
   }
   void print_statistic()
   {
-    for (int i=0; i<1; i++)
+    for (int i=0; i<2; i++)
       array[i].print_statistic();
   }
-  void clear() { for (int i = 0; i < 1; i++) array[i].clear(); };
+  void clear() { for (int i = 0; i < 2; i++) array[i].clear(); };
 
-  void undefine() { for (int i = 0; i < 1; i++) array[i].undefine(); };
+  void undefine() { for (int i = 0; i < 2; i++) array[i].undefine(); };
 
-  void reset() { for (int i = 0; i < 1; i++) array[i].reset(); };
+  void reset() { for (int i = 0; i < 2; i++) array[i].reset(); };
 
   void to_state(state *thestate)
   {
-    for (int i = 0; i < 1; i++)
+    for (int i = 0; i < 2; i++)
       array[i].to_state(thestate);
   };
 
@@ -703,12 +794,12 @@ friend int Compare(mu_1__type_2& a, mu_1__type_2& b)
 }
   void print(FILE *target, const char *separator)
   {
-    for (int i = 0; i < 1; i++)
+    for (int i = 0; i < 2; i++)
       array[i].print(target,separator); };
 
   void print_diff(state *prevstate, FILE *target, const char *separator)
   {
-    for (int i = 0; i < 1; i++)
+    for (int i = 0; i < 2; i++)
       array[i].print_diff(prevstate,target,separator);
   };
 };
@@ -734,7 +825,8 @@ friend int Compare(mu_1__type_2& a, mu_1__type_2& b)
     int i=0;
     name = (char *)n;
 
-if (n) array[i].set_self_ar(n,"pessoa", i * 40 + os); else array[i].set_self_ar(NULL, NULL, 0); i++;
+if (n) array[i].set_self_ar(n,"camamedicinainternaminimo", i * 4 + os); else array[i].set_self_ar(NULL, NULL, 0); i++;
+if (n) array[i].set_self_ar(n,"camamedicinainternaintensivo", i * 4 + os); else array[i].set_self_ar(NULL, NULL, 0); i++;
   }
 mu_1__type_2::~mu_1__type_2()
 {
@@ -745,8 +837,8 @@ mu_1__type_2 mu_1__type_2_undefined_var;
 class mu_1__type_3/*:public mu_1__type_super*/
 {
  public:
-  mu_1_real_type array[ 1 ]; 
-#define awesome_mu_00_mu_1_real_type_mu_1__type_3 1 
+  mu_0_boolean array[ 2 ]; 
+#define awesome_mu_00_mu_0_boolean_mu_1__type_3 1 
  public:
   char *name;
   char longname[BUFFER_SIZE/4];
@@ -756,11 +848,11 @@ class mu_1__type_3/*:public mu_1__type_super*/
   mu_1__type_3 (const char *n, int os) { set_self(n, os); };
   mu_1__type_3 ( void ) {};
   virtual ~mu_1__type_3 ();
-  mu_1_real_type& operator[] (int index) /* const */
+  mu_0_boolean& operator[] (int index) /* const */
   {
 #ifndef NO_RUN_TIME_CHECKING
-    if ( ( index >= 1 ) && ( index <= 1 ) )
-      return array[ index - 1 ];
+    if ( ( index >= 3 ) && ( index <= 4 ) )
+      return array[ index - 3 ];
     else {
       if (index==UNDEFVAL) 
 	Error.Error("Indexing to %s using an undefined value.", name);
@@ -769,19 +861,20 @@ class mu_1__type_3/*:public mu_1__type_super*/
       return array[0];
     }
 #else
-    return array[ index - 1 ];
+    return array[ index - 3 ];
 #endif
   };
   mu_1__type_3& operator= (const mu_1__type_3& from)
   {
-      array[0].value(from.array[0].value());
+    for (int i = 0; i < 2; i++)
+      array[i].value(from.array[i].value());
     return *this;
   }
 
 friend int CompareWeight(mu_1__type_3& a, mu_1__type_3& b)
   {
     int w;
-    for (int i=0; i<1; i++) {
+    for (int i=0; i<2; i++) {
       w = CompareWeight(a.array[i], b.array[i]);
       if (w!=0) return w;
     }
@@ -790,7 +883,7 @@ friend int CompareWeight(mu_1__type_3& a, mu_1__type_3& b)
 friend int Compare(mu_1__type_3& a, mu_1__type_3& b)
   {
     int w;
-    for (int i=0; i<1; i++) {
+    for (int i=0; i<2; i++) {
       w = Compare(a.array[i], b.array[i]);
       if (w!=0) return w;
     }
@@ -805,23 +898,23 @@ friend int Compare(mu_1__type_3& a, mu_1__type_3& b)
   virtual void MultisetLimit(PermSet& Perm);
   virtual void MultisetSort()
   {
-    for (int i=0; i<1; i++)
+    for (int i=0; i<2; i++)
       array[i].MultisetSort();
   }
   void print_statistic()
   {
-    for (int i=0; i<1; i++)
+    for (int i=0; i<2; i++)
       array[i].print_statistic();
   }
-  void clear() { for (int i = 0; i < 1; i++) array[i].clear(); };
+  void clear() { for (int i = 0; i < 2; i++) array[i].clear(); };
 
-  void undefine() { for (int i = 0; i < 1; i++) array[i].undefine(); };
+  void undefine() { for (int i = 0; i < 2; i++) array[i].undefine(); };
 
-  void reset() { for (int i = 0; i < 1; i++) array[i].reset(); };
+  void reset() { for (int i = 0; i < 2; i++) array[i].reset(); };
 
   void to_state(state *thestate)
   {
-    for (int i = 0; i < 1; i++)
+    for (int i = 0; i < 2; i++)
       array[i].to_state(thestate);
   };
 
@@ -886,12 +979,12 @@ friend int Compare(mu_1__type_3& a, mu_1__type_3& b)
 }
   void print(FILE *target, const char *separator)
   {
-    for (int i = 0; i < 1; i++)
+    for (int i = 0; i < 2; i++)
       array[i].print(target,separator); };
 
   void print_diff(state *prevstate, FILE *target, const char *separator)
   {
-    for (int i = 0; i < 1; i++)
+    for (int i = 0; i < 2; i++)
       array[i].print_diff(prevstate,target,separator);
   };
 };
@@ -917,7 +1010,8 @@ friend int Compare(mu_1__type_3& a, mu_1__type_3& b)
     int i=0;
     name = (char *)n;
 
-if (n) array[i].set_self_ar(n,"pessoa", i * 40 + os); else array[i].set_self_ar(NULL, NULL, 0); i++;
+if (n) array[i].set_self_ar(n,"camamedicinainternaminimo", i * 2 + os); else array[i].set_self_ar(NULL, NULL, 0); i++;
+if (n) array[i].set_self_ar(n,"camamedicinainternaintensivo", i * 2 + os); else array[i].set_self_ar(NULL, NULL, 0); i++;
   }
 mu_1__type_3::~mu_1__type_3()
 {
@@ -928,8 +1022,8 @@ mu_1__type_3 mu_1__type_3_undefined_var;
 class mu_1__type_4/*:public mu_1__type_super*/
 {
  public:
-  mu_1_real_type array[ 1 ]; 
-#define awesome_mu_00_mu_1_real_type_mu_1__type_4 1 
+  mu_0_boolean array[ 1 ]; 
+#define awesome_mu_00_mu_0_boolean_mu_1__type_4 1 
  public:
   char *name;
   char longname[BUFFER_SIZE/4];
@@ -939,11 +1033,11 @@ class mu_1__type_4/*:public mu_1__type_super*/
   mu_1__type_4 (const char *n, int os) { set_self(n, os); };
   mu_1__type_4 ( void ) {};
   virtual ~mu_1__type_4 ();
-  mu_1_real_type& operator[] (int index) /* const */
+  mu_0_boolean& operator[] (int index) /* const */
   {
 #ifndef NO_RUN_TIME_CHECKING
-    if ( ( index >= 1 ) && ( index <= 1 ) )
-      return array[ index - 1 ];
+    if ( ( index >= 7 ) && ( index <= 7 ) )
+      return array[ index - 7 ];
     else {
       if (index==UNDEFVAL) 
 	Error.Error("Indexing to %s using an undefined value.", name);
@@ -952,7 +1046,7 @@ class mu_1__type_4/*:public mu_1__type_super*/
       return array[0];
     }
 #else
-    return array[ index - 1 ];
+    return array[ index - 7 ];
 #endif
   };
   mu_1__type_4& operator= (const mu_1__type_4& from)
@@ -1100,7 +1194,7 @@ friend int Compare(mu_1__type_4& a, mu_1__type_4& b)
     int i=0;
     name = (char *)n;
 
-if (n) array[i].set_self_ar(n,"pessoa", i * 40 + os); else array[i].set_self_ar(NULL, NULL, 0); i++;
+if (n) array[i].set_self_ar(n,"medicinainterna", i * 2 + os); else array[i].set_self_ar(NULL, NULL, 0); i++;
   }
 mu_1__type_4::~mu_1__type_4()
 {
@@ -1111,8 +1205,8 @@ mu_1__type_4 mu_1__type_4_undefined_var;
 class mu_1__type_5/*:public mu_1__type_super*/
 {
  public:
-  mu_0_boolean array[ 1 ]; 
-#define awesome_mu_00_mu_0_boolean_mu_1__type_5 1 
+  mu_1__type_4 array[ 2 ]; 
+#define awesome_mu_00_mu_1__type_4_mu_1__type_5 1 
  public:
   char *name;
   char longname[BUFFER_SIZE/4];
@@ -1122,11 +1216,11 @@ class mu_1__type_5/*:public mu_1__type_super*/
   mu_1__type_5 (const char *n, int os) { set_self(n, os); };
   mu_1__type_5 ( void ) {};
   virtual ~mu_1__type_5 ();
-  mu_0_boolean& operator[] (int index) /* const */
+  mu_1__type_4& operator[] (int index) /* const */
   {
 #ifndef NO_RUN_TIME_CHECKING
-    if ( ( index >= 2 ) && ( index <= 2 ) )
-      return array[ index - 2 ];
+    if ( ( index >= 3 ) && ( index <= 4 ) )
+      return array[ index - 3 ];
     else {
       if (index==UNDEFVAL) 
 	Error.Error("Indexing to %s using an undefined value.", name);
@@ -1135,19 +1229,20 @@ class mu_1__type_5/*:public mu_1__type_super*/
       return array[0];
     }
 #else
-    return array[ index - 2 ];
+    return array[ index - 3 ];
 #endif
   };
   mu_1__type_5& operator= (const mu_1__type_5& from)
   {
-      array[0].value(from.array[0].value());
+    for (int i = 0; i < 2; i++)
+      array[i] = from.array[i];
     return *this;
   }
 
 friend int CompareWeight(mu_1__type_5& a, mu_1__type_5& b)
   {
     int w;
-    for (int i=0; i<1; i++) {
+    for (int i=0; i<2; i++) {
       w = CompareWeight(a.array[i], b.array[i]);
       if (w!=0) return w;
     }
@@ -1156,7 +1251,7 @@ friend int CompareWeight(mu_1__type_5& a, mu_1__type_5& b)
 friend int Compare(mu_1__type_5& a, mu_1__type_5& b)
   {
     int w;
-    for (int i=0; i<1; i++) {
+    for (int i=0; i<2; i++) {
       w = Compare(a.array[i], b.array[i]);
       if (w!=0) return w;
     }
@@ -1171,23 +1266,23 @@ friend int Compare(mu_1__type_5& a, mu_1__type_5& b)
   virtual void MultisetLimit(PermSet& Perm);
   virtual void MultisetSort()
   {
-    for (int i=0; i<1; i++)
+    for (int i=0; i<2; i++)
       array[i].MultisetSort();
   }
   void print_statistic()
   {
-    for (int i=0; i<1; i++)
+    for (int i=0; i<2; i++)
       array[i].print_statistic();
   }
-  void clear() { for (int i = 0; i < 1; i++) array[i].clear(); };
+  void clear() { for (int i = 0; i < 2; i++) array[i].clear(); };
 
-  void undefine() { for (int i = 0; i < 1; i++) array[i].undefine(); };
+  void undefine() { for (int i = 0; i < 2; i++) array[i].undefine(); };
 
-  void reset() { for (int i = 0; i < 1; i++) array[i].reset(); };
+  void reset() { for (int i = 0; i < 2; i++) array[i].reset(); };
 
   void to_state(state *thestate)
   {
-    for (int i = 0; i < 1; i++)
+    for (int i = 0; i < 2; i++)
       array[i].to_state(thestate);
   };
 
@@ -1252,12 +1347,12 @@ friend int Compare(mu_1__type_5& a, mu_1__type_5& b)
 }
   void print(FILE *target, const char *separator)
   {
-    for (int i = 0; i < 1; i++)
+    for (int i = 0; i < 2; i++)
       array[i].print(target,separator); };
 
   void print_diff(state *prevstate, FILE *target, const char *separator)
   {
-    for (int i = 0; i < 1; i++)
+    for (int i = 0; i < 2; i++)
       array[i].print_diff(prevstate,target,separator);
   };
 };
@@ -1283,7 +1378,8 @@ friend int Compare(mu_1__type_5& a, mu_1__type_5& b)
     int i=0;
     name = (char *)n;
 
-if (n) array[i].set_self_ar(n,"cama", i * 2 + os); else array[i].set_self_ar(NULL, NULL, 0); i++;
+if (n) array[i].set_self_ar(n,"camamedicinainternaminimo", i * 2 + os); else array[i].set_self_ar(NULL, NULL, 0); i++;
+if (n) array[i].set_self_ar(n,"camamedicinainternaintensivo", i * 2 + os); else array[i].set_self_ar(NULL, NULL, 0); i++;
   }
 mu_1__type_5::~mu_1__type_5()
 {
@@ -1294,8 +1390,8 @@ mu_1__type_5 mu_1__type_5_undefined_var;
 class mu_1__type_6/*:public mu_1__type_super*/
 {
  public:
-  mu_1__type_5 array[ 1 ]; 
-#define awesome_mu_00_mu_1__type_5_mu_1__type_6 1 
+  mu_0_boolean array[ 2 ]; 
+#define awesome_mu_00_mu_0_boolean_mu_1__type_6 1 
  public:
   char *name;
   char longname[BUFFER_SIZE/4];
@@ -1305,11 +1401,11 @@ class mu_1__type_6/*:public mu_1__type_super*/
   mu_1__type_6 (const char *n, int os) { set_self(n, os); };
   mu_1__type_6 ( void ) {};
   virtual ~mu_1__type_6 ();
-  mu_1__type_5& operator[] (int index) /* const */
+  mu_0_boolean& operator[] (int index) /* const */
   {
 #ifndef NO_RUN_TIME_CHECKING
-    if ( ( index >= 1 ) && ( index <= 1 ) )
-      return array[ index - 1 ];
+    if ( ( index >= 3 ) && ( index <= 4 ) )
+      return array[ index - 3 ];
     else {
       if (index==UNDEFVAL) 
 	Error.Error("Indexing to %s using an undefined value.", name);
@@ -1318,19 +1414,20 @@ class mu_1__type_6/*:public mu_1__type_super*/
       return array[0];
     }
 #else
-    return array[ index - 1 ];
+    return array[ index - 3 ];
 #endif
   };
   mu_1__type_6& operator= (const mu_1__type_6& from)
   {
-      array[0] = from.array[0];
+    for (int i = 0; i < 2; i++)
+      array[i].value(from.array[i].value());
     return *this;
   }
 
 friend int CompareWeight(mu_1__type_6& a, mu_1__type_6& b)
   {
     int w;
-    for (int i=0; i<1; i++) {
+    for (int i=0; i<2; i++) {
       w = CompareWeight(a.array[i], b.array[i]);
       if (w!=0) return w;
     }
@@ -1339,7 +1436,7 @@ friend int CompareWeight(mu_1__type_6& a, mu_1__type_6& b)
 friend int Compare(mu_1__type_6& a, mu_1__type_6& b)
   {
     int w;
-    for (int i=0; i<1; i++) {
+    for (int i=0; i<2; i++) {
       w = Compare(a.array[i], b.array[i]);
       if (w!=0) return w;
     }
@@ -1354,23 +1451,23 @@ friend int Compare(mu_1__type_6& a, mu_1__type_6& b)
   virtual void MultisetLimit(PermSet& Perm);
   virtual void MultisetSort()
   {
-    for (int i=0; i<1; i++)
+    for (int i=0; i<2; i++)
       array[i].MultisetSort();
   }
   void print_statistic()
   {
-    for (int i=0; i<1; i++)
+    for (int i=0; i<2; i++)
       array[i].print_statistic();
   }
-  void clear() { for (int i = 0; i < 1; i++) array[i].clear(); };
+  void clear() { for (int i = 0; i < 2; i++) array[i].clear(); };
 
-  void undefine() { for (int i = 0; i < 1; i++) array[i].undefine(); };
+  void undefine() { for (int i = 0; i < 2; i++) array[i].undefine(); };
 
-  void reset() { for (int i = 0; i < 1; i++) array[i].reset(); };
+  void reset() { for (int i = 0; i < 2; i++) array[i].reset(); };
 
   void to_state(state *thestate)
   {
-    for (int i = 0; i < 1; i++)
+    for (int i = 0; i < 2; i++)
       array[i].to_state(thestate);
   };
 
@@ -1435,12 +1532,12 @@ friend int Compare(mu_1__type_6& a, mu_1__type_6& b)
 }
   void print(FILE *target, const char *separator)
   {
-    for (int i = 0; i < 1; i++)
+    for (int i = 0; i < 2; i++)
       array[i].print(target,separator); };
 
   void print_diff(state *prevstate, FILE *target, const char *separator)
   {
-    for (int i = 0; i < 1; i++)
+    for (int i = 0; i < 2; i++)
       array[i].print_diff(prevstate,target,separator);
   };
 };
@@ -1466,7 +1563,8 @@ friend int Compare(mu_1__type_6& a, mu_1__type_6& b)
     int i=0;
     name = (char *)n;
 
-if (n) array[i].set_self_ar(n,"pessoa", i * 2 + os); else array[i].set_self_ar(NULL, NULL, 0); i++;
+if (n) array[i].set_self_ar(n,"camamedicinainternaminimo", i * 2 + os); else array[i].set_self_ar(NULL, NULL, 0); i++;
+if (n) array[i].set_self_ar(n,"camamedicinainternaintensivo", i * 2 + os); else array[i].set_self_ar(NULL, NULL, 0); i++;
   }
 mu_1__type_6::~mu_1__type_6()
 {
@@ -1477,7 +1575,7 @@ mu_1__type_6 mu_1__type_6_undefined_var;
 class mu_1__type_7/*:public mu_1__type_super*/
 {
  public:
-  mu_0_boolean array[ 1 ]; 
+  mu_0_boolean array[ 2 ]; 
 #define awesome_mu_00_mu_0_boolean_mu_1__type_7 1 
  public:
   char *name;
@@ -1491,8 +1589,8 @@ class mu_1__type_7/*:public mu_1__type_super*/
   mu_0_boolean& operator[] (int index) /* const */
   {
 #ifndef NO_RUN_TIME_CHECKING
-    if ( ( index >= 2 ) && ( index <= 2 ) )
-      return array[ index - 2 ];
+    if ( ( index >= 3 ) && ( index <= 4 ) )
+      return array[ index - 3 ];
     else {
       if (index==UNDEFVAL) 
 	Error.Error("Indexing to %s using an undefined value.", name);
@@ -1501,19 +1599,20 @@ class mu_1__type_7/*:public mu_1__type_super*/
       return array[0];
     }
 #else
-    return array[ index - 2 ];
+    return array[ index - 3 ];
 #endif
   };
   mu_1__type_7& operator= (const mu_1__type_7& from)
   {
-      array[0].value(from.array[0].value());
+    for (int i = 0; i < 2; i++)
+      array[i].value(from.array[i].value());
     return *this;
   }
 
 friend int CompareWeight(mu_1__type_7& a, mu_1__type_7& b)
   {
     int w;
-    for (int i=0; i<1; i++) {
+    for (int i=0; i<2; i++) {
       w = CompareWeight(a.array[i], b.array[i]);
       if (w!=0) return w;
     }
@@ -1522,7 +1621,7 @@ friend int CompareWeight(mu_1__type_7& a, mu_1__type_7& b)
 friend int Compare(mu_1__type_7& a, mu_1__type_7& b)
   {
     int w;
-    for (int i=0; i<1; i++) {
+    for (int i=0; i<2; i++) {
       w = Compare(a.array[i], b.array[i]);
       if (w!=0) return w;
     }
@@ -1537,23 +1636,23 @@ friend int Compare(mu_1__type_7& a, mu_1__type_7& b)
   virtual void MultisetLimit(PermSet& Perm);
   virtual void MultisetSort()
   {
-    for (int i=0; i<1; i++)
+    for (int i=0; i<2; i++)
       array[i].MultisetSort();
   }
   void print_statistic()
   {
-    for (int i=0; i<1; i++)
+    for (int i=0; i<2; i++)
       array[i].print_statistic();
   }
-  void clear() { for (int i = 0; i < 1; i++) array[i].clear(); };
+  void clear() { for (int i = 0; i < 2; i++) array[i].clear(); };
 
-  void undefine() { for (int i = 0; i < 1; i++) array[i].undefine(); };
+  void undefine() { for (int i = 0; i < 2; i++) array[i].undefine(); };
 
-  void reset() { for (int i = 0; i < 1; i++) array[i].reset(); };
+  void reset() { for (int i = 0; i < 2; i++) array[i].reset(); };
 
   void to_state(state *thestate)
   {
-    for (int i = 0; i < 1; i++)
+    for (int i = 0; i < 2; i++)
       array[i].to_state(thestate);
   };
 
@@ -1618,12 +1717,12 @@ friend int Compare(mu_1__type_7& a, mu_1__type_7& b)
 }
   void print(FILE *target, const char *separator)
   {
-    for (int i = 0; i < 1; i++)
+    for (int i = 0; i < 2; i++)
       array[i].print(target,separator); };
 
   void print_diff(state *prevstate, FILE *target, const char *separator)
   {
-    for (int i = 0; i < 1; i++)
+    for (int i = 0; i < 2; i++)
       array[i].print_diff(prevstate,target,separator);
   };
 };
@@ -1649,7 +1748,8 @@ friend int Compare(mu_1__type_7& a, mu_1__type_7& b)
     int i=0;
     name = (char *)n;
 
-if (n) array[i].set_self_ar(n,"cama", i * 2 + os); else array[i].set_self_ar(NULL, NULL, 0); i++;
+if (n) array[i].set_self_ar(n,"camamedicinainternaminimo", i * 2 + os); else array[i].set_self_ar(NULL, NULL, 0); i++;
+if (n) array[i].set_self_ar(n,"camamedicinainternaintensivo", i * 2 + os); else array[i].set_self_ar(NULL, NULL, 0); i++;
   }
 mu_1__type_7::~mu_1__type_7()
 {
@@ -1660,7 +1760,7 @@ mu_1__type_7 mu_1__type_7_undefined_var;
 class mu_1__type_8/*:public mu_1__type_super*/
 {
  public:
-  mu_0_boolean array[ 1 ]; 
+  mu_0_boolean array[ 2 ]; 
 #define awesome_mu_00_mu_0_boolean_mu_1__type_8 1 
  public:
   char *name;
@@ -1674,8 +1774,8 @@ class mu_1__type_8/*:public mu_1__type_super*/
   mu_0_boolean& operator[] (int index) /* const */
   {
 #ifndef NO_RUN_TIME_CHECKING
-    if ( ( index >= 2 ) && ( index <= 2 ) )
-      return array[ index - 2 ];
+    if ( ( index >= 3 ) && ( index <= 4 ) )
+      return array[ index - 3 ];
     else {
       if (index==UNDEFVAL) 
 	Error.Error("Indexing to %s using an undefined value.", name);
@@ -1684,19 +1784,20 @@ class mu_1__type_8/*:public mu_1__type_super*/
       return array[0];
     }
 #else
-    return array[ index - 2 ];
+    return array[ index - 3 ];
 #endif
   };
   mu_1__type_8& operator= (const mu_1__type_8& from)
   {
-      array[0].value(from.array[0].value());
+    for (int i = 0; i < 2; i++)
+      array[i].value(from.array[i].value());
     return *this;
   }
 
 friend int CompareWeight(mu_1__type_8& a, mu_1__type_8& b)
   {
     int w;
-    for (int i=0; i<1; i++) {
+    for (int i=0; i<2; i++) {
       w = CompareWeight(a.array[i], b.array[i]);
       if (w!=0) return w;
     }
@@ -1705,7 +1806,7 @@ friend int CompareWeight(mu_1__type_8& a, mu_1__type_8& b)
 friend int Compare(mu_1__type_8& a, mu_1__type_8& b)
   {
     int w;
-    for (int i=0; i<1; i++) {
+    for (int i=0; i<2; i++) {
       w = Compare(a.array[i], b.array[i]);
       if (w!=0) return w;
     }
@@ -1720,23 +1821,23 @@ friend int Compare(mu_1__type_8& a, mu_1__type_8& b)
   virtual void MultisetLimit(PermSet& Perm);
   virtual void MultisetSort()
   {
-    for (int i=0; i<1; i++)
+    for (int i=0; i<2; i++)
       array[i].MultisetSort();
   }
   void print_statistic()
   {
-    for (int i=0; i<1; i++)
+    for (int i=0; i<2; i++)
       array[i].print_statistic();
   }
-  void clear() { for (int i = 0; i < 1; i++) array[i].clear(); };
+  void clear() { for (int i = 0; i < 2; i++) array[i].clear(); };
 
-  void undefine() { for (int i = 0; i < 1; i++) array[i].undefine(); };
+  void undefine() { for (int i = 0; i < 2; i++) array[i].undefine(); };
 
-  void reset() { for (int i = 0; i < 1; i++) array[i].reset(); };
+  void reset() { for (int i = 0; i < 2; i++) array[i].reset(); };
 
   void to_state(state *thestate)
   {
-    for (int i = 0; i < 1; i++)
+    for (int i = 0; i < 2; i++)
       array[i].to_state(thestate);
   };
 
@@ -1801,12 +1902,12 @@ friend int Compare(mu_1__type_8& a, mu_1__type_8& b)
 }
   void print(FILE *target, const char *separator)
   {
-    for (int i = 0; i < 1; i++)
+    for (int i = 0; i < 2; i++)
       array[i].print(target,separator); };
 
   void print_diff(state *prevstate, FILE *target, const char *separator)
   {
-    for (int i = 0; i < 1; i++)
+    for (int i = 0; i < 2; i++)
       array[i].print_diff(prevstate,target,separator);
   };
 };
@@ -1832,7 +1933,8 @@ friend int Compare(mu_1__type_8& a, mu_1__type_8& b)
     int i=0;
     name = (char *)n;
 
-if (n) array[i].set_self_ar(n,"cama", i * 2 + os); else array[i].set_self_ar(NULL, NULL, 0); i++;
+if (n) array[i].set_self_ar(n,"camamedicinainternaminimo", i * 2 + os); else array[i].set_self_ar(NULL, NULL, 0); i++;
+if (n) array[i].set_self_ar(n,"camamedicinainternaintensivo", i * 2 + os); else array[i].set_self_ar(NULL, NULL, 0); i++;
   }
 mu_1__type_8::~mu_1__type_8()
 {
@@ -1843,8 +1945,8 @@ mu_1__type_8 mu_1__type_8_undefined_var;
 class mu_1__type_9/*:public mu_1__type_super*/
 {
  public:
-  mu_0_boolean array[ 1 ]; 
-#define awesome_mu_00_mu_0_boolean_mu_1__type_9 1 
+  mu_1__type_8 array[ 2 ]; 
+#define awesome_mu_00_mu_1__type_8_mu_1__type_9 1 
  public:
   char *name;
   char longname[BUFFER_SIZE/4];
@@ -1854,10 +1956,10 @@ class mu_1__type_9/*:public mu_1__type_super*/
   mu_1__type_9 (const char *n, int os) { set_self(n, os); };
   mu_1__type_9 ( void ) {};
   virtual ~mu_1__type_9 ();
-  mu_0_boolean& operator[] (int index) /* const */
+  mu_1__type_8& operator[] (int index) /* const */
   {
 #ifndef NO_RUN_TIME_CHECKING
-    if ( ( index >= 1 ) && ( index <= 1 ) )
+    if ( ( index >= 1 ) && ( index <= 2 ) )
       return array[ index - 1 ];
     else {
       if (index==UNDEFVAL) 
@@ -1872,14 +1974,15 @@ class mu_1__type_9/*:public mu_1__type_super*/
   };
   mu_1__type_9& operator= (const mu_1__type_9& from)
   {
-      array[0].value(from.array[0].value());
+    for (int i = 0; i < 2; i++)
+      array[i] = from.array[i];
     return *this;
   }
 
 friend int CompareWeight(mu_1__type_9& a, mu_1__type_9& b)
   {
     int w;
-    for (int i=0; i<1; i++) {
+    for (int i=0; i<2; i++) {
       w = CompareWeight(a.array[i], b.array[i]);
       if (w!=0) return w;
     }
@@ -1888,7 +1991,7 @@ friend int CompareWeight(mu_1__type_9& a, mu_1__type_9& b)
 friend int Compare(mu_1__type_9& a, mu_1__type_9& b)
   {
     int w;
-    for (int i=0; i<1; i++) {
+    for (int i=0; i<2; i++) {
       w = Compare(a.array[i], b.array[i]);
       if (w!=0) return w;
     }
@@ -1903,23 +2006,23 @@ friend int Compare(mu_1__type_9& a, mu_1__type_9& b)
   virtual void MultisetLimit(PermSet& Perm);
   virtual void MultisetSort()
   {
-    for (int i=0; i<1; i++)
+    for (int i=0; i<2; i++)
       array[i].MultisetSort();
   }
   void print_statistic()
   {
-    for (int i=0; i<1; i++)
+    for (int i=0; i<2; i++)
       array[i].print_statistic();
   }
-  void clear() { for (int i = 0; i < 1; i++) array[i].clear(); };
+  void clear() { for (int i = 0; i < 2; i++) array[i].clear(); };
 
-  void undefine() { for (int i = 0; i < 1; i++) array[i].undefine(); };
+  void undefine() { for (int i = 0; i < 2; i++) array[i].undefine(); };
 
-  void reset() { for (int i = 0; i < 1; i++) array[i].reset(); };
+  void reset() { for (int i = 0; i < 2; i++) array[i].reset(); };
 
   void to_state(state *thestate)
   {
-    for (int i = 0; i < 1; i++)
+    for (int i = 0; i < 2; i++)
       array[i].to_state(thestate);
   };
 
@@ -1984,12 +2087,12 @@ friend int Compare(mu_1__type_9& a, mu_1__type_9& b)
 }
   void print(FILE *target, const char *separator)
   {
-    for (int i = 0; i < 1; i++)
+    for (int i = 0; i < 2; i++)
       array[i].print(target,separator); };
 
   void print_diff(state *prevstate, FILE *target, const char *separator)
   {
-    for (int i = 0; i < 1; i++)
+    for (int i = 0; i < 2; i++)
       array[i].print_diff(prevstate,target,separator);
   };
 };
@@ -2015,7 +2118,8 @@ friend int Compare(mu_1__type_9& a, mu_1__type_9& b)
     int i=0;
     name = (char *)n;
 
-if (n) array[i].set_self_ar(n,"pessoa", i * 2 + os); else array[i].set_self_ar(NULL, NULL, 0); i++;
+if (n) array[i].set_self_ar(n,"pacientemedicinainternaminimo", i * 4 + os); else array[i].set_self_ar(NULL, NULL, 0); i++;
+if (n) array[i].set_self_ar(n,"pacientemedicinainternaintensivo", i * 4 + os); else array[i].set_self_ar(NULL, NULL, 0); i++;
   }
 mu_1__type_9::~mu_1__type_9()
 {
@@ -2023,8 +2127,1121 @@ mu_1__type_9::~mu_1__type_9()
 /*** end array declaration ***/
 mu_1__type_9 mu_1__type_9_undefined_var;
 
-const int mu_pessoa = 1;
-const int mu_cama = 2;
+class mu_1__type_10/*:public mu_1__type_super*/
+{
+ public:
+  mu_0_boolean array[ 2 ]; 
+#define awesome_mu_00_mu_0_boolean_mu_1__type_10 1 
+ public:
+  char *name;
+  char longname[BUFFER_SIZE/4];
+  void set_self( const char *n, int os);
+  void set_self_2( const char *n, const char *n2, int os);
+  void set_self_ar( const char *n, const char *n2, int os);
+  mu_1__type_10 (const char *n, int os) { set_self(n, os); };
+  mu_1__type_10 ( void ) {};
+  virtual ~mu_1__type_10 ();
+  mu_0_boolean& operator[] (int index) /* const */
+  {
+#ifndef NO_RUN_TIME_CHECKING
+    if ( ( index >= 1 ) && ( index <= 2 ) )
+      return array[ index - 1 ];
+    else {
+      if (index==UNDEFVAL) 
+	Error.Error("Indexing to %s using an undefined value.", name);
+      else
+	Error.Error("%d not in index range of %s.", index, name);
+      return array[0];
+    }
+#else
+    return array[ index - 1 ];
+#endif
+  };
+  mu_1__type_10& operator= (const mu_1__type_10& from)
+  {
+    for (int i = 0; i < 2; i++)
+      array[i].value(from.array[i].value());
+    return *this;
+  }
+
+friend int CompareWeight(mu_1__type_10& a, mu_1__type_10& b)
+  {
+    int w;
+    for (int i=0; i<2; i++) {
+      w = CompareWeight(a.array[i], b.array[i]);
+      if (w!=0) return w;
+    }
+    return 0;
+  }
+friend int Compare(mu_1__type_10& a, mu_1__type_10& b)
+  {
+    int w;
+    for (int i=0; i<2; i++) {
+      w = Compare(a.array[i], b.array[i]);
+      if (w!=0) return w;
+    }
+    return 0;
+  }
+  virtual void Permute(PermSet& Perm, int i);
+  virtual void SimpleCanonicalize(PermSet& Perm);
+  virtual void Canonicalize(PermSet& Perm);
+  virtual void SimpleLimit(PermSet& Perm);
+  virtual void ArrayLimit(PermSet& Perm);
+  virtual void Limit(PermSet& Perm);
+  virtual void MultisetLimit(PermSet& Perm);
+  virtual void MultisetSort()
+  {
+    for (int i=0; i<2; i++)
+      array[i].MultisetSort();
+  }
+  void print_statistic()
+  {
+    for (int i=0; i<2; i++)
+      array[i].print_statistic();
+  }
+  void clear() { for (int i = 0; i < 2; i++) array[i].clear(); };
+
+  void undefine() { for (int i = 0; i < 2; i++) array[i].undefine(); };
+
+  void reset() { for (int i = 0; i < 2; i++) array[i].reset(); };
+
+  void to_state(state *thestate)
+  {
+    for (int i = 0; i < 2; i++)
+      array[i].to_state(thestate);
+  };
+
+  std::vector<mu_0_boolean*> bool_array() {
+
+	std::vector<mu_0_boolean*> barr;
+	#ifdef awesome_mu_00_mu_0_boolean_mu_1__type_10
+		for (int ix = 0; ix < (sizeof((array))/sizeof(*(array))); ix++){
+			std::string stype = typeid(array[ix]).name();
+			if (stype.compare("12mu_0_boolean") == 0)
+				barr.push_back(&(array[ix]));
+ 		}
+		return barr;
+
+	#elif awesome_mu_00_mu_1_TIME_type_mu_1__type_10
+		return barr; 
+
+	#else 
+		#ifdef awesome_mu_00_mu_1_real_type_mu_1__type_10
+			return barr;
+	   		
+
+		#else 
+			for (int ix = 0; ix < (sizeof((array))/sizeof(*(array))); ix++){
+				 std::vector<mu_0_boolean*> temp_b = array[ix].bool_array();
+				 barr.insert(barr.end(), temp_b.begin(), temp_b.end());
+ 			}
+			return barr;
+	   		
+		#endif 
+	#endif 
+}
+  std::vector<mu__real*> num_array() {
+
+	std::vector<mu__real*> narr;
+	#ifdef awesome_mu_00_mu_1_real_type_mu_1__type_10
+	for (int ix = 0; ix < (sizeof((array))/sizeof(*(array))); ix++){
+		std::string stype = typeid(array[ix]).name();
+		if (stype.compare("14mu_1_real_type") == 0)
+			narr.push_back(&(array[ix]));
+ 	}
+		return narr;
+	
+
+	#elif awesome_mu_00_mu_1_TIME_type_mu_1__type_10
+		return narr; 
+
+	#else 
+		#ifdef awesome_mu_00_mu_0_boolean_mu_1__type_10
+			return narr;
+
+		#else 
+			for (int ix = 0; ix < (sizeof((array))/sizeof(*(array))); ix++){
+				 std::vector<mu__real*> temp_n = array[ix].num_array();
+				 narr.insert(narr.end(), temp_n.begin(), temp_n.end());
+ 			}
+			return narr;
+	   		
+
+		#endif 
+	#endif 
+}
+  void print(FILE *target, const char *separator)
+  {
+    for (int i = 0; i < 2; i++)
+      array[i].print(target,separator); };
+
+  void print_diff(state *prevstate, FILE *target, const char *separator)
+  {
+    for (int i = 0; i < 2; i++)
+      array[i].print_diff(prevstate,target,separator);
+  };
+};
+
+  void mu_1__type_10::set_self_ar( const char *n1, const char *n2, int os ) {
+    if (n1 == NULL) {set_self(NULL, 0); return;}
+    int l1 = strlen(n1), l2 = strlen(n2);
+    strcpy( longname, n1 );
+    longname[l1] = '[';
+    strcpy( longname+l1+1, n2 );
+    longname[l1+l2+1] = ']';
+    longname[l1+l2+2] = 0;
+    set_self( longname, os );
+  };
+  void mu_1__type_10::set_self_2( const char *n1, const char *n2, int os ) {
+    if (n1 == NULL) {set_self(NULL, 0); return;}
+    strcpy( longname, n1 );
+    strcat( longname, n2 );
+    set_self( longname, os );
+  };
+  void mu_1__type_10::set_self( const char *n, int os)
+  {
+    int i=0;
+    name = (char *)n;
+
+if (n) array[i].set_self_ar(n,"pacientemedicinainternaminimo", i * 2 + os); else array[i].set_self_ar(NULL, NULL, 0); i++;
+if (n) array[i].set_self_ar(n,"pacientemedicinainternaintensivo", i * 2 + os); else array[i].set_self_ar(NULL, NULL, 0); i++;
+  }
+mu_1__type_10::~mu_1__type_10()
+{
+}
+/*** end array declaration ***/
+mu_1__type_10 mu_1__type_10_undefined_var;
+
+class mu_1__type_11/*:public mu_1__type_super*/
+{
+ public:
+  mu_0_boolean array[ 2 ]; 
+#define awesome_mu_00_mu_0_boolean_mu_1__type_11 1 
+ public:
+  char *name;
+  char longname[BUFFER_SIZE/4];
+  void set_self( const char *n, int os);
+  void set_self_2( const char *n, const char *n2, int os);
+  void set_self_ar( const char *n, const char *n2, int os);
+  mu_1__type_11 (const char *n, int os) { set_self(n, os); };
+  mu_1__type_11 ( void ) {};
+  virtual ~mu_1__type_11 ();
+  mu_0_boolean& operator[] (int index) /* const */
+  {
+#ifndef NO_RUN_TIME_CHECKING
+    if ( ( index >= 5 ) && ( index <= 6 ) )
+      return array[ index - 5 ];
+    else {
+      if (index==UNDEFVAL) 
+	Error.Error("Indexing to %s using an undefined value.", name);
+      else
+	Error.Error("%d not in index range of %s.", index, name);
+      return array[0];
+    }
+#else
+    return array[ index - 5 ];
+#endif
+  };
+  mu_1__type_11& operator= (const mu_1__type_11& from)
+  {
+    for (int i = 0; i < 2; i++)
+      array[i].value(from.array[i].value());
+    return *this;
+  }
+
+friend int CompareWeight(mu_1__type_11& a, mu_1__type_11& b)
+  {
+    int w;
+    for (int i=0; i<2; i++) {
+      w = CompareWeight(a.array[i], b.array[i]);
+      if (w!=0) return w;
+    }
+    return 0;
+  }
+friend int Compare(mu_1__type_11& a, mu_1__type_11& b)
+  {
+    int w;
+    for (int i=0; i<2; i++) {
+      w = Compare(a.array[i], b.array[i]);
+      if (w!=0) return w;
+    }
+    return 0;
+  }
+  virtual void Permute(PermSet& Perm, int i);
+  virtual void SimpleCanonicalize(PermSet& Perm);
+  virtual void Canonicalize(PermSet& Perm);
+  virtual void SimpleLimit(PermSet& Perm);
+  virtual void ArrayLimit(PermSet& Perm);
+  virtual void Limit(PermSet& Perm);
+  virtual void MultisetLimit(PermSet& Perm);
+  virtual void MultisetSort()
+  {
+    for (int i=0; i<2; i++)
+      array[i].MultisetSort();
+  }
+  void print_statistic()
+  {
+    for (int i=0; i<2; i++)
+      array[i].print_statistic();
+  }
+  void clear() { for (int i = 0; i < 2; i++) array[i].clear(); };
+
+  void undefine() { for (int i = 0; i < 2; i++) array[i].undefine(); };
+
+  void reset() { for (int i = 0; i < 2; i++) array[i].reset(); };
+
+  void to_state(state *thestate)
+  {
+    for (int i = 0; i < 2; i++)
+      array[i].to_state(thestate);
+  };
+
+  std::vector<mu_0_boolean*> bool_array() {
+
+	std::vector<mu_0_boolean*> barr;
+	#ifdef awesome_mu_00_mu_0_boolean_mu_1__type_11
+		for (int ix = 0; ix < (sizeof((array))/sizeof(*(array))); ix++){
+			std::string stype = typeid(array[ix]).name();
+			if (stype.compare("12mu_0_boolean") == 0)
+				barr.push_back(&(array[ix]));
+ 		}
+		return barr;
+
+	#elif awesome_mu_00_mu_1_TIME_type_mu_1__type_11
+		return barr; 
+
+	#else 
+		#ifdef awesome_mu_00_mu_1_real_type_mu_1__type_11
+			return barr;
+	   		
+
+		#else 
+			for (int ix = 0; ix < (sizeof((array))/sizeof(*(array))); ix++){
+				 std::vector<mu_0_boolean*> temp_b = array[ix].bool_array();
+				 barr.insert(barr.end(), temp_b.begin(), temp_b.end());
+ 			}
+			return barr;
+	   		
+		#endif 
+	#endif 
+}
+  std::vector<mu__real*> num_array() {
+
+	std::vector<mu__real*> narr;
+	#ifdef awesome_mu_00_mu_1_real_type_mu_1__type_11
+	for (int ix = 0; ix < (sizeof((array))/sizeof(*(array))); ix++){
+		std::string stype = typeid(array[ix]).name();
+		if (stype.compare("14mu_1_real_type") == 0)
+			narr.push_back(&(array[ix]));
+ 	}
+		return narr;
+	
+
+	#elif awesome_mu_00_mu_1_TIME_type_mu_1__type_11
+		return narr; 
+
+	#else 
+		#ifdef awesome_mu_00_mu_0_boolean_mu_1__type_11
+			return narr;
+
+		#else 
+			for (int ix = 0; ix < (sizeof((array))/sizeof(*(array))); ix++){
+				 std::vector<mu__real*> temp_n = array[ix].num_array();
+				 narr.insert(narr.end(), temp_n.begin(), temp_n.end());
+ 			}
+			return narr;
+	   		
+
+		#endif 
+	#endif 
+}
+  void print(FILE *target, const char *separator)
+  {
+    for (int i = 0; i < 2; i++)
+      array[i].print(target,separator); };
+
+  void print_diff(state *prevstate, FILE *target, const char *separator)
+  {
+    for (int i = 0; i < 2; i++)
+      array[i].print_diff(prevstate,target,separator);
+  };
+};
+
+  void mu_1__type_11::set_self_ar( const char *n1, const char *n2, int os ) {
+    if (n1 == NULL) {set_self(NULL, 0); return;}
+    int l1 = strlen(n1), l2 = strlen(n2);
+    strcpy( longname, n1 );
+    longname[l1] = '[';
+    strcpy( longname+l1+1, n2 );
+    longname[l1+l2+1] = ']';
+    longname[l1+l2+2] = 0;
+    set_self( longname, os );
+  };
+  void mu_1__type_11::set_self_2( const char *n1, const char *n2, int os ) {
+    if (n1 == NULL) {set_self(NULL, 0); return;}
+    strcpy( longname, n1 );
+    strcat( longname, n2 );
+    set_self( longname, os );
+  };
+  void mu_1__type_11::set_self( const char *n, int os)
+  {
+    int i=0;
+    name = (char *)n;
+
+if (n) array[i].set_self_ar(n,"minimo", i * 2 + os); else array[i].set_self_ar(NULL, NULL, 0); i++;
+if (n) array[i].set_self_ar(n,"intensivo", i * 2 + os); else array[i].set_self_ar(NULL, NULL, 0); i++;
+  }
+mu_1__type_11::~mu_1__type_11()
+{
+}
+/*** end array declaration ***/
+mu_1__type_11 mu_1__type_11_undefined_var;
+
+class mu_1__type_12/*:public mu_1__type_super*/
+{
+ public:
+  mu_1__type_11 array[ 2 ]; 
+#define awesome_mu_00_mu_1__type_11_mu_1__type_12 1 
+ public:
+  char *name;
+  char longname[BUFFER_SIZE/4];
+  void set_self( const char *n, int os);
+  void set_self_2( const char *n, const char *n2, int os);
+  void set_self_ar( const char *n, const char *n2, int os);
+  mu_1__type_12 (const char *n, int os) { set_self(n, os); };
+  mu_1__type_12 ( void ) {};
+  virtual ~mu_1__type_12 ();
+  mu_1__type_11& operator[] (int index) /* const */
+  {
+#ifndef NO_RUN_TIME_CHECKING
+    if ( ( index >= 1 ) && ( index <= 2 ) )
+      return array[ index - 1 ];
+    else {
+      if (index==UNDEFVAL) 
+	Error.Error("Indexing to %s using an undefined value.", name);
+      else
+	Error.Error("%d not in index range of %s.", index, name);
+      return array[0];
+    }
+#else
+    return array[ index - 1 ];
+#endif
+  };
+  mu_1__type_12& operator= (const mu_1__type_12& from)
+  {
+    for (int i = 0; i < 2; i++)
+      array[i] = from.array[i];
+    return *this;
+  }
+
+friend int CompareWeight(mu_1__type_12& a, mu_1__type_12& b)
+  {
+    int w;
+    for (int i=0; i<2; i++) {
+      w = CompareWeight(a.array[i], b.array[i]);
+      if (w!=0) return w;
+    }
+    return 0;
+  }
+friend int Compare(mu_1__type_12& a, mu_1__type_12& b)
+  {
+    int w;
+    for (int i=0; i<2; i++) {
+      w = Compare(a.array[i], b.array[i]);
+      if (w!=0) return w;
+    }
+    return 0;
+  }
+  virtual void Permute(PermSet& Perm, int i);
+  virtual void SimpleCanonicalize(PermSet& Perm);
+  virtual void Canonicalize(PermSet& Perm);
+  virtual void SimpleLimit(PermSet& Perm);
+  virtual void ArrayLimit(PermSet& Perm);
+  virtual void Limit(PermSet& Perm);
+  virtual void MultisetLimit(PermSet& Perm);
+  virtual void MultisetSort()
+  {
+    for (int i=0; i<2; i++)
+      array[i].MultisetSort();
+  }
+  void print_statistic()
+  {
+    for (int i=0; i<2; i++)
+      array[i].print_statistic();
+  }
+  void clear() { for (int i = 0; i < 2; i++) array[i].clear(); };
+
+  void undefine() { for (int i = 0; i < 2; i++) array[i].undefine(); };
+
+  void reset() { for (int i = 0; i < 2; i++) array[i].reset(); };
+
+  void to_state(state *thestate)
+  {
+    for (int i = 0; i < 2; i++)
+      array[i].to_state(thestate);
+  };
+
+  std::vector<mu_0_boolean*> bool_array() {
+
+	std::vector<mu_0_boolean*> barr;
+	#ifdef awesome_mu_00_mu_0_boolean_mu_1__type_12
+		for (int ix = 0; ix < (sizeof((array))/sizeof(*(array))); ix++){
+			std::string stype = typeid(array[ix]).name();
+			if (stype.compare("12mu_0_boolean") == 0)
+				barr.push_back(&(array[ix]));
+ 		}
+		return barr;
+
+	#elif awesome_mu_00_mu_1_TIME_type_mu_1__type_12
+		return barr; 
+
+	#else 
+		#ifdef awesome_mu_00_mu_1_real_type_mu_1__type_12
+			return barr;
+	   		
+
+		#else 
+			for (int ix = 0; ix < (sizeof((array))/sizeof(*(array))); ix++){
+				 std::vector<mu_0_boolean*> temp_b = array[ix].bool_array();
+				 barr.insert(barr.end(), temp_b.begin(), temp_b.end());
+ 			}
+			return barr;
+	   		
+		#endif 
+	#endif 
+}
+  std::vector<mu__real*> num_array() {
+
+	std::vector<mu__real*> narr;
+	#ifdef awesome_mu_00_mu_1_real_type_mu_1__type_12
+	for (int ix = 0; ix < (sizeof((array))/sizeof(*(array))); ix++){
+		std::string stype = typeid(array[ix]).name();
+		if (stype.compare("14mu_1_real_type") == 0)
+			narr.push_back(&(array[ix]));
+ 	}
+		return narr;
+	
+
+	#elif awesome_mu_00_mu_1_TIME_type_mu_1__type_12
+		return narr; 
+
+	#else 
+		#ifdef awesome_mu_00_mu_0_boolean_mu_1__type_12
+			return narr;
+
+		#else 
+			for (int ix = 0; ix < (sizeof((array))/sizeof(*(array))); ix++){
+				 std::vector<mu__real*> temp_n = array[ix].num_array();
+				 narr.insert(narr.end(), temp_n.begin(), temp_n.end());
+ 			}
+			return narr;
+	   		
+
+		#endif 
+	#endif 
+}
+  void print(FILE *target, const char *separator)
+  {
+    for (int i = 0; i < 2; i++)
+      array[i].print(target,separator); };
+
+  void print_diff(state *prevstate, FILE *target, const char *separator)
+  {
+    for (int i = 0; i < 2; i++)
+      array[i].print_diff(prevstate,target,separator);
+  };
+};
+
+  void mu_1__type_12::set_self_ar( const char *n1, const char *n2, int os ) {
+    if (n1 == NULL) {set_self(NULL, 0); return;}
+    int l1 = strlen(n1), l2 = strlen(n2);
+    strcpy( longname, n1 );
+    longname[l1] = '[';
+    strcpy( longname+l1+1, n2 );
+    longname[l1+l2+1] = ']';
+    longname[l1+l2+2] = 0;
+    set_self( longname, os );
+  };
+  void mu_1__type_12::set_self_2( const char *n1, const char *n2, int os ) {
+    if (n1 == NULL) {set_self(NULL, 0); return;}
+    strcpy( longname, n1 );
+    strcat( longname, n2 );
+    set_self( longname, os );
+  };
+  void mu_1__type_12::set_self( const char *n, int os)
+  {
+    int i=0;
+    name = (char *)n;
+
+if (n) array[i].set_self_ar(n,"pacientemedicinainternaminimo", i * 4 + os); else array[i].set_self_ar(NULL, NULL, 0); i++;
+if (n) array[i].set_self_ar(n,"pacientemedicinainternaintensivo", i * 4 + os); else array[i].set_self_ar(NULL, NULL, 0); i++;
+  }
+mu_1__type_12::~mu_1__type_12()
+{
+}
+/*** end array declaration ***/
+mu_1__type_12 mu_1__type_12_undefined_var;
+
+class mu_1__type_13/*:public mu_1__type_super*/
+{
+ public:
+  mu_0_boolean array[ 1 ]; 
+#define awesome_mu_00_mu_0_boolean_mu_1__type_13 1 
+ public:
+  char *name;
+  char longname[BUFFER_SIZE/4];
+  void set_self( const char *n, int os);
+  void set_self_2( const char *n, const char *n2, int os);
+  void set_self_ar( const char *n, const char *n2, int os);
+  mu_1__type_13 (const char *n, int os) { set_self(n, os); };
+  mu_1__type_13 ( void ) {};
+  virtual ~mu_1__type_13 ();
+  mu_0_boolean& operator[] (int index) /* const */
+  {
+#ifndef NO_RUN_TIME_CHECKING
+    if ( ( index >= 7 ) && ( index <= 7 ) )
+      return array[ index - 7 ];
+    else {
+      if (index==UNDEFVAL) 
+	Error.Error("Indexing to %s using an undefined value.", name);
+      else
+	Error.Error("%d not in index range of %s.", index, name);
+      return array[0];
+    }
+#else
+    return array[ index - 7 ];
+#endif
+  };
+  mu_1__type_13& operator= (const mu_1__type_13& from)
+  {
+      array[0].value(from.array[0].value());
+    return *this;
+  }
+
+friend int CompareWeight(mu_1__type_13& a, mu_1__type_13& b)
+  {
+    int w;
+    for (int i=0; i<1; i++) {
+      w = CompareWeight(a.array[i], b.array[i]);
+      if (w!=0) return w;
+    }
+    return 0;
+  }
+friend int Compare(mu_1__type_13& a, mu_1__type_13& b)
+  {
+    int w;
+    for (int i=0; i<1; i++) {
+      w = Compare(a.array[i], b.array[i]);
+      if (w!=0) return w;
+    }
+    return 0;
+  }
+  virtual void Permute(PermSet& Perm, int i);
+  virtual void SimpleCanonicalize(PermSet& Perm);
+  virtual void Canonicalize(PermSet& Perm);
+  virtual void SimpleLimit(PermSet& Perm);
+  virtual void ArrayLimit(PermSet& Perm);
+  virtual void Limit(PermSet& Perm);
+  virtual void MultisetLimit(PermSet& Perm);
+  virtual void MultisetSort()
+  {
+    for (int i=0; i<1; i++)
+      array[i].MultisetSort();
+  }
+  void print_statistic()
+  {
+    for (int i=0; i<1; i++)
+      array[i].print_statistic();
+  }
+  void clear() { for (int i = 0; i < 1; i++) array[i].clear(); };
+
+  void undefine() { for (int i = 0; i < 1; i++) array[i].undefine(); };
+
+  void reset() { for (int i = 0; i < 1; i++) array[i].reset(); };
+
+  void to_state(state *thestate)
+  {
+    for (int i = 0; i < 1; i++)
+      array[i].to_state(thestate);
+  };
+
+  std::vector<mu_0_boolean*> bool_array() {
+
+	std::vector<mu_0_boolean*> barr;
+	#ifdef awesome_mu_00_mu_0_boolean_mu_1__type_13
+		for (int ix = 0; ix < (sizeof((array))/sizeof(*(array))); ix++){
+			std::string stype = typeid(array[ix]).name();
+			if (stype.compare("12mu_0_boolean") == 0)
+				barr.push_back(&(array[ix]));
+ 		}
+		return barr;
+
+	#elif awesome_mu_00_mu_1_TIME_type_mu_1__type_13
+		return barr; 
+
+	#else 
+		#ifdef awesome_mu_00_mu_1_real_type_mu_1__type_13
+			return barr;
+	   		
+
+		#else 
+			for (int ix = 0; ix < (sizeof((array))/sizeof(*(array))); ix++){
+				 std::vector<mu_0_boolean*> temp_b = array[ix].bool_array();
+				 barr.insert(barr.end(), temp_b.begin(), temp_b.end());
+ 			}
+			return barr;
+	   		
+		#endif 
+	#endif 
+}
+  std::vector<mu__real*> num_array() {
+
+	std::vector<mu__real*> narr;
+	#ifdef awesome_mu_00_mu_1_real_type_mu_1__type_13
+	for (int ix = 0; ix < (sizeof((array))/sizeof(*(array))); ix++){
+		std::string stype = typeid(array[ix]).name();
+		if (stype.compare("14mu_1_real_type") == 0)
+			narr.push_back(&(array[ix]));
+ 	}
+		return narr;
+	
+
+	#elif awesome_mu_00_mu_1_TIME_type_mu_1__type_13
+		return narr; 
+
+	#else 
+		#ifdef awesome_mu_00_mu_0_boolean_mu_1__type_13
+			return narr;
+
+		#else 
+			for (int ix = 0; ix < (sizeof((array))/sizeof(*(array))); ix++){
+				 std::vector<mu__real*> temp_n = array[ix].num_array();
+				 narr.insert(narr.end(), temp_n.begin(), temp_n.end());
+ 			}
+			return narr;
+	   		
+
+		#endif 
+	#endif 
+}
+  void print(FILE *target, const char *separator)
+  {
+    for (int i = 0; i < 1; i++)
+      array[i].print(target,separator); };
+
+  void print_diff(state *prevstate, FILE *target, const char *separator)
+  {
+    for (int i = 0; i < 1; i++)
+      array[i].print_diff(prevstate,target,separator);
+  };
+};
+
+  void mu_1__type_13::set_self_ar( const char *n1, const char *n2, int os ) {
+    if (n1 == NULL) {set_self(NULL, 0); return;}
+    int l1 = strlen(n1), l2 = strlen(n2);
+    strcpy( longname, n1 );
+    longname[l1] = '[';
+    strcpy( longname+l1+1, n2 );
+    longname[l1+l2+1] = ']';
+    longname[l1+l2+2] = 0;
+    set_self( longname, os );
+  };
+  void mu_1__type_13::set_self_2( const char *n1, const char *n2, int os ) {
+    if (n1 == NULL) {set_self(NULL, 0); return;}
+    strcpy( longname, n1 );
+    strcat( longname, n2 );
+    set_self( longname, os );
+  };
+  void mu_1__type_13::set_self( const char *n, int os)
+  {
+    int i=0;
+    name = (char *)n;
+
+if (n) array[i].set_self_ar(n,"medicinainterna", i * 2 + os); else array[i].set_self_ar(NULL, NULL, 0); i++;
+  }
+mu_1__type_13::~mu_1__type_13()
+{
+}
+/*** end array declaration ***/
+mu_1__type_13 mu_1__type_13_undefined_var;
+
+class mu_1__type_14/*:public mu_1__type_super*/
+{
+ public:
+  mu_1__type_13 array[ 2 ]; 
+#define awesome_mu_00_mu_1__type_13_mu_1__type_14 1 
+ public:
+  char *name;
+  char longname[BUFFER_SIZE/4];
+  void set_self( const char *n, int os);
+  void set_self_2( const char *n, const char *n2, int os);
+  void set_self_ar( const char *n, const char *n2, int os);
+  mu_1__type_14 (const char *n, int os) { set_self(n, os); };
+  mu_1__type_14 ( void ) {};
+  virtual ~mu_1__type_14 ();
+  mu_1__type_13& operator[] (int index) /* const */
+  {
+#ifndef NO_RUN_TIME_CHECKING
+    if ( ( index >= 1 ) && ( index <= 2 ) )
+      return array[ index - 1 ];
+    else {
+      if (index==UNDEFVAL) 
+	Error.Error("Indexing to %s using an undefined value.", name);
+      else
+	Error.Error("%d not in index range of %s.", index, name);
+      return array[0];
+    }
+#else
+    return array[ index - 1 ];
+#endif
+  };
+  mu_1__type_14& operator= (const mu_1__type_14& from)
+  {
+    for (int i = 0; i < 2; i++)
+      array[i] = from.array[i];
+    return *this;
+  }
+
+friend int CompareWeight(mu_1__type_14& a, mu_1__type_14& b)
+  {
+    int w;
+    for (int i=0; i<2; i++) {
+      w = CompareWeight(a.array[i], b.array[i]);
+      if (w!=0) return w;
+    }
+    return 0;
+  }
+friend int Compare(mu_1__type_14& a, mu_1__type_14& b)
+  {
+    int w;
+    for (int i=0; i<2; i++) {
+      w = Compare(a.array[i], b.array[i]);
+      if (w!=0) return w;
+    }
+    return 0;
+  }
+  virtual void Permute(PermSet& Perm, int i);
+  virtual void SimpleCanonicalize(PermSet& Perm);
+  virtual void Canonicalize(PermSet& Perm);
+  virtual void SimpleLimit(PermSet& Perm);
+  virtual void ArrayLimit(PermSet& Perm);
+  virtual void Limit(PermSet& Perm);
+  virtual void MultisetLimit(PermSet& Perm);
+  virtual void MultisetSort()
+  {
+    for (int i=0; i<2; i++)
+      array[i].MultisetSort();
+  }
+  void print_statistic()
+  {
+    for (int i=0; i<2; i++)
+      array[i].print_statistic();
+  }
+  void clear() { for (int i = 0; i < 2; i++) array[i].clear(); };
+
+  void undefine() { for (int i = 0; i < 2; i++) array[i].undefine(); };
+
+  void reset() { for (int i = 0; i < 2; i++) array[i].reset(); };
+
+  void to_state(state *thestate)
+  {
+    for (int i = 0; i < 2; i++)
+      array[i].to_state(thestate);
+  };
+
+  std::vector<mu_0_boolean*> bool_array() {
+
+	std::vector<mu_0_boolean*> barr;
+	#ifdef awesome_mu_00_mu_0_boolean_mu_1__type_14
+		for (int ix = 0; ix < (sizeof((array))/sizeof(*(array))); ix++){
+			std::string stype = typeid(array[ix]).name();
+			if (stype.compare("12mu_0_boolean") == 0)
+				barr.push_back(&(array[ix]));
+ 		}
+		return barr;
+
+	#elif awesome_mu_00_mu_1_TIME_type_mu_1__type_14
+		return barr; 
+
+	#else 
+		#ifdef awesome_mu_00_mu_1_real_type_mu_1__type_14
+			return barr;
+	   		
+
+		#else 
+			for (int ix = 0; ix < (sizeof((array))/sizeof(*(array))); ix++){
+				 std::vector<mu_0_boolean*> temp_b = array[ix].bool_array();
+				 barr.insert(barr.end(), temp_b.begin(), temp_b.end());
+ 			}
+			return barr;
+	   		
+		#endif 
+	#endif 
+}
+  std::vector<mu__real*> num_array() {
+
+	std::vector<mu__real*> narr;
+	#ifdef awesome_mu_00_mu_1_real_type_mu_1__type_14
+	for (int ix = 0; ix < (sizeof((array))/sizeof(*(array))); ix++){
+		std::string stype = typeid(array[ix]).name();
+		if (stype.compare("14mu_1_real_type") == 0)
+			narr.push_back(&(array[ix]));
+ 	}
+		return narr;
+	
+
+	#elif awesome_mu_00_mu_1_TIME_type_mu_1__type_14
+		return narr; 
+
+	#else 
+		#ifdef awesome_mu_00_mu_0_boolean_mu_1__type_14
+			return narr;
+
+		#else 
+			for (int ix = 0; ix < (sizeof((array))/sizeof(*(array))); ix++){
+				 std::vector<mu__real*> temp_n = array[ix].num_array();
+				 narr.insert(narr.end(), temp_n.begin(), temp_n.end());
+ 			}
+			return narr;
+	   		
+
+		#endif 
+	#endif 
+}
+  void print(FILE *target, const char *separator)
+  {
+    for (int i = 0; i < 2; i++)
+      array[i].print(target,separator); };
+
+  void print_diff(state *prevstate, FILE *target, const char *separator)
+  {
+    for (int i = 0; i < 2; i++)
+      array[i].print_diff(prevstate,target,separator);
+  };
+};
+
+  void mu_1__type_14::set_self_ar( const char *n1, const char *n2, int os ) {
+    if (n1 == NULL) {set_self(NULL, 0); return;}
+    int l1 = strlen(n1), l2 = strlen(n2);
+    strcpy( longname, n1 );
+    longname[l1] = '[';
+    strcpy( longname+l1+1, n2 );
+    longname[l1+l2+1] = ']';
+    longname[l1+l2+2] = 0;
+    set_self( longname, os );
+  };
+  void mu_1__type_14::set_self_2( const char *n1, const char *n2, int os ) {
+    if (n1 == NULL) {set_self(NULL, 0); return;}
+    strcpy( longname, n1 );
+    strcat( longname, n2 );
+    set_self( longname, os );
+  };
+  void mu_1__type_14::set_self( const char *n, int os)
+  {
+    int i=0;
+    name = (char *)n;
+
+if (n) array[i].set_self_ar(n,"pacientemedicinainternaminimo", i * 2 + os); else array[i].set_self_ar(NULL, NULL, 0); i++;
+if (n) array[i].set_self_ar(n,"pacientemedicinainternaintensivo", i * 2 + os); else array[i].set_self_ar(NULL, NULL, 0); i++;
+  }
+mu_1__type_14::~mu_1__type_14()
+{
+}
+/*** end array declaration ***/
+mu_1__type_14 mu_1__type_14_undefined_var;
+
+class mu_1__type_15/*:public mu_1__type_super*/
+{
+ public:
+  mu_0_boolean array[ 2 ]; 
+#define awesome_mu_00_mu_0_boolean_mu_1__type_15 1 
+ public:
+  char *name;
+  char longname[BUFFER_SIZE/4];
+  void set_self( const char *n, int os);
+  void set_self_2( const char *n, const char *n2, int os);
+  void set_self_ar( const char *n, const char *n2, int os);
+  mu_1__type_15 (const char *n, int os) { set_self(n, os); };
+  mu_1__type_15 ( void ) {};
+  virtual ~mu_1__type_15 ();
+  mu_0_boolean& operator[] (int index) /* const */
+  {
+#ifndef NO_RUN_TIME_CHECKING
+    if ( ( index >= 1 ) && ( index <= 2 ) )
+      return array[ index - 1 ];
+    else {
+      if (index==UNDEFVAL) 
+	Error.Error("Indexing to %s using an undefined value.", name);
+      else
+	Error.Error("%d not in index range of %s.", index, name);
+      return array[0];
+    }
+#else
+    return array[ index - 1 ];
+#endif
+  };
+  mu_1__type_15& operator= (const mu_1__type_15& from)
+  {
+    for (int i = 0; i < 2; i++)
+      array[i].value(from.array[i].value());
+    return *this;
+  }
+
+friend int CompareWeight(mu_1__type_15& a, mu_1__type_15& b)
+  {
+    int w;
+    for (int i=0; i<2; i++) {
+      w = CompareWeight(a.array[i], b.array[i]);
+      if (w!=0) return w;
+    }
+    return 0;
+  }
+friend int Compare(mu_1__type_15& a, mu_1__type_15& b)
+  {
+    int w;
+    for (int i=0; i<2; i++) {
+      w = Compare(a.array[i], b.array[i]);
+      if (w!=0) return w;
+    }
+    return 0;
+  }
+  virtual void Permute(PermSet& Perm, int i);
+  virtual void SimpleCanonicalize(PermSet& Perm);
+  virtual void Canonicalize(PermSet& Perm);
+  virtual void SimpleLimit(PermSet& Perm);
+  virtual void ArrayLimit(PermSet& Perm);
+  virtual void Limit(PermSet& Perm);
+  virtual void MultisetLimit(PermSet& Perm);
+  virtual void MultisetSort()
+  {
+    for (int i=0; i<2; i++)
+      array[i].MultisetSort();
+  }
+  void print_statistic()
+  {
+    for (int i=0; i<2; i++)
+      array[i].print_statistic();
+  }
+  void clear() { for (int i = 0; i < 2; i++) array[i].clear(); };
+
+  void undefine() { for (int i = 0; i < 2; i++) array[i].undefine(); };
+
+  void reset() { for (int i = 0; i < 2; i++) array[i].reset(); };
+
+  void to_state(state *thestate)
+  {
+    for (int i = 0; i < 2; i++)
+      array[i].to_state(thestate);
+  };
+
+  std::vector<mu_0_boolean*> bool_array() {
+
+	std::vector<mu_0_boolean*> barr;
+	#ifdef awesome_mu_00_mu_0_boolean_mu_1__type_15
+		for (int ix = 0; ix < (sizeof((array))/sizeof(*(array))); ix++){
+			std::string stype = typeid(array[ix]).name();
+			if (stype.compare("12mu_0_boolean") == 0)
+				barr.push_back(&(array[ix]));
+ 		}
+		return barr;
+
+	#elif awesome_mu_00_mu_1_TIME_type_mu_1__type_15
+		return barr; 
+
+	#else 
+		#ifdef awesome_mu_00_mu_1_real_type_mu_1__type_15
+			return barr;
+	   		
+
+		#else 
+			for (int ix = 0; ix < (sizeof((array))/sizeof(*(array))); ix++){
+				 std::vector<mu_0_boolean*> temp_b = array[ix].bool_array();
+				 barr.insert(barr.end(), temp_b.begin(), temp_b.end());
+ 			}
+			return barr;
+	   		
+		#endif 
+	#endif 
+}
+  std::vector<mu__real*> num_array() {
+
+	std::vector<mu__real*> narr;
+	#ifdef awesome_mu_00_mu_1_real_type_mu_1__type_15
+	for (int ix = 0; ix < (sizeof((array))/sizeof(*(array))); ix++){
+		std::string stype = typeid(array[ix]).name();
+		if (stype.compare("14mu_1_real_type") == 0)
+			narr.push_back(&(array[ix]));
+ 	}
+		return narr;
+	
+
+	#elif awesome_mu_00_mu_1_TIME_type_mu_1__type_15
+		return narr; 
+
+	#else 
+		#ifdef awesome_mu_00_mu_0_boolean_mu_1__type_15
+			return narr;
+
+		#else 
+			for (int ix = 0; ix < (sizeof((array))/sizeof(*(array))); ix++){
+				 std::vector<mu__real*> temp_n = array[ix].num_array();
+				 narr.insert(narr.end(), temp_n.begin(), temp_n.end());
+ 			}
+			return narr;
+	   		
+
+		#endif 
+	#endif 
+}
+  void print(FILE *target, const char *separator)
+  {
+    for (int i = 0; i < 2; i++)
+      array[i].print(target,separator); };
+
+  void print_diff(state *prevstate, FILE *target, const char *separator)
+  {
+    for (int i = 0; i < 2; i++)
+      array[i].print_diff(prevstate,target,separator);
+  };
+};
+
+  void mu_1__type_15::set_self_ar( const char *n1, const char *n2, int os ) {
+    if (n1 == NULL) {set_self(NULL, 0); return;}
+    int l1 = strlen(n1), l2 = strlen(n2);
+    strcpy( longname, n1 );
+    longname[l1] = '[';
+    strcpy( longname+l1+1, n2 );
+    longname[l1+l2+1] = ']';
+    longname[l1+l2+2] = 0;
+    set_self( longname, os );
+  };
+  void mu_1__type_15::set_self_2( const char *n1, const char *n2, int os ) {
+    if (n1 == NULL) {set_self(NULL, 0); return;}
+    strcpy( longname, n1 );
+    strcat( longname, n2 );
+    set_self( longname, os );
+  };
+  void mu_1__type_15::set_self( const char *n, int os)
+  {
+    int i=0;
+    name = (char *)n;
+
+if (n) array[i].set_self_ar(n,"pacientemedicinainternaminimo", i * 2 + os); else array[i].set_self_ar(NULL, NULL, 0); i++;
+if (n) array[i].set_self_ar(n,"pacientemedicinainternaintensivo", i * 2 + os); else array[i].set_self_ar(NULL, NULL, 0); i++;
+  }
+mu_1__type_15::~mu_1__type_15()
+{
+}
+/*** end array declaration ***/
+mu_1__type_15 mu_1__type_15_undefined_var;
+
+const int mu_pacientemedicinainternaminimo = 1;
+const int mu_pacientemedicinainternaintensivo = 2;
+const int mu_camamedicinainternaminimo = 3;
+const int mu_camamedicinainternaintensivo = 4;
+const int mu_minimo = 5;
+const int mu_intensivo = 6;
+const int mu_medicinainterna = 7;
 const double mu_T = +1.000000e-01;
 /*** Variable declaration ***/
 mu_0_boolean mu_all_event_true("all_event_true",0);
@@ -2042,90 +3259,195 @@ mu_1_integer mu_f_n("f_n",24);
 mu_1_TIME_type mu_TIME("TIME",35);
 
 /*** Variable declaration ***/
-mu_1__type_1 mu_distance("distance",75);
+mu_1__type_0 mu_age("age",75);
 
 /*** Variable declaration ***/
-mu_1__type_2 mu_maxspeed("maxspeed",115);
+mu_1__type_2 mu_bedcare("bedcare",155);
 
 /*** Variable declaration ***/
-mu_1__type_3 mu_speed("speed",155);
+mu_1__type_3 mu_bedmedicinainterna("bedmedicinainterna",163);
 
 /*** Variable declaration ***/
-mu_1__type_4 mu_traveltime("traveltime",195);
+mu_1__type_5 mu_bedspecialty("bedspecialty",167);
 
 /*** Variable declaration ***/
-mu_1__type_6 mu_at("at",235);
+mu_1__type_6 mu_bedfree("bedfree",171);
 
 /*** Variable declaration ***/
-mu_1__type_7 mu_bedfree("bedfree",237);
+mu_1__type_7 mu_busybed("busybed",175);
 
 /*** Variable declaration ***/
-mu_1__type_8 mu_busybed("busybed",239);
+mu_1__type_9 mu_in_("in_",179);
 
 /*** Variable declaration ***/
-mu_1__type_9 mu_alocated("alocated",241);
+mu_1__type_10 mu_allocated("allocated",187);
 
-void mu_set_at(const mu_1_patient& mu_patient, const mu_1_bed& mu_bed, const mu_0_boolean& mu_value)
+/*** Variable declaration ***/
+mu_1__type_12 mu_patientcare("patientcare",191);
+
+/*** Variable declaration ***/
+mu_1__type_14 mu_patientspecialty("patientspecialty",199);
+
+/*** Variable declaration ***/
+mu_1__type_15 mu_patientmedicinainterna("patientmedicinainterna",203);
+
+void mu_set_bedcare(const mu_1_bed& mu_varbed, const mu_1_care& mu_varcare, const mu_0_boolean& mu_value)
 {
 if (mu_value.isundefined())
-  mu_at[mu_patient][mu_bed].undefine();
+  mu_bedcare[mu_varbed][mu_varcare].undefine();
 else
-  mu_at[mu_patient][mu_bed] = mu_value;
+  mu_bedcare[mu_varbed][mu_varcare] = mu_value;
 };
 /*** end procedure declaration ***/
 
-mu_0_boolean mu_get_at(const mu_1_patient& mu_patient,const mu_1_bed& mu_bed)
+mu_0_boolean mu_get_bedcare(const mu_1_bed& mu_varbed,const mu_1_care& mu_varcare)
 {
-return mu_at[mu_patient][mu_bed];
-	Error.Error("The end of function get_at reached without returning values.");
+return mu_bedcare[mu_varbed][mu_varcare];
+	Error.Error("The end of function get_bedcare reached without returning values.");
 };
 /*** end function declaration ***/
 
-void mu_set_bedfree(const mu_1_bed& mu_bed, const mu_0_boolean& mu_value)
+void mu_set_bedmedicinainterna(const mu_1_bed& mu_varbed, const mu_0_boolean& mu_value)
 {
 if (mu_value.isundefined())
-  mu_bedfree[mu_bed].undefine();
+  mu_bedmedicinainterna[mu_varbed].undefine();
 else
-  mu_bedfree[mu_bed] = mu_value;
+  mu_bedmedicinainterna[mu_varbed] = mu_value;
 };
 /*** end procedure declaration ***/
 
-mu_0_boolean mu_get_bedfree(const mu_1_bed& mu_bed)
+mu_0_boolean mu_get_bedmedicinainterna(const mu_1_bed& mu_varbed)
 {
-return mu_bedfree[mu_bed];
+return mu_bedmedicinainterna[mu_varbed];
+	Error.Error("The end of function get_bedmedicinainterna reached without returning values.");
+};
+/*** end function declaration ***/
+
+void mu_set_bedspecialty(const mu_1_bed& mu_varbed, const mu_1_specialty& mu_varspecialty, const mu_0_boolean& mu_value)
+{
+if (mu_value.isundefined())
+  mu_bedspecialty[mu_varbed][mu_varspecialty].undefine();
+else
+  mu_bedspecialty[mu_varbed][mu_varspecialty] = mu_value;
+};
+/*** end procedure declaration ***/
+
+mu_0_boolean mu_get_bedspecialty(const mu_1_bed& mu_varbed,const mu_1_specialty& mu_varspecialty)
+{
+return mu_bedspecialty[mu_varbed][mu_varspecialty];
+	Error.Error("The end of function get_bedspecialty reached without returning values.");
+};
+/*** end function declaration ***/
+
+void mu_set_bedfree(const mu_1_bed& mu_varbed, const mu_0_boolean& mu_value)
+{
+if (mu_value.isundefined())
+  mu_bedfree[mu_varbed].undefine();
+else
+  mu_bedfree[mu_varbed] = mu_value;
+};
+/*** end procedure declaration ***/
+
+mu_0_boolean mu_get_bedfree(const mu_1_bed& mu_varbed)
+{
+return mu_bedfree[mu_varbed];
 	Error.Error("The end of function get_bedfree reached without returning values.");
 };
 /*** end function declaration ***/
 
-void mu_set_busybed(const mu_1_bed& mu_bed, const mu_0_boolean& mu_value)
+void mu_set_busybed(const mu_1_bed& mu_varbed, const mu_0_boolean& mu_value)
 {
 if (mu_value.isundefined())
-  mu_busybed[mu_bed].undefine();
+  mu_busybed[mu_varbed].undefine();
 else
-  mu_busybed[mu_bed] = mu_value;
+  mu_busybed[mu_varbed] = mu_value;
 };
 /*** end procedure declaration ***/
 
-mu_0_boolean mu_get_busybed(const mu_1_bed& mu_bed)
+mu_0_boolean mu_get_busybed(const mu_1_bed& mu_varbed)
 {
-return mu_busybed[mu_bed];
+return mu_busybed[mu_varbed];
 	Error.Error("The end of function get_busybed reached without returning values.");
 };
 /*** end function declaration ***/
 
-void mu_set_alocated(const mu_1_patient& mu_patient, const mu_0_boolean& mu_value)
+void mu_set_in_(const mu_1_patient& mu_p, const mu_1_bed& mu_varbed, const mu_0_boolean& mu_value)
 {
 if (mu_value.isundefined())
-  mu_alocated[mu_patient].undefine();
+  mu_in_[mu_p][mu_varbed].undefine();
 else
-  mu_alocated[mu_patient] = mu_value;
+  mu_in_[mu_p][mu_varbed] = mu_value;
 };
 /*** end procedure declaration ***/
 
-mu_0_boolean mu_get_alocated(const mu_1_patient& mu_patient)
+mu_0_boolean mu_get_in_(const mu_1_patient& mu_p,const mu_1_bed& mu_varbed)
 {
-return mu_alocated[mu_patient];
-	Error.Error("The end of function get_alocated reached without returning values.");
+return mu_in_[mu_p][mu_varbed];
+	Error.Error("The end of function get_in_ reached without returning values.");
+};
+/*** end function declaration ***/
+
+void mu_set_allocated(const mu_1_patient& mu_p, const mu_0_boolean& mu_value)
+{
+if (mu_value.isundefined())
+  mu_allocated[mu_p].undefine();
+else
+  mu_allocated[mu_p] = mu_value;
+};
+/*** end procedure declaration ***/
+
+mu_0_boolean mu_get_allocated(const mu_1_patient& mu_p)
+{
+return mu_allocated[mu_p];
+	Error.Error("The end of function get_allocated reached without returning values.");
+};
+/*** end function declaration ***/
+
+void mu_set_patientcare(const mu_1_patient& mu_p, const mu_1_care& mu_varcare, const mu_0_boolean& mu_value)
+{
+if (mu_value.isundefined())
+  mu_patientcare[mu_p][mu_varcare].undefine();
+else
+  mu_patientcare[mu_p][mu_varcare] = mu_value;
+};
+/*** end procedure declaration ***/
+
+mu_0_boolean mu_get_patientcare(const mu_1_patient& mu_p,const mu_1_care& mu_varcare)
+{
+return mu_patientcare[mu_p][mu_varcare];
+	Error.Error("The end of function get_patientcare reached without returning values.");
+};
+/*** end function declaration ***/
+
+void mu_set_patientspecialty(const mu_1_patient& mu_p, const mu_1_specialty& mu_varspecialty, const mu_0_boolean& mu_value)
+{
+if (mu_value.isundefined())
+  mu_patientspecialty[mu_p][mu_varspecialty].undefine();
+else
+  mu_patientspecialty[mu_p][mu_varspecialty] = mu_value;
+};
+/*** end procedure declaration ***/
+
+mu_0_boolean mu_get_patientspecialty(const mu_1_patient& mu_p,const mu_1_specialty& mu_varspecialty)
+{
+return mu_patientspecialty[mu_p][mu_varspecialty];
+	Error.Error("The end of function get_patientspecialty reached without returning values.");
+};
+/*** end function declaration ***/
+
+void mu_set_patientmedicinainterna(const mu_1_patient& mu_p, const mu_0_boolean& mu_value)
+{
+if (mu_value.isundefined())
+  mu_patientmedicinainterna[mu_p].undefine();
+else
+  mu_patientmedicinainterna[mu_p] = mu_value;
+};
+/*** end procedure declaration ***/
+
+mu_0_boolean mu_get_patientmedicinainterna(const mu_1_patient& mu_p)
+{
+return mu_patientmedicinainterna[mu_p];
+	Error.Error("The end of function get_patientmedicinainterna reached without returning values.");
 };
 /*** end function declaration ***/
 
@@ -2136,15 +3458,15 @@ mu_0_boolean mu_event_triggered("event_triggered",0);
 
 mu_event_triggered = mu_true;
 {
-  bool mu__while_expr_11;  mu__while_expr_11 = mu_event_triggered;
-int mu__counter_10 = 0;
-while (mu__while_expr_11) {
-if ( ++mu__counter_10 > args->loopmax.value )
+  bool mu__while_expr_17;  mu__while_expr_17 = mu_event_triggered;
+int mu__counter_16 = 0;
+while (mu__while_expr_17) {
+if ( ++mu__counter_16 > args->loopmax.value )
   Error.Error("Too many iterations in while loop.");
 {
 mu_event_triggered = mu_false;
 };
-mu__while_expr_11 = mu_event_triggered;
+mu__while_expr_17 = mu_event_triggered;
 }
 };
 };
@@ -2183,10 +3505,10 @@ mu_0_boolean mu_end_while("end_while",2);
 mu_process_updated = mu_false;
 mu_end_while = mu_false;
 {
-  bool mu__while_expr_13;  mu__while_expr_13 = !(mu_end_while);
-int mu__counter_12 = 0;
-while (mu__while_expr_13) {
-if ( ++mu__counter_12 > args->loopmax.value )
+  bool mu__while_expr_19;  mu__while_expr_19 = !(mu_end_while);
+int mu__counter_18 = 0;
+while (mu__while_expr_19) {
+if ( ++mu__counter_18 > args->loopmax.value )
   Error.Error("Too many iterations in while loop.");
 {
 if ( !(mu_process_updated) )
@@ -2198,7 +3520,7 @@ else
 mu_process_updated = mu_false;
 }
 };
-mu__while_expr_13 = !(mu_end_while);
+mu__while_expr_19 = !(mu_end_while);
 }
 };
 };
@@ -2218,14 +3540,17 @@ void world_class::clear()
   mu_g_n.clear();
   mu_f_n.clear();
   mu_TIME.clear();
-  mu_distance.clear();
-  mu_maxspeed.clear();
-  mu_speed.clear();
-  mu_traveltime.clear();
-  mu_at.clear();
+  mu_age.clear();
+  mu_bedcare.clear();
+  mu_bedmedicinainterna.clear();
+  mu_bedspecialty.clear();
   mu_bedfree.clear();
   mu_busybed.clear();
-  mu_alocated.clear();
+  mu_in_.clear();
+  mu_allocated.clear();
+  mu_patientcare.clear();
+  mu_patientspecialty.clear();
+  mu_patientmedicinainterna.clear();
 }
 void world_class::undefine()
 {
@@ -2234,14 +3559,17 @@ void world_class::undefine()
   mu_g_n.undefine();
   mu_f_n.undefine();
   mu_TIME.undefine();
-  mu_distance.undefine();
-  mu_maxspeed.undefine();
-  mu_speed.undefine();
-  mu_traveltime.undefine();
-  mu_at.undefine();
+  mu_age.undefine();
+  mu_bedcare.undefine();
+  mu_bedmedicinainterna.undefine();
+  mu_bedspecialty.undefine();
   mu_bedfree.undefine();
   mu_busybed.undefine();
-  mu_alocated.undefine();
+  mu_in_.undefine();
+  mu_allocated.undefine();
+  mu_patientcare.undefine();
+  mu_patientspecialty.undefine();
+  mu_patientmedicinainterna.undefine();
 }
 void world_class::reset()
 {
@@ -2250,14 +3578,17 @@ void world_class::reset()
   mu_g_n.reset();
   mu_f_n.reset();
   mu_TIME.reset();
-  mu_distance.reset();
-  mu_maxspeed.reset();
-  mu_speed.reset();
-  mu_traveltime.reset();
-  mu_at.reset();
+  mu_age.reset();
+  mu_bedcare.reset();
+  mu_bedmedicinainterna.reset();
+  mu_bedspecialty.reset();
   mu_bedfree.reset();
   mu_busybed.reset();
-  mu_alocated.reset();
+  mu_in_.reset();
+  mu_allocated.reset();
+  mu_patientcare.reset();
+  mu_patientspecialty.reset();
+  mu_patientmedicinainterna.reset();
 }
 std::vector<mu_0_boolean*> world_class::get_mu_bools()
 {
@@ -2271,21 +3602,27 @@ std::vector<mu_0_boolean*> world_class::get_mu_bool_arrays()
 	  std::vector<mu_0_boolean*> var_arrays;
    std::vector<mu_0_boolean*> interm;
 
-      interm = mu_distance.bool_array();
+      interm = mu_age.bool_array();
 		if (interm.size() > 0) var_arrays.insert(var_arrays.end(), interm.begin(), interm.end());
-      interm = mu_maxspeed.bool_array();
+      interm = mu_bedcare.bool_array();
 		if (interm.size() > 0) var_arrays.insert(var_arrays.end(), interm.begin(), interm.end());
-      interm = mu_speed.bool_array();
+      interm = mu_bedmedicinainterna.bool_array();
 		if (interm.size() > 0) var_arrays.insert(var_arrays.end(), interm.begin(), interm.end());
-      interm = mu_traveltime.bool_array();
-		if (interm.size() > 0) var_arrays.insert(var_arrays.end(), interm.begin(), interm.end());
-      interm = mu_at.bool_array();
+      interm = mu_bedspecialty.bool_array();
 		if (interm.size() > 0) var_arrays.insert(var_arrays.end(), interm.begin(), interm.end());
       interm = mu_bedfree.bool_array();
 		if (interm.size() > 0) var_arrays.insert(var_arrays.end(), interm.begin(), interm.end());
       interm = mu_busybed.bool_array();
 		if (interm.size() > 0) var_arrays.insert(var_arrays.end(), interm.begin(), interm.end());
-      interm = mu_alocated.bool_array();
+      interm = mu_in_.bool_array();
+		if (interm.size() > 0) var_arrays.insert(var_arrays.end(), interm.begin(), interm.end());
+      interm = mu_allocated.bool_array();
+		if (interm.size() > 0) var_arrays.insert(var_arrays.end(), interm.begin(), interm.end());
+      interm = mu_patientcare.bool_array();
+		if (interm.size() > 0) var_arrays.insert(var_arrays.end(), interm.begin(), interm.end());
+      interm = mu_patientspecialty.bool_array();
+		if (interm.size() > 0) var_arrays.insert(var_arrays.end(), interm.begin(), interm.end());
+      interm = mu_patientmedicinainterna.bool_array();
 		if (interm.size() > 0) var_arrays.insert(var_arrays.end(), interm.begin(), interm.end());
     return var_arrays; 
 }
@@ -2300,21 +3637,27 @@ std::vector<mu__real*> world_class::get_mu_num_arrays()
 	  std::vector<mu__real*> var_arrays;
    std::vector<mu__real*> interm;
 
-      interm = mu_distance.num_array();
+      interm = mu_age.num_array();
 		if (interm.size() > 0) var_arrays.insert(var_arrays.end(), interm.begin(), interm.end());
-      interm = mu_maxspeed.num_array();
+      interm = mu_bedcare.num_array();
 		if (interm.size() > 0) var_arrays.insert(var_arrays.end(), interm.begin(), interm.end());
-      interm = mu_speed.num_array();
+      interm = mu_bedmedicinainterna.num_array();
 		if (interm.size() > 0) var_arrays.insert(var_arrays.end(), interm.begin(), interm.end());
-      interm = mu_traveltime.num_array();
-		if (interm.size() > 0) var_arrays.insert(var_arrays.end(), interm.begin(), interm.end());
-      interm = mu_at.num_array();
+      interm = mu_bedspecialty.num_array();
 		if (interm.size() > 0) var_arrays.insert(var_arrays.end(), interm.begin(), interm.end());
       interm = mu_bedfree.num_array();
 		if (interm.size() > 0) var_arrays.insert(var_arrays.end(), interm.begin(), interm.end());
       interm = mu_busybed.num_array();
 		if (interm.size() > 0) var_arrays.insert(var_arrays.end(), interm.begin(), interm.end());
-      interm = mu_alocated.num_array();
+      interm = mu_in_.num_array();
+		if (interm.size() > 0) var_arrays.insert(var_arrays.end(), interm.begin(), interm.end());
+      interm = mu_allocated.num_array();
+		if (interm.size() > 0) var_arrays.insert(var_arrays.end(), interm.begin(), interm.end());
+      interm = mu_patientcare.num_array();
+		if (interm.size() > 0) var_arrays.insert(var_arrays.end(), interm.begin(), interm.end());
+      interm = mu_patientspecialty.num_array();
+		if (interm.size() > 0) var_arrays.insert(var_arrays.end(), interm.begin(), interm.end());
+      interm = mu_patientmedicinainterna.num_array();
 		if (interm.size() > 0) var_arrays.insert(var_arrays.end(), interm.begin(), interm.end());
     return var_arrays; 
 }
@@ -2406,14 +3749,17 @@ void world_class::print(FILE *target, const char *separator)
   mu_g_n.print(target, separator);
   mu_f_n.print(target, separator);
   mu_TIME.print(target, separator);
-  mu_distance.print(target, separator);
-  mu_maxspeed.print(target, separator);
-  mu_speed.print(target, separator);
-  mu_traveltime.print(target, separator);
-  mu_at.print(target, separator);
+  mu_age.print(target, separator);
+  mu_bedcare.print(target, separator);
+  mu_bedmedicinainterna.print(target, separator);
+  mu_bedspecialty.print(target, separator);
   mu_bedfree.print(target, separator);
   mu_busybed.print(target, separator);
-  mu_alocated.print(target, separator);
+  mu_in_.print(target, separator);
+  mu_allocated.print(target, separator);
+  mu_patientcare.print(target, separator);
+  mu_patientspecialty.print(target, separator);
+  mu_patientmedicinainterna.print(target, separator);
     num_calls--;
 }
 }
@@ -2423,14 +3769,17 @@ void world_class::pddlprint(FILE *target, const char *separator)
   if ( num_calls == 0 ) {
     num_calls++;
   mu_TIME.print(target, separator);
-  mu_distance.print(target, separator);
-  mu_maxspeed.print(target, separator);
-  mu_speed.print(target, separator);
-  mu_traveltime.print(target, separator);
-  mu_at.print(target, separator);
+  mu_age.print(target, separator);
+  mu_bedcare.print(target, separator);
+  mu_bedmedicinainterna.print(target, separator);
+  mu_bedspecialty.print(target, separator);
   mu_bedfree.print(target, separator);
   mu_busybed.print(target, separator);
-  mu_alocated.print(target, separator);
+  mu_in_.print(target, separator);
+  mu_allocated.print(target, separator);
+  mu_patientcare.print(target, separator);
+  mu_patientspecialty.print(target, separator);
+  mu_patientmedicinainterna.print(target, separator);
     num_calls--;
 }
 }
@@ -2448,14 +3797,17 @@ void world_class::print_statistic()
   mu_g_n.print_statistic();
   mu_f_n.print_statistic();
   mu_TIME.print_statistic();
-  mu_distance.print_statistic();
-  mu_maxspeed.print_statistic();
-  mu_speed.print_statistic();
-  mu_traveltime.print_statistic();
-  mu_at.print_statistic();
+  mu_age.print_statistic();
+  mu_bedcare.print_statistic();
+  mu_bedmedicinainterna.print_statistic();
+  mu_bedspecialty.print_statistic();
   mu_bedfree.print_statistic();
   mu_busybed.print_statistic();
-  mu_alocated.print_statistic();
+  mu_in_.print_statistic();
+  mu_allocated.print_statistic();
+  mu_patientcare.print_statistic();
+  mu_patientspecialty.print_statistic();
+  mu_patientmedicinainterna.print_statistic();
     num_calls--;
 }
 }
@@ -2468,14 +3820,17 @@ void world_class::print_diff(state *prevstate, FILE *target, const char *separat
     mu_g_n.print_diff(prevstate,target,separator);
     mu_f_n.print_diff(prevstate,target,separator);
     mu_TIME.print_diff(prevstate,target,separator);
-    mu_distance.print_diff(prevstate,target,separator);
-    mu_maxspeed.print_diff(prevstate,target,separator);
-    mu_speed.print_diff(prevstate,target,separator);
-    mu_traveltime.print_diff(prevstate,target,separator);
-    mu_at.print_diff(prevstate,target,separator);
+    mu_age.print_diff(prevstate,target,separator);
+    mu_bedcare.print_diff(prevstate,target,separator);
+    mu_bedmedicinainterna.print_diff(prevstate,target,separator);
+    mu_bedspecialty.print_diff(prevstate,target,separator);
     mu_bedfree.print_diff(prevstate,target,separator);
     mu_busybed.print_diff(prevstate,target,separator);
-    mu_alocated.print_diff(prevstate,target,separator);
+    mu_in_.print_diff(prevstate,target,separator);
+    mu_allocated.print_diff(prevstate,target,separator);
+    mu_patientcare.print_diff(prevstate,target,separator);
+    mu_patientspecialty.print_diff(prevstate,target,separator);
+    mu_patientmedicinainterna.print_diff(prevstate,target,separator);
   }
   else
 print(target,separator);
@@ -2487,14 +3842,17 @@ void world_class::to_state(state *newstate)
   mu_g_n.to_state( newstate );
   mu_f_n.to_state( newstate );
   mu_TIME.to_state( newstate );
-  mu_distance.to_state( newstate );
-  mu_maxspeed.to_state( newstate );
-  mu_speed.to_state( newstate );
-  mu_traveltime.to_state( newstate );
-  mu_at.to_state( newstate );
+  mu_age.to_state( newstate );
+  mu_bedcare.to_state( newstate );
+  mu_bedmedicinainterna.to_state( newstate );
+  mu_bedspecialty.to_state( newstate );
   mu_bedfree.to_state( newstate );
   mu_busybed.to_state( newstate );
-  mu_alocated.to_state( newstate );
+  mu_in_.to_state( newstate );
+  mu_allocated.to_state( newstate );
+  mu_patientcare.to_state( newstate );
+  mu_patientspecialty.to_state( newstate );
+  mu_patientmedicinainterna.to_state( newstate );
 }
 void world_class::setstate(state *thestate)
 {
@@ -2709,48 +4067,205 @@ public:
   }
   char * Name(RULE_INDEX_TYPE r)
   {
-    static mu_1_bed mu_bed;
-    mu_bed.value((r % 1) + 2);
-    r = r / 1;
-    static mu_1_patient mu_patient;
-    mu_patient.value((r % 1) + 1);
-    r = r / 1;
-    return tsprintf(" allocate , bed:%s, patient:%s", mu_bed.Name(), mu_patient.Name());
+    static mu_1_care mu_varcare;
+    mu_varcare.value((r % 2) + 5);
+    r = r / 2;
+    static mu_1_bed mu_varbed;
+    mu_varbed.value((r % 2) + 3);
+    r = r / 2;
+    static mu_1_patient mu_p;
+    mu_p.value((r % 2) + 1);
+    r = r / 2;
+    return tsprintf(" allocatemedicinainterna , varcare:%s, varbed:%s, p:%s", mu_varcare.Name(), mu_varbed.Name(), mu_p.Name());
   }
   bool Condition(RULE_INDEX_TYPE r)
   {
-    static mu_1_bed mu_bed;
-    mu_bed.value((r % 1) + 2);
-    r = r / 1;
-    static mu_1_patient mu_patient;
-    mu_patient.value((r % 1) + 1);
-    r = r / 1;
-bool mu__boolexpr14;
-  if (!(!(mu_alocated[mu_patient]))) mu__boolexpr14 = FALSE ;
+    static mu_1_care mu_varcare;
+    mu_varcare.value((r % 2) + 5);
+    r = r / 2;
+    static mu_1_bed mu_varbed;
+    mu_varbed.value((r % 2) + 3);
+    r = r / 2;
+    static mu_1_patient mu_p;
+    mu_p.value((r % 2) + 1);
+    r = r / 2;
+bool mu__boolexpr20;
+bool mu__boolexpr21;
+bool mu__boolexpr22;
+bool mu__boolexpr23;
+bool mu__boolexpr24;
+  if (!(!(mu_allocated[mu_p]))) mu__boolexpr24 = FALSE ;
   else {
-  mu__boolexpr14 = (mu_bedfree[mu_bed]) ; 
+  mu__boolexpr24 = (mu_bedfree[mu_varbed]) ; 
 }
-    return mu__boolexpr14;
+  if (!(mu__boolexpr24)) mu__boolexpr23 = FALSE ;
+  else {
+  mu__boolexpr23 = (mu_bedmedicinainterna[mu_varbed]) ; 
+}
+  if (!(mu__boolexpr23)) mu__boolexpr22 = FALSE ;
+  else {
+  mu__boolexpr22 = (mu_bedcare[mu_varbed][mu_varcare]) ; 
+}
+  if (!(mu__boolexpr22)) mu__boolexpr21 = FALSE ;
+  else {
+  mu__boolexpr21 = (mu_patientcare[mu_p][mu_varcare]) ; 
+}
+  if (!(mu__boolexpr21)) mu__boolexpr20 = FALSE ;
+  else {
+  mu__boolexpr20 = (mu_patientmedicinainterna[mu_p]) ; 
+}
+    return mu__boolexpr20;
   }
 
   std::vector<mu_0_boolean*> bool_precond_array(RULE_INDEX_TYPE r)
   {
     std::vector<mu_0_boolean*> preconds;
-    static mu_1_bed mu_bed;
-    mu_bed.value((r % 1) + 2);
-    r = r / 1;
-    static mu_1_patient mu_patient;
-    mu_patient.value((r % 1) + 1);
-    r = r / 1;
+    static mu_1_care mu_varcare;
+    mu_varcare.value((r % 2) + 5);
+    r = r / 2;
+    static mu_1_bed mu_varbed;
+    mu_varbed.value((r % 2) + 3);
+    r = r / 2;
+    static mu_1_patient mu_p;
+    mu_p.value((r % 2) + 1);
+    r = r / 2;
 
-bool mu__boolexpr15;
-  if (!(!(mu_alocated[mu_patient]))) mu__boolexpr15 = FALSE ;
+bool mu__boolexpr25;
+bool mu__boolexpr26;
+bool mu__boolexpr27;
+bool mu__boolexpr28;
+  if (!(!(mu_allocated[mu_p]))) mu__boolexpr28 = FALSE ;
   else {
-  mu__boolexpr15 = (mu_bedfree[mu_bed]) ; 
+  mu__boolexpr28 = (mu_bedfree[mu_varbed]) ; 
+}
+  if (!(mu__boolexpr28)) mu__boolexpr27 = FALSE ;
+  else {
+  mu__boolexpr27 = (mu_bedmedicinainterna[mu_varbed]) ; 
+}
+  if (!(mu__boolexpr27)) mu__boolexpr26 = FALSE ;
+  else {
+  mu__boolexpr26 = (mu_bedcare[mu_varbed][mu_varcare]) ; 
+}
+  if (!(mu__boolexpr26)) mu__boolexpr25 = FALSE ;
+  else {
+  mu__boolexpr25 = (mu_patientcare[mu_p][mu_varcare]) ; 
+}
+bool mu__boolexpr29;
+bool mu__boolexpr30;
+bool mu__boolexpr31;
+bool mu__boolexpr32;
+bool mu__boolexpr33;
+  if (!(!(mu_allocated[mu_p]))) mu__boolexpr33 = FALSE ;
+  else {
+  mu__boolexpr33 = (mu_bedfree[mu_varbed]) ; 
+}
+  if (!(mu__boolexpr33)) mu__boolexpr32 = FALSE ;
+  else {
+  mu__boolexpr32 = (mu_bedmedicinainterna[mu_varbed]) ; 
+}
+  if (!(mu__boolexpr32)) mu__boolexpr31 = FALSE ;
+  else {
+  mu__boolexpr31 = (mu_bedcare[mu_varbed][mu_varcare]) ; 
+}
+  if (!(mu__boolexpr31)) mu__boolexpr30 = FALSE ;
+  else {
+  mu__boolexpr30 = (mu_patientcare[mu_p][mu_varcare]) ; 
+}
+  if (!(mu__boolexpr30)) mu__boolexpr29 = FALSE ;
+  else {
+  mu__boolexpr29 = (mu_patientmedicinainterna[mu_p]) ; 
+}
+bool mu__boolexpr34;
+bool mu__boolexpr35;
+bool mu__boolexpr36;
+  if (!(!(mu_allocated[mu_p]))) mu__boolexpr36 = FALSE ;
+  else {
+  mu__boolexpr36 = (mu_bedfree[mu_varbed]) ; 
+}
+  if (!(mu__boolexpr36)) mu__boolexpr35 = FALSE ;
+  else {
+  mu__boolexpr35 = (mu_bedmedicinainterna[mu_varbed]) ; 
+}
+  if (!(mu__boolexpr35)) mu__boolexpr34 = FALSE ;
+  else {
+  mu__boolexpr34 = (mu_bedcare[mu_varbed][mu_varcare]) ; 
+}
+bool mu__boolexpr37;
+bool mu__boolexpr38;
+bool mu__boolexpr39;
+bool mu__boolexpr40;
+  if (!(!(mu_allocated[mu_p]))) mu__boolexpr40 = FALSE ;
+  else {
+  mu__boolexpr40 = (mu_bedfree[mu_varbed]) ; 
+}
+  if (!(mu__boolexpr40)) mu__boolexpr39 = FALSE ;
+  else {
+  mu__boolexpr39 = (mu_bedmedicinainterna[mu_varbed]) ; 
+}
+  if (!(mu__boolexpr39)) mu__boolexpr38 = FALSE ;
+  else {
+  mu__boolexpr38 = (mu_bedcare[mu_varbed][mu_varcare]) ; 
+}
+  if (!(mu__boolexpr38)) mu__boolexpr37 = FALSE ;
+  else {
+  mu__boolexpr37 = (mu_patientcare[mu_p][mu_varcare]) ; 
+}
+bool mu__boolexpr41;
+bool mu__boolexpr42;
+  if (!(!(mu_allocated[mu_p]))) mu__boolexpr42 = FALSE ;
+  else {
+  mu__boolexpr42 = (mu_bedfree[mu_varbed]) ; 
+}
+  if (!(mu__boolexpr42)) mu__boolexpr41 = FALSE ;
+  else {
+  mu__boolexpr41 = (mu_bedmedicinainterna[mu_varbed]) ; 
+}
+bool mu__boolexpr43;
+bool mu__boolexpr44;
+bool mu__boolexpr45;
+  if (!(!(mu_allocated[mu_p]))) mu__boolexpr45 = FALSE ;
+  else {
+  mu__boolexpr45 = (mu_bedfree[mu_varbed]) ; 
+}
+  if (!(mu__boolexpr45)) mu__boolexpr44 = FALSE ;
+  else {
+  mu__boolexpr44 = (mu_bedmedicinainterna[mu_varbed]) ; 
+}
+  if (!(mu__boolexpr44)) mu__boolexpr43 = FALSE ;
+  else {
+  mu__boolexpr43 = (mu_bedcare[mu_varbed][mu_varcare]) ; 
+}
+bool mu__boolexpr46;
+  if (!(!(mu_allocated[mu_p]))) mu__boolexpr46 = FALSE ;
+  else {
+  mu__boolexpr46 = (mu_bedfree[mu_varbed]) ; 
+}
+bool mu__boolexpr47;
+bool mu__boolexpr48;
+  if (!(!(mu_allocated[mu_p]))) mu__boolexpr48 = FALSE ;
+  else {
+  mu__boolexpr48 = (mu_bedfree[mu_varbed]) ; 
+}
+  if (!(mu__boolexpr48)) mu__boolexpr47 = FALSE ;
+  else {
+  mu__boolexpr47 = (mu_bedmedicinainterna[mu_varbed]) ; 
+}
+bool mu__boolexpr49;
+  if (!(!(mu_allocated[mu_p]))) mu__boolexpr49 = FALSE ;
+  else {
+  mu__boolexpr49 = (mu_bedfree[mu_varbed]) ; 
 }
 
- 		if (std::string(typeid(mu_bedfree[mu_bed]).name()).compare("12mu_0_boolean") == 0)
-			preconds.push_back(&(mu_bedfree[mu_bed])); 
+ 		if (std::string(typeid(mu_bedcare[mu_varbed][mu_varcare]).name()).compare("12mu_0_boolean") == 0)
+			preconds.push_back(&(mu_bedcare[mu_varbed][mu_varcare])); 
+ 		if (std::string(typeid(mu_bedfree[mu_varbed]).name()).compare("12mu_0_boolean") == 0)
+			preconds.push_back(&(mu_bedfree[mu_varbed])); 
+ 		if (std::string(typeid(mu_bedmedicinainterna[mu_varbed]).name()).compare("12mu_0_boolean") == 0)
+			preconds.push_back(&(mu_bedmedicinainterna[mu_varbed])); 
+ 		if (std::string(typeid(mu_patientcare[mu_p][mu_varcare]).name()).compare("12mu_0_boolean") == 0)
+			preconds.push_back(&(mu_patientcare[mu_p][mu_varcare])); 
+ 		if (std::string(typeid(mu_patientmedicinainterna[mu_p]).name()).compare("12mu_0_boolean") == 0)
+			preconds.push_back(&(mu_patientmedicinainterna[mu_p])); 
 
     return preconds;
   }
@@ -2758,17 +4273,140 @@ bool mu__boolexpr15;
   std::map<mu__real*, std::pair<double, int> > num_precond_array(RULE_INDEX_TYPE r)
   {
     std::map<mu__real*, std::pair<double, int> > preconds;
-    static mu_1_bed mu_bed;
-    mu_bed.value((r % 1) + 2);
-    r = r / 1;
-    static mu_1_patient mu_patient;
-    mu_patient.value((r % 1) + 1);
-    r = r / 1;
+    static mu_1_care mu_varcare;
+    mu_varcare.value((r % 2) + 5);
+    r = r / 2;
+    static mu_1_bed mu_varbed;
+    mu_varbed.value((r % 2) + 3);
+    r = r / 2;
+    static mu_1_patient mu_p;
+    mu_p.value((r % 2) + 1);
+    r = r / 2;
 
-bool mu__boolexpr16;
-  if (!(!(mu_alocated[mu_patient]))) mu__boolexpr16 = FALSE ;
+bool mu__boolexpr50;
+bool mu__boolexpr51;
+bool mu__boolexpr52;
+bool mu__boolexpr53;
+  if (!(!(mu_allocated[mu_p]))) mu__boolexpr53 = FALSE ;
   else {
-  mu__boolexpr16 = (mu_bedfree[mu_bed]) ; 
+  mu__boolexpr53 = (mu_bedfree[mu_varbed]) ; 
+}
+  if (!(mu__boolexpr53)) mu__boolexpr52 = FALSE ;
+  else {
+  mu__boolexpr52 = (mu_bedmedicinainterna[mu_varbed]) ; 
+}
+  if (!(mu__boolexpr52)) mu__boolexpr51 = FALSE ;
+  else {
+  mu__boolexpr51 = (mu_bedcare[mu_varbed][mu_varcare]) ; 
+}
+  if (!(mu__boolexpr51)) mu__boolexpr50 = FALSE ;
+  else {
+  mu__boolexpr50 = (mu_patientcare[mu_p][mu_varcare]) ; 
+}
+bool mu__boolexpr54;
+bool mu__boolexpr55;
+bool mu__boolexpr56;
+bool mu__boolexpr57;
+bool mu__boolexpr58;
+  if (!(!(mu_allocated[mu_p]))) mu__boolexpr58 = FALSE ;
+  else {
+  mu__boolexpr58 = (mu_bedfree[mu_varbed]) ; 
+}
+  if (!(mu__boolexpr58)) mu__boolexpr57 = FALSE ;
+  else {
+  mu__boolexpr57 = (mu_bedmedicinainterna[mu_varbed]) ; 
+}
+  if (!(mu__boolexpr57)) mu__boolexpr56 = FALSE ;
+  else {
+  mu__boolexpr56 = (mu_bedcare[mu_varbed][mu_varcare]) ; 
+}
+  if (!(mu__boolexpr56)) mu__boolexpr55 = FALSE ;
+  else {
+  mu__boolexpr55 = (mu_patientcare[mu_p][mu_varcare]) ; 
+}
+  if (!(mu__boolexpr55)) mu__boolexpr54 = FALSE ;
+  else {
+  mu__boolexpr54 = (mu_patientmedicinainterna[mu_p]) ; 
+}
+bool mu__boolexpr59;
+bool mu__boolexpr60;
+bool mu__boolexpr61;
+  if (!(!(mu_allocated[mu_p]))) mu__boolexpr61 = FALSE ;
+  else {
+  mu__boolexpr61 = (mu_bedfree[mu_varbed]) ; 
+}
+  if (!(mu__boolexpr61)) mu__boolexpr60 = FALSE ;
+  else {
+  mu__boolexpr60 = (mu_bedmedicinainterna[mu_varbed]) ; 
+}
+  if (!(mu__boolexpr60)) mu__boolexpr59 = FALSE ;
+  else {
+  mu__boolexpr59 = (mu_bedcare[mu_varbed][mu_varcare]) ; 
+}
+bool mu__boolexpr62;
+bool mu__boolexpr63;
+bool mu__boolexpr64;
+bool mu__boolexpr65;
+  if (!(!(mu_allocated[mu_p]))) mu__boolexpr65 = FALSE ;
+  else {
+  mu__boolexpr65 = (mu_bedfree[mu_varbed]) ; 
+}
+  if (!(mu__boolexpr65)) mu__boolexpr64 = FALSE ;
+  else {
+  mu__boolexpr64 = (mu_bedmedicinainterna[mu_varbed]) ; 
+}
+  if (!(mu__boolexpr64)) mu__boolexpr63 = FALSE ;
+  else {
+  mu__boolexpr63 = (mu_bedcare[mu_varbed][mu_varcare]) ; 
+}
+  if (!(mu__boolexpr63)) mu__boolexpr62 = FALSE ;
+  else {
+  mu__boolexpr62 = (mu_patientcare[mu_p][mu_varcare]) ; 
+}
+bool mu__boolexpr66;
+bool mu__boolexpr67;
+  if (!(!(mu_allocated[mu_p]))) mu__boolexpr67 = FALSE ;
+  else {
+  mu__boolexpr67 = (mu_bedfree[mu_varbed]) ; 
+}
+  if (!(mu__boolexpr67)) mu__boolexpr66 = FALSE ;
+  else {
+  mu__boolexpr66 = (mu_bedmedicinainterna[mu_varbed]) ; 
+}
+bool mu__boolexpr68;
+bool mu__boolexpr69;
+bool mu__boolexpr70;
+  if (!(!(mu_allocated[mu_p]))) mu__boolexpr70 = FALSE ;
+  else {
+  mu__boolexpr70 = (mu_bedfree[mu_varbed]) ; 
+}
+  if (!(mu__boolexpr70)) mu__boolexpr69 = FALSE ;
+  else {
+  mu__boolexpr69 = (mu_bedmedicinainterna[mu_varbed]) ; 
+}
+  if (!(mu__boolexpr69)) mu__boolexpr68 = FALSE ;
+  else {
+  mu__boolexpr68 = (mu_bedcare[mu_varbed][mu_varcare]) ; 
+}
+bool mu__boolexpr71;
+  if (!(!(mu_allocated[mu_p]))) mu__boolexpr71 = FALSE ;
+  else {
+  mu__boolexpr71 = (mu_bedfree[mu_varbed]) ; 
+}
+bool mu__boolexpr72;
+bool mu__boolexpr73;
+  if (!(!(mu_allocated[mu_p]))) mu__boolexpr73 = FALSE ;
+  else {
+  mu__boolexpr73 = (mu_bedfree[mu_varbed]) ; 
+}
+  if (!(mu__boolexpr73)) mu__boolexpr72 = FALSE ;
+  else {
+  mu__boolexpr72 = (mu_bedmedicinainterna[mu_varbed]) ; 
+}
+bool mu__boolexpr74;
+  if (!(!(mu_allocated[mu_p]))) mu__boolexpr74 = FALSE ;
+  else {
+  mu__boolexpr74 = (mu_bedfree[mu_varbed]) ; 
 }
 
 
@@ -2780,14 +4418,25 @@ bool mu__boolexpr16;
   std::vector<mu__any*> all_precond_array(RULE_INDEX_TYPE r)
   {
     std::vector<mu__any*> preconds;
-    static mu_1_bed mu_bed;
-    mu_bed.value((r % 1) + 2);
-    r = r / 1;
-    static mu_1_patient mu_patient;
-    mu_patient.value((r % 1) + 1);
-    r = r / 1;
- 		if (std::string(typeid(mu_bedfree[mu_bed]).name()).compare("12mu_0_boolean") == 0)
-			preconds.push_back(&(mu_bedfree[mu_bed])); 
+    static mu_1_care mu_varcare;
+    mu_varcare.value((r % 2) + 5);
+    r = r / 2;
+    static mu_1_bed mu_varbed;
+    mu_varbed.value((r % 2) + 3);
+    r = r / 2;
+    static mu_1_patient mu_p;
+    mu_p.value((r % 2) + 1);
+    r = r / 2;
+ 		if (std::string(typeid(mu_bedcare[mu_varbed][mu_varcare]).name()).compare("12mu_0_boolean") == 0)
+			preconds.push_back(&(mu_bedcare[mu_varbed][mu_varcare])); 
+ 		if (std::string(typeid(mu_bedfree[mu_varbed]).name()).compare("12mu_0_boolean") == 0)
+			preconds.push_back(&(mu_bedfree[mu_varbed])); 
+ 		if (std::string(typeid(mu_bedmedicinainterna[mu_varbed]).name()).compare("12mu_0_boolean") == 0)
+			preconds.push_back(&(mu_bedmedicinainterna[mu_varbed])); 
+ 		if (std::string(typeid(mu_patientcare[mu_p][mu_varcare]).name()).compare("12mu_0_boolean") == 0)
+			preconds.push_back(&(mu_patientcare[mu_p][mu_varcare])); 
+ 		if (std::string(typeid(mu_patientmedicinainterna[mu_p]).name()).compare("12mu_0_boolean") == 0)
+			preconds.push_back(&(mu_patientmedicinainterna[mu_p])); 
 
     return preconds;
   }
@@ -2795,23 +4444,154 @@ bool mu__boolexpr16;
   std::set<std::pair<mu_0_boolean*, int> > precond_bool_interference(RULE_INDEX_TYPE r)
   {
     std::set<std::pair<mu_0_boolean*, int> > interference_preconds;
-    static mu_1_bed mu_bed;
-    mu_bed.value((r % 1) + 2);
-    r = r / 1;
-    static mu_1_patient mu_patient;
-    mu_patient.value((r % 1) + 1);
-    r = r / 1;
+    static mu_1_care mu_varcare;
+    mu_varcare.value((r % 2) + 5);
+    r = r / 2;
+    static mu_1_bed mu_varbed;
+    mu_varbed.value((r % 2) + 3);
+    r = r / 2;
+    static mu_1_patient mu_p;
+    mu_p.value((r % 2) + 1);
+    r = r / 2;
 
-bool mu__boolexpr17;
-  if (!(!(mu_alocated[mu_patient]))) mu__boolexpr17 = FALSE ;
+bool mu__boolexpr75;
+bool mu__boolexpr76;
+bool mu__boolexpr77;
+bool mu__boolexpr78;
+  if (!(!(mu_allocated[mu_p]))) mu__boolexpr78 = FALSE ;
   else {
-  mu__boolexpr17 = (mu_bedfree[mu_bed]) ; 
+  mu__boolexpr78 = (mu_bedfree[mu_varbed]) ; 
+}
+  if (!(mu__boolexpr78)) mu__boolexpr77 = FALSE ;
+  else {
+  mu__boolexpr77 = (mu_bedmedicinainterna[mu_varbed]) ; 
+}
+  if (!(mu__boolexpr77)) mu__boolexpr76 = FALSE ;
+  else {
+  mu__boolexpr76 = (mu_bedcare[mu_varbed][mu_varcare]) ; 
+}
+  if (!(mu__boolexpr76)) mu__boolexpr75 = FALSE ;
+  else {
+  mu__boolexpr75 = (mu_patientcare[mu_p][mu_varcare]) ; 
+}
+bool mu__boolexpr79;
+bool mu__boolexpr80;
+bool mu__boolexpr81;
+bool mu__boolexpr82;
+bool mu__boolexpr83;
+  if (!(!(mu_allocated[mu_p]))) mu__boolexpr83 = FALSE ;
+  else {
+  mu__boolexpr83 = (mu_bedfree[mu_varbed]) ; 
+}
+  if (!(mu__boolexpr83)) mu__boolexpr82 = FALSE ;
+  else {
+  mu__boolexpr82 = (mu_bedmedicinainterna[mu_varbed]) ; 
+}
+  if (!(mu__boolexpr82)) mu__boolexpr81 = FALSE ;
+  else {
+  mu__boolexpr81 = (mu_bedcare[mu_varbed][mu_varcare]) ; 
+}
+  if (!(mu__boolexpr81)) mu__boolexpr80 = FALSE ;
+  else {
+  mu__boolexpr80 = (mu_patientcare[mu_p][mu_varcare]) ; 
+}
+  if (!(mu__boolexpr80)) mu__boolexpr79 = FALSE ;
+  else {
+  mu__boolexpr79 = (mu_patientmedicinainterna[mu_p]) ; 
+}
+bool mu__boolexpr84;
+bool mu__boolexpr85;
+bool mu__boolexpr86;
+  if (!(!(mu_allocated[mu_p]))) mu__boolexpr86 = FALSE ;
+  else {
+  mu__boolexpr86 = (mu_bedfree[mu_varbed]) ; 
+}
+  if (!(mu__boolexpr86)) mu__boolexpr85 = FALSE ;
+  else {
+  mu__boolexpr85 = (mu_bedmedicinainterna[mu_varbed]) ; 
+}
+  if (!(mu__boolexpr85)) mu__boolexpr84 = FALSE ;
+  else {
+  mu__boolexpr84 = (mu_bedcare[mu_varbed][mu_varcare]) ; 
+}
+bool mu__boolexpr87;
+bool mu__boolexpr88;
+bool mu__boolexpr89;
+bool mu__boolexpr90;
+  if (!(!(mu_allocated[mu_p]))) mu__boolexpr90 = FALSE ;
+  else {
+  mu__boolexpr90 = (mu_bedfree[mu_varbed]) ; 
+}
+  if (!(mu__boolexpr90)) mu__boolexpr89 = FALSE ;
+  else {
+  mu__boolexpr89 = (mu_bedmedicinainterna[mu_varbed]) ; 
+}
+  if (!(mu__boolexpr89)) mu__boolexpr88 = FALSE ;
+  else {
+  mu__boolexpr88 = (mu_bedcare[mu_varbed][mu_varcare]) ; 
+}
+  if (!(mu__boolexpr88)) mu__boolexpr87 = FALSE ;
+  else {
+  mu__boolexpr87 = (mu_patientcare[mu_p][mu_varcare]) ; 
+}
+bool mu__boolexpr91;
+bool mu__boolexpr92;
+  if (!(!(mu_allocated[mu_p]))) mu__boolexpr92 = FALSE ;
+  else {
+  mu__boolexpr92 = (mu_bedfree[mu_varbed]) ; 
+}
+  if (!(mu__boolexpr92)) mu__boolexpr91 = FALSE ;
+  else {
+  mu__boolexpr91 = (mu_bedmedicinainterna[mu_varbed]) ; 
+}
+bool mu__boolexpr93;
+bool mu__boolexpr94;
+bool mu__boolexpr95;
+  if (!(!(mu_allocated[mu_p]))) mu__boolexpr95 = FALSE ;
+  else {
+  mu__boolexpr95 = (mu_bedfree[mu_varbed]) ; 
+}
+  if (!(mu__boolexpr95)) mu__boolexpr94 = FALSE ;
+  else {
+  mu__boolexpr94 = (mu_bedmedicinainterna[mu_varbed]) ; 
+}
+  if (!(mu__boolexpr94)) mu__boolexpr93 = FALSE ;
+  else {
+  mu__boolexpr93 = (mu_bedcare[mu_varbed][mu_varcare]) ; 
+}
+bool mu__boolexpr96;
+  if (!(!(mu_allocated[mu_p]))) mu__boolexpr96 = FALSE ;
+  else {
+  mu__boolexpr96 = (mu_bedfree[mu_varbed]) ; 
+}
+bool mu__boolexpr97;
+bool mu__boolexpr98;
+  if (!(!(mu_allocated[mu_p]))) mu__boolexpr98 = FALSE ;
+  else {
+  mu__boolexpr98 = (mu_bedfree[mu_varbed]) ; 
+}
+  if (!(mu__boolexpr98)) mu__boolexpr97 = FALSE ;
+  else {
+  mu__boolexpr97 = (mu_bedmedicinainterna[mu_varbed]) ; 
+}
+bool mu__boolexpr99;
+  if (!(!(mu_allocated[mu_p]))) mu__boolexpr99 = FALSE ;
+  else {
+  mu__boolexpr99 = (mu_bedfree[mu_varbed]) ; 
 }
 
- 		if (std::string(typeid(mu_alocated[mu_patient]).name()).compare("12mu_0_boolean") == 0)
-			interference_preconds.insert(std::make_pair(&(mu_alocated[mu_patient]), 0)); 
- 		if (std::string(typeid(mu_bedfree[mu_bed]).name()).compare("12mu_0_boolean") == 0)
-			interference_preconds.insert(std::make_pair(&(mu_bedfree[mu_bed]), 1)); 
+ 		if (std::string(typeid(mu_allocated[mu_p]).name()).compare("12mu_0_boolean") == 0)
+			interference_preconds.insert(std::make_pair(&(mu_allocated[mu_p]), 0)); 
+ 		if (std::string(typeid(mu_bedcare[mu_varbed][mu_varcare]).name()).compare("12mu_0_boolean") == 0)
+			interference_preconds.insert(std::make_pair(&(mu_bedcare[mu_varbed][mu_varcare]), 1)); 
+ 		if (std::string(typeid(mu_bedfree[mu_varbed]).name()).compare("12mu_0_boolean") == 0)
+			interference_preconds.insert(std::make_pair(&(mu_bedfree[mu_varbed]), 1)); 
+ 		if (std::string(typeid(mu_bedmedicinainterna[mu_varbed]).name()).compare("12mu_0_boolean") == 0)
+			interference_preconds.insert(std::make_pair(&(mu_bedmedicinainterna[mu_varbed]), 1)); 
+ 		if (std::string(typeid(mu_patientcare[mu_p][mu_varcare]).name()).compare("12mu_0_boolean") == 0)
+			interference_preconds.insert(std::make_pair(&(mu_patientcare[mu_p][mu_varcare]), 1)); 
+ 		if (std::string(typeid(mu_patientmedicinainterna[mu_p]).name()).compare("12mu_0_boolean") == 0)
+			interference_preconds.insert(std::make_pair(&(mu_patientmedicinainterna[mu_p]), 1)); 
 
     return interference_preconds;
   }
@@ -2819,17 +4599,140 @@ bool mu__boolexpr17;
   std::pair<double, double> temporal_constraints(RULE_INDEX_TYPE r)
   {
     std::pair<double, double> temporal_cons;
-    static mu_1_bed mu_bed;
-    mu_bed.value((r % 1) + 2);
-    r = r / 1;
-    static mu_1_patient mu_patient;
-    mu_patient.value((r % 1) + 1);
-    r = r / 1;
+    static mu_1_care mu_varcare;
+    mu_varcare.value((r % 2) + 5);
+    r = r / 2;
+    static mu_1_bed mu_varbed;
+    mu_varbed.value((r % 2) + 3);
+    r = r / 2;
+    static mu_1_patient mu_p;
+    mu_p.value((r % 2) + 1);
+    r = r / 2;
 
-bool mu__boolexpr18;
-  if (!(!(mu_alocated[mu_patient]))) mu__boolexpr18 = FALSE ;
+bool mu__boolexpr100;
+bool mu__boolexpr101;
+bool mu__boolexpr102;
+bool mu__boolexpr103;
+  if (!(!(mu_allocated[mu_p]))) mu__boolexpr103 = FALSE ;
   else {
-  mu__boolexpr18 = (mu_bedfree[mu_bed]) ; 
+  mu__boolexpr103 = (mu_bedfree[mu_varbed]) ; 
+}
+  if (!(mu__boolexpr103)) mu__boolexpr102 = FALSE ;
+  else {
+  mu__boolexpr102 = (mu_bedmedicinainterna[mu_varbed]) ; 
+}
+  if (!(mu__boolexpr102)) mu__boolexpr101 = FALSE ;
+  else {
+  mu__boolexpr101 = (mu_bedcare[mu_varbed][mu_varcare]) ; 
+}
+  if (!(mu__boolexpr101)) mu__boolexpr100 = FALSE ;
+  else {
+  mu__boolexpr100 = (mu_patientcare[mu_p][mu_varcare]) ; 
+}
+bool mu__boolexpr104;
+bool mu__boolexpr105;
+bool mu__boolexpr106;
+bool mu__boolexpr107;
+bool mu__boolexpr108;
+  if (!(!(mu_allocated[mu_p]))) mu__boolexpr108 = FALSE ;
+  else {
+  mu__boolexpr108 = (mu_bedfree[mu_varbed]) ; 
+}
+  if (!(mu__boolexpr108)) mu__boolexpr107 = FALSE ;
+  else {
+  mu__boolexpr107 = (mu_bedmedicinainterna[mu_varbed]) ; 
+}
+  if (!(mu__boolexpr107)) mu__boolexpr106 = FALSE ;
+  else {
+  mu__boolexpr106 = (mu_bedcare[mu_varbed][mu_varcare]) ; 
+}
+  if (!(mu__boolexpr106)) mu__boolexpr105 = FALSE ;
+  else {
+  mu__boolexpr105 = (mu_patientcare[mu_p][mu_varcare]) ; 
+}
+  if (!(mu__boolexpr105)) mu__boolexpr104 = FALSE ;
+  else {
+  mu__boolexpr104 = (mu_patientmedicinainterna[mu_p]) ; 
+}
+bool mu__boolexpr109;
+bool mu__boolexpr110;
+bool mu__boolexpr111;
+  if (!(!(mu_allocated[mu_p]))) mu__boolexpr111 = FALSE ;
+  else {
+  mu__boolexpr111 = (mu_bedfree[mu_varbed]) ; 
+}
+  if (!(mu__boolexpr111)) mu__boolexpr110 = FALSE ;
+  else {
+  mu__boolexpr110 = (mu_bedmedicinainterna[mu_varbed]) ; 
+}
+  if (!(mu__boolexpr110)) mu__boolexpr109 = FALSE ;
+  else {
+  mu__boolexpr109 = (mu_bedcare[mu_varbed][mu_varcare]) ; 
+}
+bool mu__boolexpr112;
+bool mu__boolexpr113;
+bool mu__boolexpr114;
+bool mu__boolexpr115;
+  if (!(!(mu_allocated[mu_p]))) mu__boolexpr115 = FALSE ;
+  else {
+  mu__boolexpr115 = (mu_bedfree[mu_varbed]) ; 
+}
+  if (!(mu__boolexpr115)) mu__boolexpr114 = FALSE ;
+  else {
+  mu__boolexpr114 = (mu_bedmedicinainterna[mu_varbed]) ; 
+}
+  if (!(mu__boolexpr114)) mu__boolexpr113 = FALSE ;
+  else {
+  mu__boolexpr113 = (mu_bedcare[mu_varbed][mu_varcare]) ; 
+}
+  if (!(mu__boolexpr113)) mu__boolexpr112 = FALSE ;
+  else {
+  mu__boolexpr112 = (mu_patientcare[mu_p][mu_varcare]) ; 
+}
+bool mu__boolexpr116;
+bool mu__boolexpr117;
+  if (!(!(mu_allocated[mu_p]))) mu__boolexpr117 = FALSE ;
+  else {
+  mu__boolexpr117 = (mu_bedfree[mu_varbed]) ; 
+}
+  if (!(mu__boolexpr117)) mu__boolexpr116 = FALSE ;
+  else {
+  mu__boolexpr116 = (mu_bedmedicinainterna[mu_varbed]) ; 
+}
+bool mu__boolexpr118;
+bool mu__boolexpr119;
+bool mu__boolexpr120;
+  if (!(!(mu_allocated[mu_p]))) mu__boolexpr120 = FALSE ;
+  else {
+  mu__boolexpr120 = (mu_bedfree[mu_varbed]) ; 
+}
+  if (!(mu__boolexpr120)) mu__boolexpr119 = FALSE ;
+  else {
+  mu__boolexpr119 = (mu_bedmedicinainterna[mu_varbed]) ; 
+}
+  if (!(mu__boolexpr119)) mu__boolexpr118 = FALSE ;
+  else {
+  mu__boolexpr118 = (mu_bedcare[mu_varbed][mu_varcare]) ; 
+}
+bool mu__boolexpr121;
+  if (!(!(mu_allocated[mu_p]))) mu__boolexpr121 = FALSE ;
+  else {
+  mu__boolexpr121 = (mu_bedfree[mu_varbed]) ; 
+}
+bool mu__boolexpr122;
+bool mu__boolexpr123;
+  if (!(!(mu_allocated[mu_p]))) mu__boolexpr123 = FALSE ;
+  else {
+  mu__boolexpr123 = (mu_bedfree[mu_varbed]) ; 
+}
+  if (!(mu__boolexpr123)) mu__boolexpr122 = FALSE ;
+  else {
+  mu__boolexpr122 = (mu_bedmedicinainterna[mu_varbed]) ; 
+}
+bool mu__boolexpr124;
+  if (!(!(mu_allocated[mu_p]))) mu__boolexpr124 = FALSE ;
+  else {
+  mu__boolexpr124 = (mu_bedfree[mu_varbed]) ; 
 }
 
 
@@ -2840,12 +4743,15 @@ bool mu__boolexpr18;
   {
     std::vector<mu__real*> effs;
 
-    static mu_1_bed mu_bed;
-    mu_bed.value((r % 1) + 2);
-    r = r / 1;
-    static mu_1_patient mu_patient;
-    mu_patient.value((r % 1) + 1);
-    r = r / 1;
+    static mu_1_care mu_varcare;
+    mu_varcare.value((r % 2) + 5);
+    r = r / 2;
+    static mu_1_bed mu_varbed;
+    mu_varbed.value((r % 2) + 3);
+    r = r / 2;
+    static mu_1_patient mu_p;
+    mu_p.value((r % 2) + 1);
+    r = r / 2;
 
 
     return effs;
@@ -2855,16 +4761,19 @@ bool mu__boolexpr18;
   {
     std::vector<mu_0_boolean*> aeffs;
 
-    static mu_1_bed mu_bed;
-    mu_bed.value((r % 1) + 2);
-    r = r / 1;
-    static mu_1_patient mu_patient;
-    mu_patient.value((r % 1) + 1);
-    r = r / 1;
+    static mu_1_care mu_varcare;
+    mu_varcare.value((r % 2) + 5);
+    r = r / 2;
+    static mu_1_bed mu_varbed;
+    mu_varbed.value((r % 2) + 3);
+    r = r / 2;
+    static mu_1_patient mu_p;
+    mu_p.value((r % 2) + 1);
+    r = r / 2;
 
-    aeffs.push_back(&(mu_at[mu_patient][mu_bed])); //  mu_true 
-    aeffs.push_back(&(mu_busybed[mu_bed])); //  mu_true 
-    aeffs.push_back(&(mu_alocated[mu_patient])); //  mu_true 
+    aeffs.push_back(&(mu_in_[mu_p][mu_varbed])); //  mu_true 
+    aeffs.push_back(&(mu_allocated[mu_p])); //  mu_true 
+    aeffs.push_back(&(mu_busybed[mu_varbed])); //  mu_true 
 
     return aeffs;
   }
@@ -2873,16 +4782,19 @@ bool mu__boolexpr18;
   {
     std::set<std::pair<mu_0_boolean*,int> > inter_effs;
 
-    static mu_1_bed mu_bed;
-    mu_bed.value((r % 1) + 2);
-    r = r / 1;
-    static mu_1_patient mu_patient;
-    mu_patient.value((r % 1) + 1);
-    r = r / 1;
+    static mu_1_care mu_varcare;
+    mu_varcare.value((r % 2) + 5);
+    r = r / 2;
+    static mu_1_bed mu_varbed;
+    mu_varbed.value((r % 2) + 3);
+    r = r / 2;
+    static mu_1_patient mu_p;
+    mu_p.value((r % 2) + 1);
+    r = r / 2;
 
-    inter_effs.insert(std::make_pair(&(mu_at[mu_patient][mu_bed]), 1)); //  mu_true 
-    inter_effs.insert(std::make_pair(&(mu_busybed[mu_bed]), 1)); //  mu_true 
-    inter_effs.insert(std::make_pair(&(mu_alocated[mu_patient]), 1)); //  mu_true 
+    inter_effs.insert(std::make_pair(&(mu_in_[mu_p][mu_varbed]), 1)); //  mu_true 
+    inter_effs.insert(std::make_pair(&(mu_allocated[mu_p]), 1)); //  mu_true 
+    inter_effs.insert(std::make_pair(&(mu_busybed[mu_varbed]), 1)); //  mu_true 
 
     return inter_effs;
   }
@@ -2890,15 +4802,18 @@ bool mu__boolexpr18;
   std::vector<mu__any*> effects_all_array(RULE_INDEX_TYPE r)
   {
     std::vector<mu__any*> aeffs;
-    static mu_1_bed mu_bed;
-    mu_bed.value((r % 1) + 2);
-    r = r / 1;
-    static mu_1_patient mu_patient;
-    mu_patient.value((r % 1) + 1);
-    r = r / 1;
-    aeffs.push_back(&(mu_at[mu_patient][mu_bed])); //  mu_true 
-    aeffs.push_back(&(mu_busybed[mu_bed])); //  mu_true 
-    aeffs.push_back(&(mu_alocated[mu_patient])); //  mu_true 
+    static mu_1_care mu_varcare;
+    mu_varcare.value((r % 2) + 5);
+    r = r / 2;
+    static mu_1_bed mu_varbed;
+    mu_varbed.value((r % 2) + 3);
+    r = r / 2;
+    static mu_1_patient mu_p;
+    mu_p.value((r % 2) + 1);
+    r = r / 2;
+    aeffs.push_back(&(mu_in_[mu_p][mu_varbed])); //  mu_true 
+    aeffs.push_back(&(mu_allocated[mu_p])); //  mu_true 
+    aeffs.push_back(&(mu_busybed[mu_varbed])); //  mu_true 
 
     return aeffs;
   }
@@ -2906,21 +4821,44 @@ bool mu__boolexpr18;
   void NextRule(RULE_INDEX_TYPE & what_rule)
   {
     RULE_INDEX_TYPE r = what_rule - 1;
-    static mu_1_bed mu_bed;
-    mu_bed.value((r % 1) + 2);
-    r = r / 1;
-    static mu_1_patient mu_patient;
-    mu_patient.value((r % 1) + 1);
-    r = r / 1;
-    while (what_rule < 2 )
+    static mu_1_care mu_varcare;
+    mu_varcare.value((r % 2) + 5);
+    r = r / 2;
+    static mu_1_bed mu_varbed;
+    mu_varbed.value((r % 2) + 3);
+    r = r / 2;
+    static mu_1_patient mu_p;
+    mu_p.value((r % 2) + 1);
+    r = r / 2;
+    while (what_rule < 9 )
       {
 	if ( ( TRUE  ) ) {
-bool mu__boolexpr19;
-  if (!(!(mu_alocated[mu_patient]))) mu__boolexpr19 = FALSE ;
+bool mu__boolexpr125;
+bool mu__boolexpr126;
+bool mu__boolexpr127;
+bool mu__boolexpr128;
+bool mu__boolexpr129;
+  if (!(!(mu_allocated[mu_p]))) mu__boolexpr129 = FALSE ;
   else {
-  mu__boolexpr19 = (mu_bedfree[mu_bed]) ; 
+  mu__boolexpr129 = (mu_bedfree[mu_varbed]) ; 
 }
-	      if (mu__boolexpr19) {
+  if (!(mu__boolexpr129)) mu__boolexpr128 = FALSE ;
+  else {
+  mu__boolexpr128 = (mu_bedmedicinainterna[mu_varbed]) ; 
+}
+  if (!(mu__boolexpr128)) mu__boolexpr127 = FALSE ;
+  else {
+  mu__boolexpr127 = (mu_bedcare[mu_varbed][mu_varcare]) ; 
+}
+  if (!(mu__boolexpr127)) mu__boolexpr126 = FALSE ;
+  else {
+  mu__boolexpr126 = (mu_patientcare[mu_p][mu_varcare]) ; 
+}
+  if (!(mu__boolexpr126)) mu__boolexpr125 = FALSE ;
+  else {
+  mu__boolexpr125 = (mu_patientmedicinainterna[mu_p]) ; 
+}
+	      if (mu__boolexpr125) {
 		if ( ( TRUE  ) )
 		  return;
 		else
@@ -2932,40 +4870,48 @@ bool mu__boolexpr19;
 	else
 	  what_rule += 1;
     r = what_rule - 1;
-    mu_bed.value((r % 1) + 2);
-    r = r / 1;
-    mu_patient.value((r % 1) + 1);
-    r = r / 1;
+    mu_varcare.value((r % 2) + 5);
+    r = r / 2;
+    mu_varbed.value((r % 2) + 3);
+    r = r / 2;
+    mu_p.value((r % 2) + 1);
+    r = r / 2;
     }
   }
 
   void Code(RULE_INDEX_TYPE r)
   {
-    static mu_1_bed mu_bed;
-    mu_bed.value((r % 1) + 2);
-    r = r / 1;
-    static mu_1_patient mu_patient;
-    mu_patient.value((r % 1) + 1);
-    r = r / 1;
-mu_at[mu_patient][mu_bed] = mu_true;
-mu_busybed[mu_bed] = mu_true;
-mu_alocated[mu_patient] = mu_true;
+    static mu_1_care mu_varcare;
+    mu_varcare.value((r % 2) + 5);
+    r = r / 2;
+    static mu_1_bed mu_varbed;
+    mu_varbed.value((r % 2) + 3);
+    r = r / 2;
+    static mu_1_patient mu_p;
+    mu_p.value((r % 2) + 1);
+    r = r / 2;
+mu_in_[mu_p][mu_varbed] = mu_true;
+mu_allocated[mu_p] = mu_true;
+mu_busybed[mu_varbed] = mu_true;
   };
 
   void Code_ff(RULE_INDEX_TYPE r)
   {
 
 
-    static mu_1_bed mu_bed;
-    mu_bed.value((r % 1) + 2);
-    r = r / 1;
-    static mu_1_patient mu_patient;
-    mu_patient.value((r % 1) + 1);
-    r = r / 1;
+    static mu_1_care mu_varcare;
+    mu_varcare.value((r % 2) + 5);
+    r = r / 2;
+    static mu_1_bed mu_varbed;
+    mu_varbed.value((r % 2) + 3);
+    r = r / 2;
+    static mu_1_patient mu_p;
+    mu_p.value((r % 2) + 1);
+    r = r / 2;
 
-mu_at[mu_patient][mu_bed] = mu_true;
-mu_busybed[mu_bed] = mu_true;
-mu_alocated[mu_patient] = mu_true;
+mu_in_[mu_p][mu_varbed] = mu_true;
+mu_allocated[mu_p] = mu_true;
+mu_busybed[mu_varbed] = mu_true;
 
 
   }
@@ -2974,16 +4920,19 @@ mu_alocated[mu_patient] = mu_true;
   {
 
 
-    static mu_1_bed mu_bed;
-    mu_bed.value((r % 1) + 2);
-    r = r / 1;
-    static mu_1_patient mu_patient;
-    mu_patient.value((r % 1) + 1);
-    r = r / 1;
+    static mu_1_care mu_varcare;
+    mu_varcare.value((r % 2) + 5);
+    r = r / 2;
+    static mu_1_bed mu_varbed;
+    mu_varbed.value((r % 2) + 3);
+    r = r / 2;
+    static mu_1_patient mu_p;
+    mu_p.value((r % 2) + 1);
+    r = r / 2;
 
-mu_at[mu_patient][mu_bed] = mu_true;
-mu_busybed[mu_bed] = mu_true;
-mu_alocated[mu_patient] = mu_true;
+mu_in_[mu_p][mu_varbed] = mu_true;
+mu_allocated[mu_p] = mu_true;
+mu_busybed[mu_varbed] = mu_true;
 
 
   }
@@ -2992,16 +4941,19 @@ mu_alocated[mu_patient] = mu_true;
   {
 
 
-    static mu_1_bed mu_bed;
-    mu_bed.value((r % 1) + 2);
-    r = r / 1;
-    static mu_1_patient mu_patient;
-    mu_patient.value((r % 1) + 1);
-    r = r / 1;
+    static mu_1_care mu_varcare;
+    mu_varcare.value((r % 2) + 5);
+    r = r / 2;
+    static mu_1_bed mu_varbed;
+    mu_varbed.value((r % 2) + 3);
+    r = r / 2;
+    static mu_1_patient mu_p;
+    mu_p.value((r % 2) + 1);
+    r = r / 2;
 
-mu_at[mu_patient][mu_bed] = mu_true;
-mu_busybed[mu_bed] = mu_true;
-mu_alocated[mu_patient] = mu_true;
+mu_in_[mu_p][mu_varbed] = mu_true;
+mu_allocated[mu_p] = mu_true;
+mu_busybed[mu_varbed] = mu_true;
 
 
   }
@@ -3010,12 +4962,15 @@ mu_alocated[mu_patient] = mu_true;
   {
 
 
-    static mu_1_bed mu_bed;
-    mu_bed.value((r % 1) + 2);
-    r = r / 1;
-    static mu_1_patient mu_patient;
-    mu_patient.value((r % 1) + 1);
-    r = r / 1;
+    static mu_1_care mu_varcare;
+    mu_varcare.value((r % 2) + 5);
+    r = r / 2;
+    static mu_1_bed mu_varbed;
+    mu_varbed.value((r % 2) + 3);
+    r = r / 2;
+    static mu_1_patient mu_p;
+    mu_p.value((r % 2) + 1);
+    r = r / 2;
 
 
 
@@ -3026,12 +4981,15 @@ std::map<mu_0_boolean*, mu__real*> get_clocks(RULE_INDEX_TYPE r)
 
 
  std::map<mu_0_boolean*, mu__real*> pr; 
-    static mu_1_bed mu_bed;
-    mu_bed.value((r % 1) + 2);
-    r = r / 1;
-    static mu_1_patient mu_patient;
-    mu_patient.value((r % 1) + 1);
-    r = r / 1;
+    static mu_1_care mu_varcare;
+    mu_varcare.value((r % 2) + 5);
+    r = r / 2;
+    static mu_1_bed mu_varbed;
+    mu_varbed.value((r % 2) + 3);
+    r = r / 2;
+    static mu_1_patient mu_p;
+    mu_p.value((r % 2) + 1);
+    r = r / 2;
 
 return pr; 
 
@@ -3040,35 +4998,44 @@ return pr;
 
   int Duration(RULE_INDEX_TYPE r)
   {
-    static mu_1_bed mu_bed;
-    mu_bed.value((r % 1) + 2);
-    r = r / 1;
-    static mu_1_patient mu_patient;
-    mu_patient.value((r % 1) + 1);
-    r = r / 1;
+    static mu_1_care mu_varcare;
+    mu_varcare.value((r % 2) + 5);
+    r = r / 2;
+    static mu_1_bed mu_varbed;
+    mu_varbed.value((r % 2) + 3);
+    r = r / 2;
+    static mu_1_patient mu_p;
+    mu_p.value((r % 2) + 1);
+    r = r / 2;
     return 0;
   }
 
   int Weight(RULE_INDEX_TYPE r)
   {
-    static mu_1_bed mu_bed;
-    mu_bed.value((r % 1) + 2);
-    r = r / 1;
-    static mu_1_patient mu_patient;
-    mu_patient.value((r % 1) + 1);
-    r = r / 1;
+    static mu_1_care mu_varcare;
+    mu_varcare.value((r % 2) + 5);
+    r = r / 2;
+    static mu_1_bed mu_varbed;
+    mu_varbed.value((r % 2) + 3);
+    r = r / 2;
+    static mu_1_patient mu_p;
+    mu_p.value((r % 2) + 1);
+    r = r / 2;
     return 0;
   }
 
    char * PDDLName(RULE_INDEX_TYPE r)
   {
-    static mu_1_bed mu_bed;
-    mu_bed.value((r % 1) + 2);
-    r = r / 1;
-    static mu_1_patient mu_patient;
-    mu_patient.value((r % 1) + 1);
-    r = r / 1;
-    return tsprintf("( allocate %s %s)", mu_patient.Name(), mu_bed.Name());
+    static mu_1_care mu_varcare;
+    mu_varcare.value((r % 2) + 5);
+    r = r / 2;
+    static mu_1_bed mu_varbed;
+    mu_varbed.value((r % 2) + 3);
+    r = r / 2;
+    static mu_1_patient mu_p;
+    mu_p.value((r % 2) + 1);
+    r = r / 2;
+    return tsprintf("( allocatemedicinainterna %s %s %s)", mu_p.Name(), mu_varbed.Name(), mu_varcare.Name());
   }
    RuleManager::rule_pddlclass PDDLClass(RULE_INDEX_TYPE r)
   {
@@ -3087,148 +5054,148 @@ void SetNextEnabledRule(RULE_INDEX_TYPE & what_rule)
   if (what_rule<1)
     { R0.NextRule(what_rule);
       if (what_rule<1) return; }
-  if (what_rule>=1 && what_rule<2)
+  if (what_rule>=1 && what_rule<9)
     { R1.NextRule(what_rule);
-      if (what_rule<2) return; }
+      if (what_rule<9) return; }
 }
 bool Condition(RULE_INDEX_TYPE r)
 {
   category = CONDITION;
   if (r<=0) return R0.Condition(r-0);
-  if (r>=1 && r<=1) return R1.Condition(r-1);
+  if (r>=1 && r<=8) return R1.Condition(r-1);
 Error.Notrace("Internal: NextStateGenerator -- checking condition for nonexisting rule.");
 }
 std::vector<mu_0_boolean*> bool_precond_array(RULE_INDEX_TYPE r)
 {
   category = CONDITION;
   if (r<=0) return R0.bool_precond_array(r-0);
-  if (r>=1 && r<=1) return R1.bool_precond_array(r-1);
+  if (r>=1 && r<=8) return R1.bool_precond_array(r-1);
 Error.Notrace("Internal: NextStateGenerator -- checking preconditions for nonexisting rule.");
 }
 std::map<mu__real*, std::pair<double,int> > num_precond_array(RULE_INDEX_TYPE r)
 {
   category = CONDITION;
   if (r<=0) return R0.num_precond_array(r-0);
-  if (r>=1 && r<=1) return R1.num_precond_array(r-1);
+  if (r>=1 && r<=8) return R1.num_precond_array(r-1);
 Error.Notrace("Internal: NextStateGenerator -- checking preconditions for nonexisting rule.");
 }
 std::vector<mu__any*> all_precond_array(RULE_INDEX_TYPE r)
 {
   category = CONDITION;
   if (r<=0) return R0.all_precond_array(r-0);
-  if (r>=1 && r<=1) return R1.all_precond_array(r-1);
+  if (r>=1 && r<=8) return R1.all_precond_array(r-1);
 Error.Notrace("Internal: NextStateGenerator -- checking preconditions for nonexisting rule.");
 }
 std::set<std::pair<mu_0_boolean*, int> > precond_bool_interference(RULE_INDEX_TYPE r)
 {
   category = CONDITION;
   if (r<=0) return R0.precond_bool_interference(r-0);
-  if (r>=1 && r<=1) return R1.precond_bool_interference(r-1);
+  if (r>=1 && r<=8) return R1.precond_bool_interference(r-1);
 Error.Notrace("Internal: NextStateGenerator -- checking preconditions for nonexisting rule.");
 }
 std::pair<double, double> temporal_constraints(RULE_INDEX_TYPE r)
 {
   category = CONDITION;
   if (r<=0) return R0.temporal_constraints(r-0);
-  if (r>=1 && r<=1) return R1.temporal_constraints(r-1);
+  if (r>=1 && r<=8) return R1.temporal_constraints(r-1);
 Error.Notrace("Internal: NextStateGenerator -- checking preconditions for nonexisting rule.");
 }
 std::set<std::pair<mu_0_boolean*, int> > effects_bool_interference(RULE_INDEX_TYPE r)
 {
   if (r<=0) return R0.effects_bool_interference(r-0);
-  if (r>=1 && r<=1) return R1.effects_bool_interference(r-1);
+  if (r>=1 && r<=8) return R1.effects_bool_interference(r-1);
 Error.Notrace("Internal: NextStateGenerator -- checking add effects for nonexisting rule.");
 }
 std::vector<mu_0_boolean*> effects_add_bool_array(RULE_INDEX_TYPE r)
 {
   if (r<=0) return R0.effects_add_bool_array(r-0);
-  if (r>=1 && r<=1) return R1.effects_add_bool_array(r-1);
+  if (r>=1 && r<=8) return R1.effects_add_bool_array(r-1);
 Error.Notrace("Internal: NextStateGenerator -- checking add effects for nonexisting rule.");
 }
 std::vector<mu__real*> effects_num_array(RULE_INDEX_TYPE r)
 {
   if (r<=0) return R0.effects_num_array(r-0);
-  if (r>=1 && r<=1) return R1.effects_num_array(r-1);
+  if (r>=1 && r<=8) return R1.effects_num_array(r-1);
 Error.Notrace("Internal: NextStateGenerator -- checking add effects for nonexisting rule.");
 }
 std::vector<mu__any*> effects_all_array(RULE_INDEX_TYPE r)
 {
   if (r<=0) return R0.effects_all_array(r-0);
-  if (r>=1 && r<=1) return R1.effects_all_array(r-1);
+  if (r>=1 && r<=8) return R1.effects_all_array(r-1);
 Error.Notrace("Internal: NextStateGenerator -- checking add effects for nonexisting rule.");
 }
 void Code(RULE_INDEX_TYPE r)
 {
   if (r<=0) { R0.Code(r-0); return; } 
-  if (r>=1 && r<=1) { R1.Code(r-1); return; } 
+  if (r>=1 && r<=8) { R1.Code(r-1); return; } 
 }
 void Code_ff(RULE_INDEX_TYPE r)
 {
   if (r<=0) { R0.Code_ff(r-0); return; } 
-  if (r>=1 && r<=1) { R1.Code_ff(r-1); return; } 
+  if (r>=1 && r<=8) { R1.Code_ff(r-1); return; } 
 }
 void Code_numeric_ff_plus(RULE_INDEX_TYPE r)
 {
   if (r<=0) { R0.Code_numeric_ff_plus(r-0); return; } 
-  if (r>=1 && r<=1) { R1.Code_numeric_ff_plus(r-1); return; } 
+  if (r>=1 && r<=8) { R1.Code_numeric_ff_plus(r-1); return; } 
 }
 void Code_numeric_ff_minus(RULE_INDEX_TYPE r)
 {
   if (r<=0) { R0.Code_numeric_ff_minus(r-0); return; } 
-  if (r>=1 && r<=1) { R1.Code_numeric_ff_minus(r-1); return; } 
+  if (r>=1 && r<=8) { R1.Code_numeric_ff_minus(r-1); return; } 
 }
 mu_0_boolean* get_rule_clock_started(RULE_INDEX_TYPE r)
 {
   if (r<=0) { return R0.get_rule_clock_started(r-0); } 
-  if (r>=1 && r<=1) { return R1.get_rule_clock_started(r-1); } 
+  if (r>=1 && r<=8) { return R1.get_rule_clock_started(r-1); } 
 }
 std::map<mu_0_boolean*, mu__real*> get_clocks(RULE_INDEX_TYPE r)
 {
   if (r<=0) { return R0.get_clocks(r-0); } 
-  if (r>=1 && r<=1) { return R1.get_clocks(r-1); } 
+  if (r>=1 && r<=8) { return R1.get_clocks(r-1); } 
 }
 int Priority(RULE_INDEX_TYPE r)
 {
   if (r<=0) { return R0.Priority(); } 
-  if (r>=1 && r<=1) { return R1.Priority(); } 
+  if (r>=1 && r<=8) { return R1.Priority(); } 
 }
 char * Name(RULE_INDEX_TYPE r)
 {
   if (r<=0) return R0.Name(r-0);
-  if (r>=1 && r<=1) return R1.Name(r-1);
+  if (r>=1 && r<=8) return R1.Name(r-1);
   return NULL;
 }
 int Duration(RULE_INDEX_TYPE r)
 {
   if (r<=0) return R0.Duration(r-0);
-  if (r>=1 && r<=1) return R1.Duration(r-1);
+  if (r>=1 && r<=8) return R1.Duration(r-1);
 Error.Notrace("Internal: NextStateGenerator -- querying duration for nonexisting rule.");
 }
 int Weight(RULE_INDEX_TYPE r)
 {
   if (r<=0) return R0.Weight(r-0);
-  if (r>=1 && r<=1) return R1.Weight(r-1);
+  if (r>=1 && r<=8) return R1.Weight(r-1);
 Error.Notrace("Internal: NextStateGenerator -- querying duration for nonexisting rule.");
 }
  char * PDDLName(RULE_INDEX_TYPE r)
 {
   if (r<=0) return R0.PDDLName(r-0);
-  if (r>=1 && r<=1) return R1.PDDLName(r-1);
+  if (r>=1 && r<=8) return R1.PDDLName(r-1);
   return NULL;
 }
 RuleManager::rule_pddlclass PDDLClass(RULE_INDEX_TYPE r)
 {
   if (r<=0) return R0.PDDLClass(r-0);
-  if (r>=1 && r<=1) return R1.PDDLClass(r-1);
+  if (r>=1 && r<=8) return R1.PDDLClass(r-1);
 Error.Notrace("Internal: NextStateGenerator -- querying PDDL class for nonexisting rule.");
 }
 };
-const RULE_INDEX_TYPE numrules = 2;
+const RULE_INDEX_TYPE numrules = 9;
 
 /********************
   parameter
  ********************/
-#define RULES_IN_WORLD 2
+#define RULES_IN_WORLD 9
 
 
 /********************
@@ -3246,54 +5213,94 @@ public:
   {
 mu_TIME = 0.000000e+00;
 {
-for(int mu_patient = 1; mu_patient <= 1; mu_patient++) {
+for(int mu_varbed = 3; mu_varbed <= 4; mu_varbed++) {
 {
-for(int mu_bed = 2; mu_bed <= 2; mu_bed++) {
-mu_set_at ( mu_patient, mu_bed, mu_false );
+for(int mu_varcare = 5; mu_varcare <= 6; mu_varcare++) {
+mu_set_bedcare ( mu_varbed, mu_varcare, mu_false );
 };
 };
-};
-};
-{
-for(int mu_bed = 2; mu_bed <= 2; mu_bed++) {
-mu_set_bedfree ( mu_bed, mu_false );
 };
 };
 {
-for(int mu_bed = 2; mu_bed <= 2; mu_bed++) {
-mu_set_busybed ( mu_bed, mu_false );
+for(int mu_varbed = 3; mu_varbed <= 4; mu_varbed++) {
+mu_set_bedmedicinainterna ( mu_varbed, mu_false );
 };
 };
 {
-for(int mu_patient = 1; mu_patient <= 1; mu_patient++) {
-mu_set_alocated ( mu_patient, mu_false );
+for(int mu_varbed = 3; mu_varbed <= 4; mu_varbed++) {
+{
+for(int mu_varspecialty = 7; mu_varspecialty <= 7; mu_varspecialty++) {
+mu_set_bedspecialty ( mu_varbed, mu_varspecialty, mu_false );
+};
+};
 };
 };
 {
-for(int mu_patient = 1; mu_patient <= 1; mu_patient++) {
-mu_maxspeed[mu_patient] = 0.000000e+00;
+for(int mu_varbed = 3; mu_varbed <= 4; mu_varbed++) {
+mu_set_bedfree ( mu_varbed, mu_false );
 };
 };
 {
-for(int mu_patient = 1; mu_patient <= 1; mu_patient++) {
-mu_speed[mu_patient] = 0.000000e+00;
+for(int mu_varbed = 3; mu_varbed <= 4; mu_varbed++) {
+mu_set_busybed ( mu_varbed, mu_false );
 };
 };
 {
-for(int mu_patient = 1; mu_patient <= 1; mu_patient++) {
-mu_traveltime[mu_patient] = 0.000000e+00;
+for(int mu_p = 1; mu_p <= 2; mu_p++) {
+{
+for(int mu_varbed = 3; mu_varbed <= 4; mu_varbed++) {
+mu_set_in_ ( mu_p, mu_varbed, mu_false );
+};
+};
 };
 };
 {
-for(int mu_p = 2; mu_p <= 2; mu_p++) {
+for(int mu_p = 1; mu_p <= 2; mu_p++) {
+mu_set_allocated ( mu_p, mu_false );
+};
+};
 {
-for(int mu_bed = 2; mu_bed <= 2; mu_bed++) {
-mu_distance[mu_p][mu_bed] = 0.000000e+00;
+for(int mu_p = 1; mu_p <= 2; mu_p++) {
+{
+for(int mu_varcare = 5; mu_varcare <= 6; mu_varcare++) {
+mu_set_patientcare ( mu_p, mu_varcare, mu_false );
 };
 };
 };
 };
-mu_bedfree[mu_cama] = mu_true;
+{
+for(int mu_p = 1; mu_p <= 2; mu_p++) {
+{
+for(int mu_varspecialty = 7; mu_varspecialty <= 7; mu_varspecialty++) {
+mu_set_patientspecialty ( mu_p, mu_varspecialty, mu_false );
+};
+};
+};
+};
+{
+for(int mu_p = 1; mu_p <= 2; mu_p++) {
+mu_set_patientmedicinainterna ( mu_p, mu_false );
+};
+};
+{
+for(int mu_p = 1; mu_p <= 2; mu_p++) {
+mu_age[mu_p] = 0.000000e+00;
+};
+};
+mu_bedfree[mu_camamedicinainternaminimo] = mu_true;
+mu_bedfree[mu_camamedicinainternaintensivo] = mu_true;
+mu_patientspecialty[mu_pacientemedicinainternaminimo][mu_medicinainterna] = mu_true;
+mu_patientspecialty[mu_pacientemedicinainternaintensivo][mu_medicinainterna] = mu_true;
+mu_patientmedicinainterna[mu_pacientemedicinainternaminimo] = mu_true;
+mu_patientmedicinainterna[mu_pacientemedicinainternaintensivo] = mu_true;
+mu_patientcare[mu_pacientemedicinainternaminimo][mu_minimo] = mu_true;
+mu_patientcare[mu_pacientemedicinainternaintensivo][mu_intensivo] = mu_true;
+mu_bedcare[mu_camamedicinainternaminimo][mu_minimo] = mu_true;
+mu_bedcare[mu_camamedicinainternaintensivo][mu_intensivo] = mu_true;
+mu_bedspecialty[mu_camamedicinainternaminimo][mu_medicinainterna] = mu_true;
+mu_bedspecialty[mu_camamedicinainternaintensivo][mu_medicinainterna] = mu_true;
+mu_bedmedicinainterna[mu_camamedicinainternaminimo] = mu_true;
+mu_bedmedicinainterna[mu_camamedicinainternaintensivo] = mu_true;
 mu_all_event_true = mu_true;
 mu_g_n = 0;
 mu_h_n = 0;
@@ -3325,27 +5332,49 @@ unsigned short StartStateManager::numstartstates = 1;
  ********************/
 
 // WP WP WP GOAL
-int mu__goal_20() // Goal "enjoy"
+int mu__goal_130() // Goal "enjoy"
 {
-bool mu__boolexpr21;
-  if (!(mu_alocated[mu_pessoa])) mu__boolexpr21 = FALSE ;
+bool mu__boolexpr131;
+bool mu__boolexpr132;
+  if (!(mu_allocated[mu_pacientemedicinainternaminimo])) mu__boolexpr132 = FALSE ;
   else {
-  mu__boolexpr21 = (!(mu_DAs_ongoing_in_goal_state(  ))) ; 
+  mu__boolexpr132 = (mu_allocated[mu_pacientemedicinainternaintensivo]) ; 
 }
-return mu__boolexpr21;
+  if (!(mu__boolexpr132)) mu__boolexpr131 = FALSE ;
+  else {
+  mu__boolexpr131 = (!(mu_DAs_ongoing_in_goal_state(  ))) ; 
+}
+return mu__boolexpr131;
 };
 
   std::set<mu_0_boolean*> get_bool_goal_conditions()
   {
     std::set<mu_0_boolean*> bool_goal_conds;
-bool mu__boolexpr22;
-  if (!(mu_alocated[mu_pessoa])) mu__boolexpr22 = FALSE ;
+bool mu__boolexpr133;
+  if (!(mu_allocated[mu_pacientemedicinainternaminimo])) mu__boolexpr133 = FALSE ;
   else {
-  mu__boolexpr22 = (!(mu_DAs_ongoing_in_goal_state(  ))) ; 
+  mu__boolexpr133 = (mu_allocated[mu_pacientemedicinainternaintensivo]) ; 
+}
+bool mu__boolexpr134;
+bool mu__boolexpr135;
+  if (!(mu_allocated[mu_pacientemedicinainternaminimo])) mu__boolexpr135 = FALSE ;
+  else {
+  mu__boolexpr135 = (mu_allocated[mu_pacientemedicinainternaintensivo]) ; 
+}
+  if (!(mu__boolexpr135)) mu__boolexpr134 = FALSE ;
+  else {
+  mu__boolexpr134 = (!(mu_DAs_ongoing_in_goal_state(  ))) ; 
+}
+bool mu__boolexpr136;
+  if (!(mu_allocated[mu_pacientemedicinainternaminimo])) mu__boolexpr136 = FALSE ;
+  else {
+  mu__boolexpr136 = (mu_allocated[mu_pacientemedicinainternaintensivo]) ; 
 }
 
- if (std::string(typeid(mu_alocated[mu_pessoa]).name()).compare("12mu_0_boolean") == 0)
-		bool_goal_conds.insert(&(mu_alocated[mu_pessoa])); 
+ if (std::string(typeid(mu_allocated[mu_pacientemedicinainternaintensivo]).name()).compare("12mu_0_boolean") == 0)
+		bool_goal_conds.insert(&(mu_allocated[mu_pacientemedicinainternaintensivo])); 
+ if (std::string(typeid(mu_allocated[mu_pacientemedicinainternaminimo]).name()).compare("12mu_0_boolean") == 0)
+		bool_goal_conds.insert(&(mu_allocated[mu_pacientemedicinainternaminimo])); 
 
     return bool_goal_conds;
   }
@@ -3357,17 +5386,17 @@ bool mu__boolexpr22;
     return numeric_goal_conds;
   }
 
-bool mu__condition_23() // Condition for Rule "enjoy"
+bool mu__condition_137() // Condition for Rule "enjoy"
 {
-  return mu__goal_20( );
+  return mu__goal_130( );
 }
 
-bool mu__goal__00(){ return mu__condition_23(); } /* WP WP WP GOAL CONDITION CHECK */ /**** end rule declaration ****/
+bool mu__goal__00(){ return mu__condition_137(); } /* WP WP WP GOAL CONDITION CHECK */ /**** end rule declaration ****/
 
 
 // WP WP WP GOAL
 const rulerec goals[] = {
-{"enjoy", &mu__condition_23, NULL, },
+{"enjoy", &mu__condition_137, NULL, },
 };
 const unsigned short numgoals = 1;
 
@@ -3379,25 +5408,25 @@ const short metric = -1;
 /********************
   Invariant records
  ********************/
-int mu__invariant_24() // Invariant "todo bien"
+int mu__invariant_138() // Invariant "todo bien"
 {
-bool mu__boolexpr25;
-  if (!(mu_all_event_true)) mu__boolexpr25 = FALSE ;
+bool mu__boolexpr139;
+  if (!(mu_all_event_true)) mu__boolexpr139 = FALSE ;
   else {
-  mu__boolexpr25 = (!(mu_DAs_violate_duration(  ))) ; 
+  mu__boolexpr139 = (!(mu_DAs_violate_duration(  ))) ; 
 }
-return mu__boolexpr25;
+return mu__boolexpr139;
 };
 
-bool mu__condition_26() // Condition for Rule "todo bien"
+bool mu__condition_140() // Condition for Rule "todo bien"
 {
-  return mu__invariant_24( );
+  return mu__invariant_138( );
 }
 
-bool mu__goal__01(){ return mu__condition_26(); } /* WP WP WP GOAL CONDITION CHECK */ /**** end rule declaration ****/
+bool mu__goal__01(){ return mu__condition_140(); } /* WP WP WP GOAL CONDITION CHECK */ /**** end rule declaration ****/
 
 const rulerec invariants[] = {
-{"todo bien", &mu__condition_26, NULL, },
+{"todo bien", &mu__condition_140, NULL, },
 };
 const unsigned short numinvariants = 1;
 
@@ -3405,19 +5434,22 @@ const unsigned short numinvariants = 1;
   Normal/Canonicalization for scalarset
  ********************/
 /*
-traveltime:NoScalarset
-speed:NoScalarset
-maxspeed:NoScalarset
-distance:NoScalarset
-f_n:NoScalarset
-h_n:NoScalarset
-all_event_true:NoScalarset
-g_n:NoScalarset
-TIME:NoScalarset
-at:NoScalarset
-bedfree:NoScalarset
+patientcare:NoScalarset
 busybed:NoScalarset
-alocated:NoScalarset
+bedfree:NoScalarset
+bedspecialty:NoScalarset
+age:NoScalarset
+TIME:NoScalarset
+g_n:NoScalarset
+all_event_true:NoScalarset
+h_n:NoScalarset
+f_n:NoScalarset
+bedcare:NoScalarset
+bedmedicinainterna:NoScalarset
+in_:NoScalarset
+allocated:NoScalarset
+patientspecialty:NoScalarset
+patientmedicinainterna:NoScalarset
 */
 
 /********************
@@ -3617,19 +5649,22 @@ public:
  ********************/
 void SymmetryClass::MultisetSort(state* s)
 {
-        mu_traveltime.MultisetSort();
-        mu_speed.MultisetSort();
-        mu_maxspeed.MultisetSort();
-        mu_distance.MultisetSort();
-        mu_f_n.MultisetSort();
-        mu_h_n.MultisetSort();
-        mu_all_event_true.MultisetSort();
-        mu_g_n.MultisetSort();
-        mu_TIME.MultisetSort();
-        mu_at.MultisetSort();
-        mu_bedfree.MultisetSort();
+        mu_patientcare.MultisetSort();
         mu_busybed.MultisetSort();
-        mu_alocated.MultisetSort();
+        mu_bedfree.MultisetSort();
+        mu_bedspecialty.MultisetSort();
+        mu_age.MultisetSort();
+        mu_TIME.MultisetSort();
+        mu_g_n.MultisetSort();
+        mu_all_event_true.MultisetSort();
+        mu_h_n.MultisetSort();
+        mu_f_n.MultisetSort();
+        mu_bedcare.MultisetSort();
+        mu_bedmedicinainterna.MultisetSort();
+        mu_in_.MultisetSort();
+        mu_allocated.MultisetSort();
+        mu_patientspecialty.MultisetSort();
+        mu_patientmedicinainterna.MultisetSort();
 }
 void SymmetryClass::Normalize(state* s)
 {
@@ -3694,11 +5729,27 @@ void mu_1_bed::ArrayLimit(PermSet& Perm) {};
 void mu_1_bed::Limit(PermSet& Perm) {};
 void mu_1_bed::MultisetLimit(PermSet& Perm)
 { Error.Error("Internal: calling MultisetLimit for enum type.\n"); };
+void mu_1_care::Permute(PermSet& Perm, int i) {};
+void mu_1_care::SimpleCanonicalize(PermSet& Perm) {};
+void mu_1_care::Canonicalize(PermSet& Perm) {};
+void mu_1_care::SimpleLimit(PermSet& Perm) {};
+void mu_1_care::ArrayLimit(PermSet& Perm) {};
+void mu_1_care::Limit(PermSet& Perm) {};
+void mu_1_care::MultisetLimit(PermSet& Perm)
+{ Error.Error("Internal: calling MultisetLimit for enum type.\n"); };
+void mu_1_specialty::Permute(PermSet& Perm, int i) {};
+void mu_1_specialty::SimpleCanonicalize(PermSet& Perm) {};
+void mu_1_specialty::Canonicalize(PermSet& Perm) {};
+void mu_1_specialty::SimpleLimit(PermSet& Perm) {};
+void mu_1_specialty::ArrayLimit(PermSet& Perm) {};
+void mu_1_specialty::Limit(PermSet& Perm) {};
+void mu_1_specialty::MultisetLimit(PermSet& Perm)
+{ Error.Error("Internal: calling MultisetLimit for enum type.\n"); };
 void mu_1__type_0::Permute(PermSet& Perm, int i)
 {
   static mu_1__type_0 temp("Permute_mu_1__type_0",-1);
   int j;
-  for (j=0; j<1; j++)
+  for (j=0; j<2; j++)
     array[j].Permute(Perm, i);
 };
 void mu_1__type_0::SimpleCanonicalize(PermSet& Perm)
@@ -3713,7 +5764,7 @@ void mu_1__type_1::Permute(PermSet& Perm, int i)
 {
   static mu_1__type_1 temp("Permute_mu_1__type_1",-1);
   int j;
-  for (j=0; j<1; j++)
+  for (j=0; j<2; j++)
     array[j].Permute(Perm, i);
 };
 void mu_1__type_1::SimpleCanonicalize(PermSet& Perm)
@@ -3728,7 +5779,7 @@ void mu_1__type_2::Permute(PermSet& Perm, int i)
 {
   static mu_1__type_2 temp("Permute_mu_1__type_2",-1);
   int j;
-  for (j=0; j<1; j++)
+  for (j=0; j<2; j++)
     array[j].Permute(Perm, i);
 };
 void mu_1__type_2::SimpleCanonicalize(PermSet& Perm)
@@ -3743,7 +5794,7 @@ void mu_1__type_3::Permute(PermSet& Perm, int i)
 {
   static mu_1__type_3 temp("Permute_mu_1__type_3",-1);
   int j;
-  for (j=0; j<1; j++)
+  for (j=0; j<2; j++)
     array[j].Permute(Perm, i);
 };
 void mu_1__type_3::SimpleCanonicalize(PermSet& Perm)
@@ -3773,7 +5824,7 @@ void mu_1__type_5::Permute(PermSet& Perm, int i)
 {
   static mu_1__type_5 temp("Permute_mu_1__type_5",-1);
   int j;
-  for (j=0; j<1; j++)
+  for (j=0; j<2; j++)
     array[j].Permute(Perm, i);
 };
 void mu_1__type_5::SimpleCanonicalize(PermSet& Perm)
@@ -3788,7 +5839,7 @@ void mu_1__type_6::Permute(PermSet& Perm, int i)
 {
   static mu_1__type_6 temp("Permute_mu_1__type_6",-1);
   int j;
-  for (j=0; j<1; j++)
+  for (j=0; j<2; j++)
     array[j].Permute(Perm, i);
 };
 void mu_1__type_6::SimpleCanonicalize(PermSet& Perm)
@@ -3803,7 +5854,7 @@ void mu_1__type_7::Permute(PermSet& Perm, int i)
 {
   static mu_1__type_7 temp("Permute_mu_1__type_7",-1);
   int j;
-  for (j=0; j<1; j++)
+  for (j=0; j<2; j++)
     array[j].Permute(Perm, i);
 };
 void mu_1__type_7::SimpleCanonicalize(PermSet& Perm)
@@ -3818,7 +5869,7 @@ void mu_1__type_8::Permute(PermSet& Perm, int i)
 {
   static mu_1__type_8 temp("Permute_mu_1__type_8",-1);
   int j;
-  for (j=0; j<1; j++)
+  for (j=0; j<2; j++)
     array[j].Permute(Perm, i);
 };
 void mu_1__type_8::SimpleCanonicalize(PermSet& Perm)
@@ -3833,7 +5884,7 @@ void mu_1__type_9::Permute(PermSet& Perm, int i)
 {
   static mu_1__type_9 temp("Permute_mu_1__type_9",-1);
   int j;
-  for (j=0; j<1; j++)
+  for (j=0; j<2; j++)
     array[j].Permute(Perm, i);
 };
 void mu_1__type_9::SimpleCanonicalize(PermSet& Perm)
@@ -3843,6 +5894,96 @@ void mu_1__type_9::SimpleLimit(PermSet& Perm){}
 void mu_1__type_9::ArrayLimit(PermSet& Perm) {}
 void mu_1__type_9::Limit(PermSet& Perm){}
 void mu_1__type_9::MultisetLimit(PermSet& Perm)
+{ Error.Error("Internal: calling MultisetLimit for scalarset array.\n"); };
+void mu_1__type_10::Permute(PermSet& Perm, int i)
+{
+  static mu_1__type_10 temp("Permute_mu_1__type_10",-1);
+  int j;
+  for (j=0; j<2; j++)
+    array[j].Permute(Perm, i);
+};
+void mu_1__type_10::SimpleCanonicalize(PermSet& Perm)
+{ Error.Error("Internal: Simple Canonicalization of Scalarset Array\n"); };
+void mu_1__type_10::Canonicalize(PermSet& Perm){};
+void mu_1__type_10::SimpleLimit(PermSet& Perm){}
+void mu_1__type_10::ArrayLimit(PermSet& Perm) {}
+void mu_1__type_10::Limit(PermSet& Perm){}
+void mu_1__type_10::MultisetLimit(PermSet& Perm)
+{ Error.Error("Internal: calling MultisetLimit for scalarset array.\n"); };
+void mu_1__type_11::Permute(PermSet& Perm, int i)
+{
+  static mu_1__type_11 temp("Permute_mu_1__type_11",-1);
+  int j;
+  for (j=0; j<2; j++)
+    array[j].Permute(Perm, i);
+};
+void mu_1__type_11::SimpleCanonicalize(PermSet& Perm)
+{ Error.Error("Internal: Simple Canonicalization of Scalarset Array\n"); };
+void mu_1__type_11::Canonicalize(PermSet& Perm){};
+void mu_1__type_11::SimpleLimit(PermSet& Perm){}
+void mu_1__type_11::ArrayLimit(PermSet& Perm) {}
+void mu_1__type_11::Limit(PermSet& Perm){}
+void mu_1__type_11::MultisetLimit(PermSet& Perm)
+{ Error.Error("Internal: calling MultisetLimit for scalarset array.\n"); };
+void mu_1__type_12::Permute(PermSet& Perm, int i)
+{
+  static mu_1__type_12 temp("Permute_mu_1__type_12",-1);
+  int j;
+  for (j=0; j<2; j++)
+    array[j].Permute(Perm, i);
+};
+void mu_1__type_12::SimpleCanonicalize(PermSet& Perm)
+{ Error.Error("Internal: Simple Canonicalization of Scalarset Array\n"); };
+void mu_1__type_12::Canonicalize(PermSet& Perm){};
+void mu_1__type_12::SimpleLimit(PermSet& Perm){}
+void mu_1__type_12::ArrayLimit(PermSet& Perm) {}
+void mu_1__type_12::Limit(PermSet& Perm){}
+void mu_1__type_12::MultisetLimit(PermSet& Perm)
+{ Error.Error("Internal: calling MultisetLimit for scalarset array.\n"); };
+void mu_1__type_13::Permute(PermSet& Perm, int i)
+{
+  static mu_1__type_13 temp("Permute_mu_1__type_13",-1);
+  int j;
+  for (j=0; j<1; j++)
+    array[j].Permute(Perm, i);
+};
+void mu_1__type_13::SimpleCanonicalize(PermSet& Perm)
+{ Error.Error("Internal: Simple Canonicalization of Scalarset Array\n"); };
+void mu_1__type_13::Canonicalize(PermSet& Perm){};
+void mu_1__type_13::SimpleLimit(PermSet& Perm){}
+void mu_1__type_13::ArrayLimit(PermSet& Perm) {}
+void mu_1__type_13::Limit(PermSet& Perm){}
+void mu_1__type_13::MultisetLimit(PermSet& Perm)
+{ Error.Error("Internal: calling MultisetLimit for scalarset array.\n"); };
+void mu_1__type_14::Permute(PermSet& Perm, int i)
+{
+  static mu_1__type_14 temp("Permute_mu_1__type_14",-1);
+  int j;
+  for (j=0; j<2; j++)
+    array[j].Permute(Perm, i);
+};
+void mu_1__type_14::SimpleCanonicalize(PermSet& Perm)
+{ Error.Error("Internal: Simple Canonicalization of Scalarset Array\n"); };
+void mu_1__type_14::Canonicalize(PermSet& Perm){};
+void mu_1__type_14::SimpleLimit(PermSet& Perm){}
+void mu_1__type_14::ArrayLimit(PermSet& Perm) {}
+void mu_1__type_14::Limit(PermSet& Perm){}
+void mu_1__type_14::MultisetLimit(PermSet& Perm)
+{ Error.Error("Internal: calling MultisetLimit for scalarset array.\n"); };
+void mu_1__type_15::Permute(PermSet& Perm, int i)
+{
+  static mu_1__type_15 temp("Permute_mu_1__type_15",-1);
+  int j;
+  for (j=0; j<2; j++)
+    array[j].Permute(Perm, i);
+};
+void mu_1__type_15::SimpleCanonicalize(PermSet& Perm)
+{ Error.Error("Internal: Simple Canonicalization of Scalarset Array\n"); };
+void mu_1__type_15::Canonicalize(PermSet& Perm){};
+void mu_1__type_15::SimpleLimit(PermSet& Perm){}
+void mu_1__type_15::ArrayLimit(PermSet& Perm) {}
+void mu_1__type_15::Limit(PermSet& Perm){}
+void mu_1__type_15::MultisetLimit(PermSet& Perm)
 { Error.Error("Internal: calling MultisetLimit for scalarset array.\n"); };
 
 /********************
@@ -3864,45 +6005,54 @@ bool match(state* ns, StatePtr p)
               if (ns != workingstate)
                   StateCopy(workingstate, ns);
               
-              mu_traveltime.Permute(Perm,i);
+              mu_patientcare.Permute(Perm,i);
               if (args->multiset_reduction.value)
-                mu_traveltime.MultisetSort();
-              mu_speed.Permute(Perm,i);
-              if (args->multiset_reduction.value)
-                mu_speed.MultisetSort();
-              mu_maxspeed.Permute(Perm,i);
-              if (args->multiset_reduction.value)
-                mu_maxspeed.MultisetSort();
-              mu_distance.Permute(Perm,i);
-              if (args->multiset_reduction.value)
-                mu_distance.MultisetSort();
-              mu_f_n.Permute(Perm,i);
-              if (args->multiset_reduction.value)
-                mu_f_n.MultisetSort();
-              mu_h_n.Permute(Perm,i);
-              if (args->multiset_reduction.value)
-                mu_h_n.MultisetSort();
-              mu_all_event_true.Permute(Perm,i);
-              if (args->multiset_reduction.value)
-                mu_all_event_true.MultisetSort();
-              mu_g_n.Permute(Perm,i);
-              if (args->multiset_reduction.value)
-                mu_g_n.MultisetSort();
-              mu_TIME.Permute(Perm,i);
-              if (args->multiset_reduction.value)
-                mu_TIME.MultisetSort();
-              mu_at.Permute(Perm,i);
-              if (args->multiset_reduction.value)
-                mu_at.MultisetSort();
-              mu_bedfree.Permute(Perm,i);
-              if (args->multiset_reduction.value)
-                mu_bedfree.MultisetSort();
+                mu_patientcare.MultisetSort();
               mu_busybed.Permute(Perm,i);
               if (args->multiset_reduction.value)
                 mu_busybed.MultisetSort();
-              mu_alocated.Permute(Perm,i);
+              mu_bedfree.Permute(Perm,i);
               if (args->multiset_reduction.value)
-                mu_alocated.MultisetSort();
+                mu_bedfree.MultisetSort();
+              mu_bedspecialty.Permute(Perm,i);
+              if (args->multiset_reduction.value)
+                mu_bedspecialty.MultisetSort();
+              mu_age.Permute(Perm,i);
+              if (args->multiset_reduction.value)
+                mu_age.MultisetSort();
+              mu_TIME.Permute(Perm,i);
+              if (args->multiset_reduction.value)
+                mu_TIME.MultisetSort();
+              mu_g_n.Permute(Perm,i);
+              if (args->multiset_reduction.value)
+                mu_g_n.MultisetSort();
+              mu_all_event_true.Permute(Perm,i);
+              if (args->multiset_reduction.value)
+                mu_all_event_true.MultisetSort();
+              mu_h_n.Permute(Perm,i);
+              if (args->multiset_reduction.value)
+                mu_h_n.MultisetSort();
+              mu_f_n.Permute(Perm,i);
+              if (args->multiset_reduction.value)
+                mu_f_n.MultisetSort();
+              mu_bedcare.Permute(Perm,i);
+              if (args->multiset_reduction.value)
+                mu_bedcare.MultisetSort();
+              mu_bedmedicinainterna.Permute(Perm,i);
+              if (args->multiset_reduction.value)
+                mu_bedmedicinainterna.MultisetSort();
+              mu_in_.Permute(Perm,i);
+              if (args->multiset_reduction.value)
+                mu_in_.MultisetSort();
+              mu_allocated.Permute(Perm,i);
+              if (args->multiset_reduction.value)
+                mu_allocated.MultisetSort();
+              mu_patientspecialty.Permute(Perm,i);
+              if (args->multiset_reduction.value)
+                mu_patientspecialty.MultisetSort();
+              mu_patientmedicinainterna.Permute(Perm,i);
+              if (args->multiset_reduction.value)
+                mu_patientmedicinainterna.MultisetSort();
             if (p.compare(workingstate)) {
               StateCopy(workingstate,&temp); return TRUE; }
           }
@@ -3915,45 +6065,54 @@ bool match(state* ns, StatePtr p)
         if (ns != workingstate)
           StateCopy(workingstate, ns);
 
-          mu_traveltime.Permute(Perm,0);
+          mu_patientcare.Permute(Perm,0);
           if (args->multiset_reduction.value)
-            mu_traveltime.MultisetSort();
-          mu_speed.Permute(Perm,0);
-          if (args->multiset_reduction.value)
-            mu_speed.MultisetSort();
-          mu_maxspeed.Permute(Perm,0);
-          if (args->multiset_reduction.value)
-            mu_maxspeed.MultisetSort();
-          mu_distance.Permute(Perm,0);
-          if (args->multiset_reduction.value)
-            mu_distance.MultisetSort();
-          mu_f_n.Permute(Perm,0);
-          if (args->multiset_reduction.value)
-            mu_f_n.MultisetSort();
-          mu_h_n.Permute(Perm,0);
-          if (args->multiset_reduction.value)
-            mu_h_n.MultisetSort();
-          mu_all_event_true.Permute(Perm,0);
-          if (args->multiset_reduction.value)
-            mu_all_event_true.MultisetSort();
-          mu_g_n.Permute(Perm,0);
-          if (args->multiset_reduction.value)
-            mu_g_n.MultisetSort();
-          mu_TIME.Permute(Perm,0);
-          if (args->multiset_reduction.value)
-            mu_TIME.MultisetSort();
-          mu_at.Permute(Perm,0);
-          if (args->multiset_reduction.value)
-            mu_at.MultisetSort();
-          mu_bedfree.Permute(Perm,0);
-          if (args->multiset_reduction.value)
-            mu_bedfree.MultisetSort();
+            mu_patientcare.MultisetSort();
           mu_busybed.Permute(Perm,0);
           if (args->multiset_reduction.value)
             mu_busybed.MultisetSort();
-          mu_alocated.Permute(Perm,0);
+          mu_bedfree.Permute(Perm,0);
           if (args->multiset_reduction.value)
-            mu_alocated.MultisetSort();
+            mu_bedfree.MultisetSort();
+          mu_bedspecialty.Permute(Perm,0);
+          if (args->multiset_reduction.value)
+            mu_bedspecialty.MultisetSort();
+          mu_age.Permute(Perm,0);
+          if (args->multiset_reduction.value)
+            mu_age.MultisetSort();
+          mu_TIME.Permute(Perm,0);
+          if (args->multiset_reduction.value)
+            mu_TIME.MultisetSort();
+          mu_g_n.Permute(Perm,0);
+          if (args->multiset_reduction.value)
+            mu_g_n.MultisetSort();
+          mu_all_event_true.Permute(Perm,0);
+          if (args->multiset_reduction.value)
+            mu_all_event_true.MultisetSort();
+          mu_h_n.Permute(Perm,0);
+          if (args->multiset_reduction.value)
+            mu_h_n.MultisetSort();
+          mu_f_n.Permute(Perm,0);
+          if (args->multiset_reduction.value)
+            mu_f_n.MultisetSort();
+          mu_bedcare.Permute(Perm,0);
+          if (args->multiset_reduction.value)
+            mu_bedcare.MultisetSort();
+          mu_bedmedicinainterna.Permute(Perm,0);
+          if (args->multiset_reduction.value)
+            mu_bedmedicinainterna.MultisetSort();
+          mu_in_.Permute(Perm,0);
+          if (args->multiset_reduction.value)
+            mu_in_.MultisetSort();
+          mu_allocated.Permute(Perm,0);
+          if (args->multiset_reduction.value)
+            mu_allocated.MultisetSort();
+          mu_patientspecialty.Permute(Perm,0);
+          if (args->multiset_reduction.value)
+            mu_patientspecialty.MultisetSort();
+          mu_patientmedicinainterna.Permute(Perm,0);
+          if (args->multiset_reduction.value)
+            mu_patientmedicinainterna.MultisetSort();
         if (p.compare(workingstate)) {
           StateCopy(workingstate,&temp); return TRUE; }
 
@@ -3962,45 +6121,54 @@ bool match(state* ns, StatePtr p)
             if (ns != workingstate)
               StateCopy(workingstate, ns);
               
-              mu_traveltime.Permute(Perm,0);
+              mu_patientcare.Permute(Perm,0);
               if (args->multiset_reduction.value)
-                mu_traveltime.MultisetSort();
-              mu_speed.Permute(Perm,0);
-              if (args->multiset_reduction.value)
-                mu_speed.MultisetSort();
-              mu_maxspeed.Permute(Perm,0);
-              if (args->multiset_reduction.value)
-                mu_maxspeed.MultisetSort();
-              mu_distance.Permute(Perm,0);
-              if (args->multiset_reduction.value)
-                mu_distance.MultisetSort();
-              mu_f_n.Permute(Perm,0);
-              if (args->multiset_reduction.value)
-                mu_f_n.MultisetSort();
-              mu_h_n.Permute(Perm,0);
-              if (args->multiset_reduction.value)
-                mu_h_n.MultisetSort();
-              mu_all_event_true.Permute(Perm,0);
-              if (args->multiset_reduction.value)
-                mu_all_event_true.MultisetSort();
-              mu_g_n.Permute(Perm,0);
-              if (args->multiset_reduction.value)
-                mu_g_n.MultisetSort();
-              mu_TIME.Permute(Perm,0);
-              if (args->multiset_reduction.value)
-                mu_TIME.MultisetSort();
-              mu_at.Permute(Perm,0);
-              if (args->multiset_reduction.value)
-                mu_at.MultisetSort();
-              mu_bedfree.Permute(Perm,0);
-              if (args->multiset_reduction.value)
-                mu_bedfree.MultisetSort();
+                mu_patientcare.MultisetSort();
               mu_busybed.Permute(Perm,0);
               if (args->multiset_reduction.value)
                 mu_busybed.MultisetSort();
-              mu_alocated.Permute(Perm,0);
+              mu_bedfree.Permute(Perm,0);
               if (args->multiset_reduction.value)
-                mu_alocated.MultisetSort();
+                mu_bedfree.MultisetSort();
+              mu_bedspecialty.Permute(Perm,0);
+              if (args->multiset_reduction.value)
+                mu_bedspecialty.MultisetSort();
+              mu_age.Permute(Perm,0);
+              if (args->multiset_reduction.value)
+                mu_age.MultisetSort();
+              mu_TIME.Permute(Perm,0);
+              if (args->multiset_reduction.value)
+                mu_TIME.MultisetSort();
+              mu_g_n.Permute(Perm,0);
+              if (args->multiset_reduction.value)
+                mu_g_n.MultisetSort();
+              mu_all_event_true.Permute(Perm,0);
+              if (args->multiset_reduction.value)
+                mu_all_event_true.MultisetSort();
+              mu_h_n.Permute(Perm,0);
+              if (args->multiset_reduction.value)
+                mu_h_n.MultisetSort();
+              mu_f_n.Permute(Perm,0);
+              if (args->multiset_reduction.value)
+                mu_f_n.MultisetSort();
+              mu_bedcare.Permute(Perm,0);
+              if (args->multiset_reduction.value)
+                mu_bedcare.MultisetSort();
+              mu_bedmedicinainterna.Permute(Perm,0);
+              if (args->multiset_reduction.value)
+                mu_bedmedicinainterna.MultisetSort();
+              mu_in_.Permute(Perm,0);
+              if (args->multiset_reduction.value)
+                mu_in_.MultisetSort();
+              mu_allocated.Permute(Perm,0);
+              if (args->multiset_reduction.value)
+                mu_allocated.MultisetSort();
+              mu_patientspecialty.Permute(Perm,0);
+              if (args->multiset_reduction.value)
+                mu_patientspecialty.MultisetSort();
+              mu_patientmedicinainterna.Permute(Perm,0);
+              if (args->multiset_reduction.value)
+                mu_patientmedicinainterna.MultisetSort();
             if (p.compare(workingstate)) {
               StateCopy(workingstate,&temp); return TRUE; }
           }
@@ -4013,19 +6181,22 @@ bool match(state* ns, StatePtr p)
     {
       if (ns != workingstate)
           StateCopy(workingstate, ns);
-      mu_traveltime.MultisetSort();
-      mu_speed.MultisetSort();
-      mu_maxspeed.MultisetSort();
-      mu_distance.MultisetSort();
-      mu_f_n.MultisetSort();
-      mu_h_n.MultisetSort();
-      mu_all_event_true.MultisetSort();
-      mu_g_n.MultisetSort();
-      mu_TIME.MultisetSort();
-      mu_at.MultisetSort();
-      mu_bedfree.MultisetSort();
+      mu_patientcare.MultisetSort();
       mu_busybed.MultisetSort();
-      mu_alocated.MultisetSort();
+      mu_bedfree.MultisetSort();
+      mu_bedspecialty.MultisetSort();
+      mu_age.MultisetSort();
+      mu_TIME.MultisetSort();
+      mu_g_n.MultisetSort();
+      mu_all_event_true.MultisetSort();
+      mu_h_n.MultisetSort();
+      mu_f_n.MultisetSort();
+      mu_bedcare.MultisetSort();
+      mu_bedmedicinainterna.MultisetSort();
+      mu_in_.MultisetSort();
+      mu_allocated.MultisetSort();
+      mu_patientspecialty.MultisetSort();
+      mu_patientmedicinainterna.MultisetSort();
       if (p.compare(workingstate)) {
         StateCopy(workingstate,&temp); return TRUE; }
       StateCopy(workingstate,&temp);
@@ -4050,139 +6221,9 @@ void SymmetryClass::Exhaustive_Fast_Canonicalize(state* s)
     if (Perm.In(i))
       {
         StateCopy(workingstate, &temp);
-        mu_traveltime.Permute(Perm,i);
+        mu_patientcare.Permute(Perm,i);
         if (args->multiset_reduction.value)
-          mu_traveltime.MultisetSort();
-        SetBestResult(i, workingstate);
-      }
-  StateCopy(workingstate, &BestPermutedState);
-
-  StateCopy(&temp, workingstate);
-  ResetBestResult();
-  for (i=0; i<Perm.count; i++)
-    if (Perm.In(i))
-      {
-        StateCopy(workingstate, &temp);
-        mu_speed.Permute(Perm,i);
-        if (args->multiset_reduction.value)
-          mu_speed.MultisetSort();
-        SetBestResult(i, workingstate);
-      }
-  StateCopy(workingstate, &BestPermutedState);
-
-  StateCopy(&temp, workingstate);
-  ResetBestResult();
-  for (i=0; i<Perm.count; i++)
-    if (Perm.In(i))
-      {
-        StateCopy(workingstate, &temp);
-        mu_maxspeed.Permute(Perm,i);
-        if (args->multiset_reduction.value)
-          mu_maxspeed.MultisetSort();
-        SetBestResult(i, workingstate);
-      }
-  StateCopy(workingstate, &BestPermutedState);
-
-  StateCopy(&temp, workingstate);
-  ResetBestResult();
-  for (i=0; i<Perm.count; i++)
-    if (Perm.In(i))
-      {
-        StateCopy(workingstate, &temp);
-        mu_distance.Permute(Perm,i);
-        if (args->multiset_reduction.value)
-          mu_distance.MultisetSort();
-        SetBestResult(i, workingstate);
-      }
-  StateCopy(workingstate, &BestPermutedState);
-
-  StateCopy(&temp, workingstate);
-  ResetBestResult();
-  for (i=0; i<Perm.count; i++)
-    if (Perm.In(i))
-      {
-        StateCopy(workingstate, &temp);
-        mu_f_n.Permute(Perm,i);
-        if (args->multiset_reduction.value)
-          mu_f_n.MultisetSort();
-        SetBestResult(i, workingstate);
-      }
-  StateCopy(workingstate, &BestPermutedState);
-
-  StateCopy(&temp, workingstate);
-  ResetBestResult();
-  for (i=0; i<Perm.count; i++)
-    if (Perm.In(i))
-      {
-        StateCopy(workingstate, &temp);
-        mu_h_n.Permute(Perm,i);
-        if (args->multiset_reduction.value)
-          mu_h_n.MultisetSort();
-        SetBestResult(i, workingstate);
-      }
-  StateCopy(workingstate, &BestPermutedState);
-
-  StateCopy(&temp, workingstate);
-  ResetBestResult();
-  for (i=0; i<Perm.count; i++)
-    if (Perm.In(i))
-      {
-        StateCopy(workingstate, &temp);
-        mu_all_event_true.Permute(Perm,i);
-        if (args->multiset_reduction.value)
-          mu_all_event_true.MultisetSort();
-        SetBestResult(i, workingstate);
-      }
-  StateCopy(workingstate, &BestPermutedState);
-
-  StateCopy(&temp, workingstate);
-  ResetBestResult();
-  for (i=0; i<Perm.count; i++)
-    if (Perm.In(i))
-      {
-        StateCopy(workingstate, &temp);
-        mu_g_n.Permute(Perm,i);
-        if (args->multiset_reduction.value)
-          mu_g_n.MultisetSort();
-        SetBestResult(i, workingstate);
-      }
-  StateCopy(workingstate, &BestPermutedState);
-
-  StateCopy(&temp, workingstate);
-  ResetBestResult();
-  for (i=0; i<Perm.count; i++)
-    if (Perm.In(i))
-      {
-        StateCopy(workingstate, &temp);
-        mu_TIME.Permute(Perm,i);
-        if (args->multiset_reduction.value)
-          mu_TIME.MultisetSort();
-        SetBestResult(i, workingstate);
-      }
-  StateCopy(workingstate, &BestPermutedState);
-
-  StateCopy(&temp, workingstate);
-  ResetBestResult();
-  for (i=0; i<Perm.count; i++)
-    if (Perm.In(i))
-      {
-        StateCopy(workingstate, &temp);
-        mu_at.Permute(Perm,i);
-        if (args->multiset_reduction.value)
-          mu_at.MultisetSort();
-        SetBestResult(i, workingstate);
-      }
-  StateCopy(workingstate, &BestPermutedState);
-
-  StateCopy(&temp, workingstate);
-  ResetBestResult();
-  for (i=0; i<Perm.count; i++)
-    if (Perm.In(i))
-      {
-        StateCopy(workingstate, &temp);
-        mu_bedfree.Permute(Perm,i);
-        if (args->multiset_reduction.value)
-          mu_bedfree.MultisetSort();
+          mu_patientcare.MultisetSort();
         SetBestResult(i, workingstate);
       }
   StateCopy(workingstate, &BestPermutedState);
@@ -4206,9 +6247,178 @@ void SymmetryClass::Exhaustive_Fast_Canonicalize(state* s)
     if (Perm.In(i))
       {
         StateCopy(workingstate, &temp);
-        mu_alocated.Permute(Perm,i);
+        mu_bedfree.Permute(Perm,i);
         if (args->multiset_reduction.value)
-          mu_alocated.MultisetSort();
+          mu_bedfree.MultisetSort();
+        SetBestResult(i, workingstate);
+      }
+  StateCopy(workingstate, &BestPermutedState);
+
+  StateCopy(&temp, workingstate);
+  ResetBestResult();
+  for (i=0; i<Perm.count; i++)
+    if (Perm.In(i))
+      {
+        StateCopy(workingstate, &temp);
+        mu_bedspecialty.Permute(Perm,i);
+        if (args->multiset_reduction.value)
+          mu_bedspecialty.MultisetSort();
+        SetBestResult(i, workingstate);
+      }
+  StateCopy(workingstate, &BestPermutedState);
+
+  StateCopy(&temp, workingstate);
+  ResetBestResult();
+  for (i=0; i<Perm.count; i++)
+    if (Perm.In(i))
+      {
+        StateCopy(workingstate, &temp);
+        mu_age.Permute(Perm,i);
+        if (args->multiset_reduction.value)
+          mu_age.MultisetSort();
+        SetBestResult(i, workingstate);
+      }
+  StateCopy(workingstate, &BestPermutedState);
+
+  StateCopy(&temp, workingstate);
+  ResetBestResult();
+  for (i=0; i<Perm.count; i++)
+    if (Perm.In(i))
+      {
+        StateCopy(workingstate, &temp);
+        mu_TIME.Permute(Perm,i);
+        if (args->multiset_reduction.value)
+          mu_TIME.MultisetSort();
+        SetBestResult(i, workingstate);
+      }
+  StateCopy(workingstate, &BestPermutedState);
+
+  StateCopy(&temp, workingstate);
+  ResetBestResult();
+  for (i=0; i<Perm.count; i++)
+    if (Perm.In(i))
+      {
+        StateCopy(workingstate, &temp);
+        mu_g_n.Permute(Perm,i);
+        if (args->multiset_reduction.value)
+          mu_g_n.MultisetSort();
+        SetBestResult(i, workingstate);
+      }
+  StateCopy(workingstate, &BestPermutedState);
+
+  StateCopy(&temp, workingstate);
+  ResetBestResult();
+  for (i=0; i<Perm.count; i++)
+    if (Perm.In(i))
+      {
+        StateCopy(workingstate, &temp);
+        mu_all_event_true.Permute(Perm,i);
+        if (args->multiset_reduction.value)
+          mu_all_event_true.MultisetSort();
+        SetBestResult(i, workingstate);
+      }
+  StateCopy(workingstate, &BestPermutedState);
+
+  StateCopy(&temp, workingstate);
+  ResetBestResult();
+  for (i=0; i<Perm.count; i++)
+    if (Perm.In(i))
+      {
+        StateCopy(workingstate, &temp);
+        mu_h_n.Permute(Perm,i);
+        if (args->multiset_reduction.value)
+          mu_h_n.MultisetSort();
+        SetBestResult(i, workingstate);
+      }
+  StateCopy(workingstate, &BestPermutedState);
+
+  StateCopy(&temp, workingstate);
+  ResetBestResult();
+  for (i=0; i<Perm.count; i++)
+    if (Perm.In(i))
+      {
+        StateCopy(workingstate, &temp);
+        mu_f_n.Permute(Perm,i);
+        if (args->multiset_reduction.value)
+          mu_f_n.MultisetSort();
+        SetBestResult(i, workingstate);
+      }
+  StateCopy(workingstate, &BestPermutedState);
+
+  StateCopy(&temp, workingstate);
+  ResetBestResult();
+  for (i=0; i<Perm.count; i++)
+    if (Perm.In(i))
+      {
+        StateCopy(workingstate, &temp);
+        mu_bedcare.Permute(Perm,i);
+        if (args->multiset_reduction.value)
+          mu_bedcare.MultisetSort();
+        SetBestResult(i, workingstate);
+      }
+  StateCopy(workingstate, &BestPermutedState);
+
+  StateCopy(&temp, workingstate);
+  ResetBestResult();
+  for (i=0; i<Perm.count; i++)
+    if (Perm.In(i))
+      {
+        StateCopy(workingstate, &temp);
+        mu_bedmedicinainterna.Permute(Perm,i);
+        if (args->multiset_reduction.value)
+          mu_bedmedicinainterna.MultisetSort();
+        SetBestResult(i, workingstate);
+      }
+  StateCopy(workingstate, &BestPermutedState);
+
+  StateCopy(&temp, workingstate);
+  ResetBestResult();
+  for (i=0; i<Perm.count; i++)
+    if (Perm.In(i))
+      {
+        StateCopy(workingstate, &temp);
+        mu_in_.Permute(Perm,i);
+        if (args->multiset_reduction.value)
+          mu_in_.MultisetSort();
+        SetBestResult(i, workingstate);
+      }
+  StateCopy(workingstate, &BestPermutedState);
+
+  StateCopy(&temp, workingstate);
+  ResetBestResult();
+  for (i=0; i<Perm.count; i++)
+    if (Perm.In(i))
+      {
+        StateCopy(workingstate, &temp);
+        mu_allocated.Permute(Perm,i);
+        if (args->multiset_reduction.value)
+          mu_allocated.MultisetSort();
+        SetBestResult(i, workingstate);
+      }
+  StateCopy(workingstate, &BestPermutedState);
+
+  StateCopy(&temp, workingstate);
+  ResetBestResult();
+  for (i=0; i<Perm.count; i++)
+    if (Perm.In(i))
+      {
+        StateCopy(workingstate, &temp);
+        mu_patientspecialty.Permute(Perm,i);
+        if (args->multiset_reduction.value)
+          mu_patientspecialty.MultisetSort();
+        SetBestResult(i, workingstate);
+      }
+  StateCopy(workingstate, &BestPermutedState);
+
+  StateCopy(&temp, workingstate);
+  ResetBestResult();
+  for (i=0; i<Perm.count; i++)
+    if (Perm.In(i))
+      {
+        StateCopy(workingstate, &temp);
+        mu_patientmedicinainterna.Permute(Perm,i);
+        if (args->multiset_reduction.value)
+          mu_patientmedicinainterna.MultisetSort();
         SetBestResult(i, workingstate);
       }
   StateCopy(workingstate, &BestPermutedState);

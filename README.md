@@ -5,13 +5,14 @@ Usar com o planejador DiNo `https://github.com/KCL-Planning/DiNo` e com o valida
 ###Para rodar o planejador 
 
 ```
-Executed command line: "/home/debo/planejador/DiNo/bin/pddl2upm" hospital.pddl problem.pddl
-"/home/debo/planejador/DiNo/bin/dino" hospital.pddl problem.pddl
-Digite isso
+Executed command line: 
+$ "/home/debo/planejador/DiNo/bin/pddl2upm" hospital.pddl problem.pddl
+$ "/home/debo/planejador/DiNo/bin/dino" hospital.pddl problem.pddl
+$ ./hospital_planner
 ```
 
 ###Para rodar o validador
 
 ```
-Digite isso
+$ ./hospital_planner -val
 ```
