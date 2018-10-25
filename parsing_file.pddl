@@ -39,6 +39,8 @@
     (patientucl ?p - patient)
     (bedavc ?varbed - bed)
     (patientavc ?p - patient)
+    (bedpsiquiatria ?varbed - bed)
+    (patientpsiquiatria ?p - patient)
   )
 
   (:functions (agefunc ?p - patient))
@@ -59,7 +61,7 @@
                  (busybed ?varbed) (bedisolation ?varbed))
   )
 
-  (:action allocateObstetrics
+  (:action allocateobstetricia
     :parameters (?p - patient ?varbed - bed ?varbirthtype - birthtype )
     :precondition (and (not (allocated ?p)) 
                        (bedfree ?varbed) 
@@ -72,7 +74,7 @@
                  (busybed ?varbed))
   )
 
-  (:action allocateUcl
+  (:action allocateucl
     :parameters (?p - patient ?varbed - bed ?varage - age)
     :precondition (and (not (allocated ?p)) 
                        (bedfree ?varbed) 
@@ -85,12 +87,25 @@
                  (busybed ?varbed))
   )
 
-  (:action allocateAvc
+  (:action allocateavc
     :parameters (?p - patient ?varbed - bed ?vargender - gender )
     :precondition (and (not (allocated ?p)) 
                        (bedfree ?varbed) 
                        (patientavc ?p)
                        (bedavc ?varbed)
+                       (patientgender ?p ?vargender)
+                       (bedgender ?varbed ?vargender)
+                       )
+    :effect (and (not (bedfree ?varbed)) (in ?p ?varbed) (allocated ?p) 
+                 (busybed ?varbed))
+  )
+
+  (:action allocatepsiquiatria
+    :parameters (?p - patient ?varbed - bed ?vargender - gender )
+    :precondition (and (not (allocated ?p)) 
+                       (bedfree ?varbed) 
+                       (patientpsiquiatria ?p)
+                       (bedpsiquiatria ?varbed)
                        (patientgender ?p ?vargender)
                        (bedgender ?varbed ?vargender)
                        )
@@ -136,6 +151,21 @@
     PacienteObstetriciaNascimento - patient
     CamaObstetriciaAborto - bed
     CamaObstetriciaNascimento - bed
+    ;UCL
+    PacienteUCLAdulto - patient
+    PacienteUCLCrianca - patient
+    CamaUCLAdulto - bed
+    CamaUCLCrianca - bed
+    ;AVC
+    PacienteAVCFeminino - patient
+    PacienteAVCMasculino - patient
+    CamaAVCFeminino - bed
+    CamaAVCMasculino - bed
+    ;Psiquiatria
+    PacientePsiquiatriaFeminino - patient
+    PacientePsiquiatriaMasculino - patient
+    CamaPsiquiatriaFeminino - bed
+    CamaPsiquiatriaMasculino - bed
     ;MedicinaInterna
     PacienteMedicinaInternaMinimo - patient
     PacienteMedicinaInternaIntensivo - patient
@@ -177,6 +207,39 @@
     (bedbirthtype CamaObstetriciaNascimento nascimento)
     (patientbirthtype PacienteObstetriciaAborto aborto)
     (patientbirthtype PacienteObstetriciaNascimento nascimento)
+    ;UCL
+    (bedfree CamaUCLAdulto)
+    (bedfree CamaUCLCrianca)
+    (patientucl PacienteUCLAdulto)
+    (patientucl PacienteUCLCrianca)
+    (beducl CamaUCLAdulto)
+    (beducl CamaUCLCrianca)
+    (patientage PacienteUCLAdulto adulto)
+    (patientage PacienteUCLCrianca crianca)
+    (bedage CamaUCLAdulto adulto)
+    (bedage CamaUCLCrianca crianca)
+    ;AVC
+    (bedfree CamaAVCFeminino)
+    (bedfree CamaAVCMasculino)
+    (patientavc PacienteAVCFeminino)
+    (patientavc PacienteAVCMasculino)
+    (bedavc CamaAVCFeminino)
+    (bedavc CamaAVCMasculino)
+    (patientgender PacienteAVCFeminino feminino)
+    (patientgender PacienteAVCMasculino masculino)
+    (bedgender CamaAVCFeminino feminino)
+    (bedgender CamaAVCMasculino masculino)
+    ;Psiquiatria
+    (bedfree CamaPsiquiatriaFeminino)
+    (bedfree CamaPsiquiatriaMasculino)
+    (patientpsiquiatria PacientePsiquiatriaFeminino)
+    (patientpsiquiatria PacientePsiquiatriaMasculino)
+    (bedpsiquiatria CamaPsiquiatriaFeminino)
+    (bedpsiquiatria CamaPsiquiatriaMasculino)
+    (patientgender PacientePsiquiatriaFeminino feminino)
+    (patientgender PacientePsiquiatriaMasculino masculino)
+    (bedgender CamaPsiquiatriaFeminino feminino)
+    (bedgender CamaPsiquiatriaMasculino masculino)
     ;Medicina Interna
     (bedfree camaMedicinaInternaMinimo)
     (bedfree camaMedicinaInternaIntensivo)
@@ -194,9 +257,15 @@
   (:goal (and (donotallocate pacienteUti);UTI
               (allocated pacienteIsolamento);Isolamento
               (allocated PacienteObstetriciaAborto);Obstetricia
-              (allocated PacienteObstetriciaNascimento)
+              ;(allocated PacienteObstetriciaNascimento)
+              (allocated PacienteUCLAdulto) ;UCL
+              (allocated PacienteUCLCrianca)
+              (allocated PacienteAVCFeminino) ;AVC
+              (allocated PacienteAVCMasculino)
+              (allocated PacientePsiquiatriaFeminino) ;Psiquiatria
+              (allocated PacientePsiquiatriaMasculino)
               (allocated PacienteMedicinaInternaMinimo);Medicina Interna
-              (allocated PacienteMedicinaInternaIntensivo)
-              )
+              (allocated PacienteMedicinaInternaIntensivo)              
+         )
   )
 )

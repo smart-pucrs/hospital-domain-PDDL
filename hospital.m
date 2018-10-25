@@ -9,8 +9,8 @@ type
 
 	 TIME_type: real(7,2);
 
-	patient : Enum {pacienteuti,pacienteisolamento,pacienteobstetriciaaborto,pacienteobstetricianascimento,pacientemedicinainternaminimo,pacientemedicinainternaintensivo};
-	bed : Enum {camaisolamento,camaobstetriciaaborto,camaobstetricianascimento,camamedicinainternaminimo,camamedicinainternaintensivo};
+	patient : Enum {pacienteuti,pacienteisolamento,pacienteobstetriciaaborto,pacienteobstetricianascimento,pacienteucladulto,pacienteuclcrianca,pacienteavcfeminino,pacienteavcmasculino,pacientepsiquiatriafeminino,pacientepsiquiatriamasculino,pacientemedicinainternaminimo,pacientemedicinainternaintensivo};
+	bed : Enum {camaisolamento,camaobstetriciaaborto,camaobstetricianascimento,camaucladulto,camauclcrianca,camaavcfeminino,camaavcmasculino,camapsiquiatriafeminino,camapsiquiatriamasculino,camamedicinainternaminimo,camamedicinainternaintensivo};
 	care : Enum {minimo,intensivo,semiintensivo};
 	specialty : Enum {medicinainterna};
 	birthtype : Enum {aborto,nascimento};
@@ -59,6 +59,8 @@ var
 	patientucl[pddlname: "patientucl";] : Array [patient] of  boolean;
 	bedavc[pddlname: "bedavc";] : Array [bed] of  boolean;
 	patientavc[pddlname: "patientavc";] : Array [patient] of  boolean;
+	bedpsiquiatria[pddlname: "bedpsiquiatria";] : Array [bed] of  boolean;
+	patientpsiquiatria[pddlname: "patientpsiquiatria";] : Array [patient] of  boolean;
 
 
 -- External function declaration 
@@ -324,6 +326,26 @@ BEGIN
 	return 	patientavc[p];
 END;
 
+procedure set_bedpsiquiatria( varbed : bed ;  value : boolean);
+BEGIN
+	bedpsiquiatria[varbed] := value;
+END;
+
+function get_bedpsiquiatria( varbed : bed): boolean;
+BEGIN
+	return 	bedpsiquiatria[varbed];
+END;
+
+procedure set_patientpsiquiatria( p : patient ;  value : boolean);
+BEGIN
+	patientpsiquiatria[p] := value;
+END;
+
+function get_patientpsiquiatria( p : patient): boolean;
+BEGIN
+	return 	patientpsiquiatria[p];
+END;
+
 
 
 
@@ -400,9 +422,9 @@ END;
 ruleset p:patient do 
  ruleset varbed:bed do 
  ruleset varbirthtype:birthtype do 
- action rule " allocateobstetrics " 
+ action rule " allocateobstetricia " 
 (!(allocated[p])) & (bedfree[varbed]) & (patientobstetricia[p]) & (bedobstetricia[varbed]) & (bedbirthtype[varbed][varbirthtype]) & (patientbirthtype[p][varbirthtype]) ==> 
-pddlname: " allocateobstetrics"; 
+pddlname: " allocateobstetricia"; 
 BEGIN
 in_[p][varbed]:= true; 
 allocated[p]:= true; 
@@ -437,6 +459,23 @@ ruleset p:patient do
  action rule " allocateavc " 
 (!(allocated[p])) & (bedfree[varbed]) & (patientavc[p]) & (bedavc[varbed]) & (patientgender[p][vargender]) & (bedgender[varbed][vargender]) ==> 
 pddlname: " allocateavc"; 
+BEGIN
+in_[p][varbed]:= true; 
+allocated[p]:= true; 
+busybed[varbed]:= true; 
+bedfree[varbed]:= false; 
+
+END; 
+END; 
+END; 
+END;
+
+ruleset p:patient do 
+ ruleset varbed:bed do 
+ ruleset vargender:gender do 
+ action rule " allocatepsiquiatria " 
+(!(allocated[p])) & (bedfree[varbed]) & (patientpsiquiatria[p]) & (bedpsiquiatria[varbed]) & (patientgender[p][vargender]) & (bedgender[varbed][vargender]) ==> 
+pddlname: " allocatepsiquiatria"; 
 BEGIN
 in_[p][varbed]:= true; 
 allocated[p]:= true; 
@@ -585,6 +624,12 @@ END;  -- close for
    for p : patient do 
      set_patientavc(p, false);
 END;  -- close for
+   for varbed : bed do 
+     set_bedpsiquiatria(varbed, false);
+END;  -- close for
+   for p : patient do 
+     set_patientpsiquiatria(p, false);
+END;  -- close for
    for p : patient do 
      agefunc[p] := 0.0 ;
 END;  -- close for
@@ -601,6 +646,36 @@ bedbirthtype[camaobstetriciaaborto][aborto]:= true;
 bedbirthtype[camaobstetricianascimento][nascimento]:= true; 
 patientbirthtype[pacienteobstetriciaaborto][aborto]:= true; 
 patientbirthtype[pacienteobstetricianascimento][nascimento]:= true; 
+bedfree[camaucladulto]:= true; 
+bedfree[camauclcrianca]:= true; 
+patientucl[pacienteucladulto]:= true; 
+patientucl[pacienteuclcrianca]:= true; 
+beducl[camaucladulto]:= true; 
+beducl[camauclcrianca]:= true; 
+patientage[pacienteucladulto][adulto]:= true; 
+patientage[pacienteuclcrianca][crianca]:= true; 
+bedage[camaucladulto][adulto]:= true; 
+bedage[camauclcrianca][crianca]:= true; 
+bedfree[camaavcfeminino]:= true; 
+bedfree[camaavcmasculino]:= true; 
+patientavc[pacienteavcfeminino]:= true; 
+patientavc[pacienteavcmasculino]:= true; 
+bedavc[camaavcfeminino]:= true; 
+bedavc[camaavcmasculino]:= true; 
+patientgender[pacienteavcfeminino][feminino]:= true; 
+patientgender[pacienteavcmasculino][masculino]:= true; 
+bedgender[camaavcfeminino][feminino]:= true; 
+bedgender[camaavcmasculino][masculino]:= true; 
+bedfree[camapsiquiatriafeminino]:= true; 
+bedfree[camapsiquiatriamasculino]:= true; 
+patientpsiquiatria[pacientepsiquiatriafeminino]:= true; 
+patientpsiquiatria[pacientepsiquiatriamasculino]:= true; 
+bedpsiquiatria[camapsiquiatriafeminino]:= true; 
+bedpsiquiatria[camapsiquiatriamasculino]:= true; 
+patientgender[pacientepsiquiatriafeminino][feminino]:= true; 
+patientgender[pacientepsiquiatriamasculino][masculino]:= true; 
+bedgender[camapsiquiatriafeminino][feminino]:= true; 
+bedgender[camapsiquiatriamasculino][masculino]:= true; 
 bedfree[camamedicinainternaminimo]:= true; 
 bedfree[camamedicinainternaintensivo]:= true; 
 patientmedicinainterna[pacientemedicinainternaminimo]:= true; 
@@ -620,7 +695,7 @@ f_n := 0;
 END; -- close startstate
 
 goal "enjoy" 
- (donotallocate[pacienteuti]) & (allocated[pacienteisolamento]) & (allocated[pacienteobstetriciaaborto]) & (allocated[pacienteobstetricianascimento]) & (allocated[pacientemedicinainternaminimo]) & (allocated[pacientemedicinainternaintensivo])& !DAs_ongoing_in_goal_state(); 
+ (donotallocate[pacienteuti]) & (allocated[pacienteisolamento]) & (allocated[pacienteobstetriciaaborto]) & (allocated[pacienteucladulto]) & (allocated[pacienteuclcrianca]) & (allocated[pacienteavcfeminino]) & (allocated[pacienteavcmasculino]) & (allocated[pacientepsiquiatriafeminino]) & (allocated[pacientepsiquiatriamasculino]) & (allocated[pacientemedicinainternaminimo]) & (allocated[pacientemedicinainternaintensivo])& !DAs_ongoing_in_goal_state(); 
 
 invariant "todo bien" 
  all_event_true & !DAs_violate_duration();

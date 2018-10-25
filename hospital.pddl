@@ -39,6 +39,8 @@
     (patientucl ?p - patient)
     (bedavc ?varbed - bed)
     (patientavc ?p - patient)
+    (bedpsiquiatria ?varbed - bed)
+    (patientpsiquiatria ?p - patient)
   )
 
   (:functions (agefunc ?p - patient))
@@ -59,7 +61,7 @@
                  (busybed ?varbed) (bedisolation ?varbed))
   )
 
-  (:action allocateObstetrics
+  (:action allocateobstetricia
     :parameters (?p - patient ?varbed - bed ?varbirthtype - birthtype )
     :precondition (and (not (allocated ?p)) 
                        (bedfree ?varbed) 
@@ -72,7 +74,7 @@
                  (busybed ?varbed))
   )
 
-  (:action allocateUcl
+  (:action allocateucl
     :parameters (?p - patient ?varbed - bed ?varage - age)
     :precondition (and (not (allocated ?p)) 
                        (bedfree ?varbed) 
@@ -85,12 +87,25 @@
                  (busybed ?varbed))
   )
 
-  (:action allocateAvc
+  (:action allocateavc
     :parameters (?p - patient ?varbed - bed ?vargender - gender )
     :precondition (and (not (allocated ?p)) 
                        (bedfree ?varbed) 
                        (patientavc ?p)
                        (bedavc ?varbed)
+                       (patientgender ?p ?vargender)
+                       (bedgender ?varbed ?vargender)
+                       )
+    :effect (and (not (bedfree ?varbed)) (in ?p ?varbed) (allocated ?p) 
+                 (busybed ?varbed))
+  )
+
+  (:action allocatepsiquiatria
+    :parameters (?p - patient ?varbed - bed ?vargender - gender )
+    :precondition (and (not (allocated ?p)) 
+                       (bedfree ?varbed) 
+                       (patientpsiquiatria ?p)
+                       (bedpsiquiatria ?varbed)
                        (patientgender ?p ?vargender)
                        (bedgender ?varbed ?vargender)
                        )
