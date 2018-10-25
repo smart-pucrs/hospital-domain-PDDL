@@ -7,7 +7,21 @@
     camaMedicinaInternaIntensivo - bed
     minimo - care
     intensivo - care
+    semiintensivo - care
     medicinainterna - specialty
+    aborto - birthtype
+    nascimento - birthtype
+    crianca - age
+    adulto - age
+    adolescente - age
+    masculino - gender
+    feminino - gender
+    eletivo - origin
+    agudo - origin
+    clinico - roomtype
+    cirurgico - roomtype
+    longapermanencia - stay
+    girorapido - stay
   )
   (:init 
     (bedfree camaMedicinaInternaMinimo)

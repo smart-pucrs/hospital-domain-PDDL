@@ -2,73 +2,73 @@
   (:requirements :fluents :continuous-effects :negative-preconditions :duration-inequalities :time :typing)
   (:types bed patient specialty birthtype type gender care origin bedtype stay age)
   (:predicates 
-    ;(bedspecialty ?bed - bed ?specialty - specialty) ;UTI, Obstetrics, UCL, AVC, Psychiatry, BariatricSurgery, Gynecology...
-    ;(bedbirthtype ?bed - bed ?birthtype - birthtype) ;childbirth or abortion
-    (bedchildbirth ?bed - bed)
+    ;(bedspecialty ?varbed - bed ?specialty - specialty) ;UTI, Obstetrics, UCL, AVC, Psychiatry, BariatricSurgery, Gynecology...
+    ;(bedbirthtype ?varbed - bed ?birthtype - birthtype) ;childbirth or abortion
+    (bedchildbirth ?varbed - bed)
     
-    ; (bedage ?bed - bed ?type - type) ;adult, teenager, child
-    ; (bedgender ?bed - bed ?gender - gender) ;male, female
-     ;(bedcare ?bed - bed ?care - care) ;minimum, semiIntensive, intensive
-    ; (bedorigin ?bed - bed ?origin - origin) ;elective, emergency
-    ; (bedtype ?bed - bed ?bedtype - bedtype) ;clinical, surgical
-    ; (bedstay ?bed - bed ?stay - stay) ;QuickTurn, LongStay
+    ; (bedage ?varbed - bed ?type - type) ;adult, teenager, child
+    ; (bedgender ?varbed - bed ?gender - gender) ;male, female
+     ;(bedcare ?varbed - bed ?care - care) ;minimum, semiIntensive, intensive
+    ; (bedorigin ?varbed - bed ?origin - origin) ;elective, emergency
+    ; (bedtype ?varbed - bed ?bedtype - bedtype) ;clinical, surgical
+    ; (bedstay ?varbed - bed ?stay - stay) ;QuickTurn, LongStay
 
-    ; (bed ?bed - bed)
-    (bedfree ?bed - bed)
-    (busybed ?bed - bed)
-    ; (patient ?patient - patient)
-    (in ?patient - patient ?bed - bed)
-    (donotallocate ?patient - patient)
-    (isolation ?patient - patient)
-    (bedisolation ?bed - bed)
-    (allocated ?patient - patient)
-    (uti ?patient - patient)
-    (bedObstetrics ?bed - bed)
-    (Obstetrics ?patient - patient)
-    ;(specialty ?patient - patient ?specialty - specialty) ;UTI, Obstetrics, UCL, AVC, Psychiatry, BariatricSurgery, Gynecology...
-    ;(birth ?patient - patient ?birthtype - birthtype) ;childbirth or abortion
-    (patientchildbirth ?patient - patient)
-    ; (age ?patient - patient ?age - age) ;number
-    ; (gender ?patient - patient ?gender - gender) ;male, female
-    ;(care ?patient - patient ?care - care) ;minimum, semiIntensive, intensive
-    ; (origin ?patient - patient ?origin - origin) ;elective, emergency
-    ; (bedtypepatient ?patient - patient ?bedtype - bedtype) ;clinical, surgical
-    ; (stay ?patient - patient ?stay - stay); QuickTurn, LongStay
-    (MedicinaInterna ?patient - patient)
-    (bedMedicinaInterna ?bed - bed)
+    ; (bed ?varbed - bed)
+    (bedfree ?varbed - bed)
+    (busybed ?varbed - bed)
+    ; (patient ?p - patient)
+    (in ?p - patient ?varbed - bed)
+    (donotallocate ?p - patient)
+    (isolation ?p - patient)
+    (bedisolation ?varbed - bed)
+    (allocated ?p - patient)
+    (uti ?p - patient)
+    (bedObstetrics ?varbed - bed)
+    (Obstetrics ?p - patient)
+    ;(specialty ?p - patient ?specialty - specialty) ;UTI, Obstetrics, UCL, AVC, Psychiatry, BariatricSurgery, Gynecology...
+    ;(birth ?p - patient ?birthtype - birthtype) ;childbirth or abortion
+    (patientchildbirth ?p - patient)
+    ; (age ?p - patient ?age - age) ;number
+    ; (gender ?p - patient ?gender - gender) ;male, female
+    ;(care ?p - patient ?care - care) ;minimum, semiIntensive, intensive
+    ; (origin ?p - patient ?origin - origin) ;elective, emergency
+    ; (bedtypepatient ?p - patient ?bedtype - bedtype) ;clinical, surgical
+    ; (stay ?p - patient ?stay - stay); QuickTurn, LongStay
+    (MedicinaInterna ?p - patient)
+    (bedMedicinaInterna ?varbed - bed)
   
   )
 
-  (:functions (maxspeed ?patient - patient) (speed ?patient - patient) (traveltime ?patient - patient) (distance ?p ?bed - bed))
+  (:functions (maxspeed ?p - patient) (speed ?p - patient) (traveltime ?p - patient) (distance ?p ?varbed - bed))
 
 
   (:action allocateuti
-    :parameters (?patient - patient)
-    :precondition (and (not (allocated ?patient)) 
-                       (uti ?patient))
-    :effect (and (donotallocate ?patient))
+    :parameters (?p - patient)
+    :precondition (and (not (allocated ?p)) 
+                       (uti ?p))
+    :effect (and (donotallocate ?p))
   )
 
   (:action allocateisolation
-    :parameters (?patient - patient ?bed - bed)
-    :precondition (and (not (allocated ?patient)) 
-                       (bedfree ?bed) 
-                       (isolation ?patient))
-    :effect (and (in ?patient ?bed) (allocated ?patient) 
-                 (busybed ?bed) (bedisolation ?bed))
+    :parameters (?p - patient ?varbed - bed)
+    :precondition (and (not (allocated ?p)) 
+                       (bedfree ?varbed) 
+                       (isolation ?p))
+    :effect (and (in ?p ?varbed) (allocated ?p) 
+                 (busybed ?varbed) (bedisolation ?varbed))
   )
 
   (:action allocateObstetrics
-    :parameters (?patient - patient ?bed - bed)
-    :precondition (and (not (allocated ?patient)) 
-                       (bedfree ?bed) 
-                       (Obstetrics ?patient) 
-                       (patientchildbirth ?patient) 
-                       (bedObstetrics ?bed) 
-                       (bedchildbirth ?bed)
+    :parameters (?p - patient ?varbed - bed)
+    :precondition (and (not (allocated ?p)) 
+                       (bedfree ?varbed) 
+                       (Obstetrics ?p) 
+                       (patientchildbirth ?p) 
+                       (bedObstetrics ?varbed) 
+                       (bedchildbirth ?varbed)
                        )
-    :effect (and (in ?patient ?bed) (allocated ?patient) 
-                 (busybed ?bed))
+    :effect (and (in ?p ?varbed) (allocated ?p) 
+                 (busybed ?varbed))
   )
 
 )

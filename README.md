@@ -11,8 +11,11 @@ $ "/home/debo/planejador/DiNo/bin/dino" hospital.pddl problem.pddl
 $ ./hospital_planner
 ```
 
-###Para rodar o validador
+###Para rodar o validador  interno do DiNo
 
 ```
 $ ./hospital_planner -val
 ```
+###Para rodar o Val
+
+"/home/debo/planejador/VAL-master/validate" -v hospital.pddl problem1.pddl problem1_plan.pddl
