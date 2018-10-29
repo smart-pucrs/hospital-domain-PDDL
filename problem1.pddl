@@ -25,17 +25,27 @@
     PacientePsiquiatriaMasculino - patient
     CamaPsiquiatriaFeminino - bed
     CamaPsiquiatriaMasculino - bed
-    ;MedicinaInterna
-    PacienteMedicinaInternaMinimo - patient
-    PacienteMedicinaInternaIntensivo - patient
-    camaMedicinaInternaMinimo - bed
-    camaMedicinaInternaIntensivo - bed
+    ;Cirurgia Bariátrica
+    PacienteCirurgiaBariatricaFeminino - patient
+    PacienteCirurgiaBariatricaMasculino - patient
+    CamaCirurgiaBariatricaFeminino - bed
+    CamaCirurgiaBariatricaMasculino - bed
+    ;Ginecologia
+    PacienteGinecologiaClinico - patient
+    PacienteGinecologiaCirurgico - patient
+    CamaGinecologiaClinico - bed
+    CamaGinecologiaCirurgico - bed
+    ;Geral
+    PacienteGeralMinimoLongaPermanencia - patient
+    PacienteGeralIntensivoGiroRapido - patient
+    camaGeralMinimoLongaPermanencia - bed
+    camaGeralIntensivoGiroRapido - bed
     
     ;variacoes possiveis
     minimo - care
     intensivo - care
     semiintensivo - care
-    medicinainterna - specialty
+    geral - specialty
     aborto - birthtype
     nascimento - birthtype
     crianca - age
@@ -49,6 +59,7 @@
     cirurgico - roomtype
     longapermanencia - stay
     girorapido - stay
+
   )
   (:init
     (patientuti pacienteUti)
@@ -99,23 +110,64 @@
     (patientgender PacientePsiquiatriaMasculino masculino)
     (bedgender CamaPsiquiatriaFeminino feminino)
     (bedgender CamaPsiquiatriaMasculino masculino)
-    ;Medicina Interna
-    (bedfree camaMedicinaInternaMinimo)
-    (bedfree camaMedicinaInternaIntensivo)
-    (patientmedicinainterna PacienteMedicinaInternaMinimo) 
-    (patientmedicinainterna PacienteMedicinaInternaIntensivo)
-    (patientcare PacienteMedicinaInternaMinimo minimo)
-    (patientcare PacienteMedicinaInternaIntensivo intensivo)
-    (bedcare camaMedicinaInternaMinimo minimo)
-    (bedcare camaMedicinaInternaIntensivo intensivo)
-    (bedspecialty camaMedicinaInternaMinimo medicinainterna)
-    (bedspecialty camaMedicinaInternaIntensivo medicinainterna)
-    (bedmedicinainterna camaMedicinaInternaMinimo)
-    (bedmedicinainterna camaMedicinaInternaIntensivo)
+    ;CirurgiaBariatrica
+    (bedfree CamaCirurgiaBariatricaFeminino)
+    (bedfree CamaCirurgiaBariatricaMasculino)
+    (patientcirurgiabariatrica PacienteCirurgiaBariatricaFeminino)
+    (patientcirurgiabariatrica PacienteCirurgiaBariatricaMasculino)
+    (bedcirurgiabariatrica CamaCirurgiaBariatricaFeminino)
+    (bedcirurgiabariatrica CamaCirurgiaBariatricaMasculino)
+    (patientgender PacienteCirurgiaBariatricaFeminino feminino)
+    (patientgender PacienteCirurgiaBariatricaMasculino masculino)
+    (bedgender CamaCirurgiaBariatricaFeminino feminino)
+    (bedgender CamaCirurgiaBariatricaMasculino masculino)
+    ;Ginecologia
+    (bedfree CamaGinecologiaClinico) 
+    (bedfree CamaGinecologiaCirurgico) 
+    (patientginecologia PacienteGinecologiaClinico)
+    (patientginecologia PacienteGinecologiaCirurgico)
+    (bedginecologia CamaGinecologiaClinico)
+    (bedginecologia CamaGinecologiaCirurgico)
+    (patientroomtype PacienteGinecologiaClinico clinico)
+    (patientroomtype PacienteGinecologiaCirurgico cirurgico)
+    (bedroomtype CamaGinecologiaClinico clinico)
+    (bedroomtype CamaGinecologiaCirurgico cirurgico)
+    ;Geral
+    (bedfree camaGeralMinimoLongaPermanencia) 
+    (bedfree camaGeralIntensivoGiroRapido) 
+    (patientspecialty PacienteGeralMinimoLongaPermanencia geral) 
+    (patientspecialty PacienteGeralIntensivoGiroRapido geral) 
+    (patientstay PacienteGeralMinimoLongaPermanencia longapermanencia)
+    (patientstay PacienteGeralIntensivoGiroRapido girorapido)
+    (patientroomtype PacienteGeralMinimoLongaPermanencia clinico)
+    (patientroomtype PacienteGeralIntensivoGiroRapido clinico)
+    (patientorigin PacienteGeralMinimoLongaPermanencia eletivo)
+    (patientorigin PacienteGeralIntensivoGiroRapido eletivo)
+    (patientgender PacienteGeralMinimoLongaPermanencia masculino)
+    (patientgender PacienteGeralIntensivoGiroRapido masculino)
+    (patientage PacienteGeralMinimoLongaPermanencia adulto)
+    (patientage PacienteGeralIntensivoGiroRapido adulto)
+    (patientcare PacienteGeralMinimoLongaPermanencia minimo)
+    (patientcare PacienteGeralIntensivoGiroRapido intensivo)
+    (bedspecialty camaGeralMinimoLongaPermanencia geral)
+    (bedspecialty camaGeralIntensivoGiroRapido geral)
+    (bedstay camaGeralMinimoLongaPermanencia longapermanencia)
+    (bedstay camaGeralIntensivoGiroRapido girorapido)
+    (bedroomtype camaGeralMinimoLongaPermanencia clinico)
+    (bedroomtype camaGeralIntensivoGiroRapido clinico)
+    (bedorigin camaGeralMinimoLongaPermanencia eletivo)
+    (bedorigin camaGeralIntensivoGiroRapido eletivo)
+    (bedgender camaGeralMinimoLongaPermanencia masculino)
+    (bedgender camaGeralIntensivoGiroRapido masculino)
+    (bedage camaGeralMinimoLongaPermanencia adulto)
+    (bedage camaGeralIntensivoGiroRapido adulto)
+    (bedcare camaGeralMinimoLongaPermanencia minimo)
+    (bedcare camaGeralIntensivoGiroRapido intensivo)
+  
   )
-  (:goal (and (donotallocate pacienteUti);UTI
-              (allocated pacienteIsolamento);Isolamento
-              (allocated PacienteObstetriciaAborto);Obstetricia
+  (:goal (and (donotallocate pacienteUti) ;UTI
+              (allocated pacienteIsolamento) ;Isolamento
+              (allocated PacienteObstetriciaAborto) ;Obstetricia
               ;(allocated PacienteObstetriciaNascimento)
               (allocated PacienteUCLAdulto) ;UCL
               (allocated PacienteUCLCrianca)
@@ -123,8 +175,12 @@
               (allocated PacienteAVCMasculino)
               (allocated PacientePsiquiatriaFeminino) ;Psiquiatria
               (allocated PacientePsiquiatriaMasculino)
-              (allocated PacienteMedicinaInternaMinimo);Medicina Interna
-              (allocated PacienteMedicinaInternaIntensivo)              
+              (allocated PacienteCirurgiaBariatricaFeminino) ;Cirurgia Bariátrica
+              (allocated PacienteCirurgiaBariatricaMasculino)
+              (allocated PacienteGinecologiaClinico) ;Ginecologia
+              (allocated PacienteGinecologiaCirurgico)
+              (allocated PacienteGeralMinimoLongaPermanencia) ;Geral
+              (allocated PacienteGeralIntensivoGiroRapido)              
          )
   )
 )

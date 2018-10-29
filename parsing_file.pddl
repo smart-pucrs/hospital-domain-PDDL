@@ -4,9 +4,9 @@
   
   (:predicates   
     ;Bed
-    ;(bedstay ?varbed - bed ?varstay - stay)
-    ;(bedroomtype ?varbed - bed ?varroomtype - roomtype)
-    ;(bedorigin ?varbed - bed ?varorigin - origin)
+    (bedstay ?varbed - bed ?varstay - stay)
+    (bedroomtype ?varbed - bed ?varroomtype - roomtype)
+    (bedorigin ?varbed - bed ?varorigin - origin)
     (bedgender ?varbed - bed ?vargender - gender)
     (bedage ?varbed - bed ?varage - age)
     (bedbirthtype ?varbed - bed ?varbirthtype - birthtype)
@@ -18,9 +18,9 @@
     ;Effect
     (in ?p - patient ?varbed - bed)
     ;Patient
-    ;(patientstay ?p - patient ?varstay - stay)
-    ;(patientroomtype ?p - patient ?varroomtype - roomtype)
-    ;(patientorigin ?p - patient ?varorigin - origin)
+    (patientstay ?p - patient ?varstay - stay)
+    (patientroomtype ?p - patient ?varroomtype - roomtype)
+    (patientorigin ?p - patient ?varorigin - origin)
     (patientgender ?p - patient ?vargender - gender)
     (patientage ?p - patient ?varage - age)
     (patientbirthtype ?p - patient ?varbirthtype - birthtype)
@@ -31,8 +31,6 @@
     (donotallocate ?p - patient)
     ;Specialties
     (patientuti ?p - patient)
-    (bedmedicinainterna ?varbed - bed)
-    (patientmedicinainterna ?p - patient)
     (bedobstetricia ?varbed - bed)
     (patientobstetricia ?p - patient)
     (beducl ?varbed - bed)
@@ -41,6 +39,10 @@
     (patientavc ?p - patient)
     (bedpsiquiatria ?varbed - bed)
     (patientpsiquiatria ?p - patient)
+    (bedcirurgiabariatrica ?varbed - bed)
+    (patientcirurgiabariatrica ?p - patient)
+    (bedginecologia ?varbed - bed)
+    (patientginecologia ?p - patient)
   )
 
   (:functions (agefunc ?p - patient))
@@ -57,8 +59,9 @@
     :precondition (and (not (allocated ?p)) 
                        (bedfree ?varbed)
                        (patientisolation ?p))
-    :effect (and (not (bedfree ?varbed)) (in ?p ?varbed) (allocated ?p) 
-                 (busybed ?varbed) (bedisolation ?varbed))
+    :effect (and (not (bedfree ?varbed)) (in ?p ?varbed) 
+                 (allocated ?p) (busybed ?varbed) 
+                 (bedisolation ?varbed))
   )
 
   (:action allocateobstetricia
@@ -70,8 +73,8 @@
                        (bedbirthtype ?varbed ?varbirthtype)
                        (patientbirthtype ?p ?varbirthtype)
                        )
-    :effect (and (not (bedfree ?varbed)) (in ?p ?varbed) (allocated ?p) 
-                 (busybed ?varbed))
+    :effect (and (not (bedfree ?varbed)) (in ?p ?varbed) 
+                 (allocated ?p) (busybed ?varbed))
   )
 
   (:action allocateucl
@@ -83,8 +86,8 @@
                        (patientage ?p ?varage)
                        (bedage ?varbed ?varage)
                        )
-    :effect (and (not (bedfree ?varbed)) (in ?p ?varbed) (allocated ?p) 
-                 (busybed ?varbed))
+    :effect (and (not (bedfree ?varbed)) (in ?p ?varbed) 
+                 (allocated ?p) (busybed ?varbed))
   )
 
   (:action allocateavc
@@ -96,8 +99,8 @@
                        (patientgender ?p ?vargender)
                        (bedgender ?varbed ?vargender)
                        )
-    :effect (and (not (bedfree ?varbed)) (in ?p ?varbed) (allocated ?p) 
-                 (busybed ?varbed))
+    :effect (and (not (bedfree ?varbed)) (in ?p ?varbed) 
+                 (allocated ?p) (busybed ?varbed))
   )
 
   (:action allocatepsiquiatria
@@ -109,34 +112,59 @@
                        (patientgender ?p ?vargender)
                        (bedgender ?varbed ?vargender)
                        )
-    :effect (and (not (bedfree ?varbed)) (in ?p ?varbed) (allocated ?p) 
-                 (busybed ?varbed))
+    :effect (and (not (bedfree ?varbed)) (in ?p ?varbed) 
+                 (allocated ?p) (busybed ?varbed))
   )
 
-  (:action allocatemedicinainterna
-    :parameters (?p - patient ?varbed - bed ?varcare - care )
+  (:action allocatecirurgiabariatrica
+    :parameters (?p - patient ?varbed - bed ?vargender - gender )
     :precondition (and (not (allocated ?p)) 
                        (bedfree ?varbed) 
-                       (bedmedicinainterna ?varbed) 
-                       (bedcare ?varbed ?varcare)
+                       (patientcirurgiabariatrica ?p)
+                       (bedcirurgiabariatrica ?varbed)
+                       (patientgender ?p ?vargender)
+                       (bedgender ?varbed ?vargender)
+                       )
+    :effect (and (not (bedfree ?varbed)) (in ?p ?varbed) 
+                 (allocated ?p) (busybed ?varbed))
+  )
+
+  (:action allocateginecologia
+    :parameters (?p - patient ?varbed - bed ?varroomtype - roomtype )
+    :precondition (and (not (allocated ?p)) 
+                       (bedfree ?varbed) 
+                       (patientginecologia ?p)
+                       (bedginecologia ?varbed)
+                       (patientroomtype ?p ?varroomtype)
+                       (bedroomtype ?varbed ?varroomtype)
+                       )
+    :effect (and (not (bedfree ?varbed)) (in ?p ?varbed) 
+                 (allocated ?p) (busybed ?varbed))
+  )
+
+  (:action allocate
+    :parameters (?p - patient ?varbed - bed ?varspecialty - specialty
+                 ?varstay - stay ?varroomtype - roomtype ?varorigin - origin
+                 ?vargender - gender ?varage - age ?varcare - care )
+    :precondition (and (not (allocated ?p)) 
+                       (bedfree ?varbed) 
+                       (patientspecialty ?p ?varspecialty) 
+                       (patientstay ?p ?varstay)
+                       (patientroomtype ?p ?varroomtype)
+                       (patientorigin ?p ?varorigin)
+                       (patientgender ?p ?vargender)
+                       (patientage ?p ?varage)
                        (patientcare ?p ?varcare)
-                       (patientmedicinainterna ?p)
-                       )
-    :effect (and (not (bedfree ?varbed)) (in ?p ?varbed) (allocated ?p) 
-                 (busybed ?varbed))
-  )
-
-  (:action actionteste
-    :parameters (?p - patient ?varbed - bed ?varbirthtype - birthtype )
-    :precondition (and (not (allocated ?p)) 
-                       (bedfree ?varbed) 
-                       ;(bedmedicinainterna ?varbed) 
-                       (bedbirthtype ?varbed ?varbirthtype)
-                       (patientbirthtype ?p ?varbirthtype)
-                       (not (patientmedicinainterna ?p))
-                       )
-    :effect (and (not (bedfree ?varbed)) (in ?p ?varbed) (allocated ?p) 
-                 (busybed ?varbed))
+                       (bedspecialty ?varbed ?varspecialty)
+                       (bedstay ?varbed ?varstay)
+                       (bedroomtype ?varbed ?varroomtype)
+                       (bedorigin ?varbed ?varorigin)
+                       (bedgender ?varbed ?vargender)
+                       (bedage ?varbed ?varage)
+                       (bedcare ?varbed ?varcare)
+                  )
+    :effect (and (not (bedfree ?varbed)) (in ?p ?varbed) 
+                 (allocated ?p) (busybed ?varbed))
   )
 )
 (define (problem hospital-problem)
@@ -166,17 +194,27 @@
     PacientePsiquiatriaMasculino - patient
     CamaPsiquiatriaFeminino - bed
     CamaPsiquiatriaMasculino - bed
-    ;MedicinaInterna
-    PacienteMedicinaInternaMinimo - patient
-    PacienteMedicinaInternaIntensivo - patient
-    camaMedicinaInternaMinimo - bed
-    camaMedicinaInternaIntensivo - bed
+    ;Cirurgia Bariátrica
+    PacienteCirurgiaBariatricaFeminino - patient
+    PacienteCirurgiaBariatricaMasculino - patient
+    CamaCirurgiaBariatricaFeminino - bed
+    CamaCirurgiaBariatricaMasculino - bed
+    ;Ginecologia
+    PacienteGinecologiaClinico - patient
+    PacienteGinecologiaCirurgico - patient
+    CamaGinecologiaClinico - bed
+    CamaGinecologiaCirurgico - bed
+    ;Geral
+    PacienteGeralMinimoLongaPermanencia - patient
+    PacienteGeralIntensivoGiroRapido - patient
+    camaGeralMinimoLongaPermanencia - bed
+    camaGeralIntensivoGiroRapido - bed
     
     ;variacoes possiveis
     minimo - care
     intensivo - care
     semiintensivo - care
-    medicinainterna - specialty
+    geral - specialty
     aborto - birthtype
     nascimento - birthtype
     crianca - age
@@ -190,6 +228,7 @@
     cirurgico - roomtype
     longapermanencia - stay
     girorapido - stay
+
   )
   (:init
     (patientuti pacienteUti)
@@ -240,32 +279,77 @@
     (patientgender PacientePsiquiatriaMasculino masculino)
     (bedgender CamaPsiquiatriaFeminino feminino)
     (bedgender CamaPsiquiatriaMasculino masculino)
-    ;Medicina Interna
-    (bedfree camaMedicinaInternaMinimo)
-    (bedfree camaMedicinaInternaIntensivo)
-    (patientmedicinainterna PacienteMedicinaInternaMinimo) 
-    (patientmedicinainterna PacienteMedicinaInternaIntensivo)
-    (patientcare PacienteMedicinaInternaMinimo minimo)
-    (patientcare PacienteMedicinaInternaIntensivo intensivo)
-    (bedcare camaMedicinaInternaMinimo minimo)
-    (bedcare camaMedicinaInternaIntensivo intensivo)
-    (bedspecialty camaMedicinaInternaMinimo medicinainterna)
-    (bedspecialty camaMedicinaInternaIntensivo medicinainterna)
-    (bedmedicinainterna camaMedicinaInternaMinimo)
-    (bedmedicinainterna camaMedicinaInternaIntensivo)
+    ;CirurgiaBariatrica
+    (bedfree CamaCirurgiaBariatricaFeminino)
+    (bedfree CamaCirurgiaBariatricaMasculino)
+    (patientcirurgiabariatrica PacienteCirurgiaBariatricaFeminino)
+    (patientcirurgiabariatrica PacienteCirurgiaBariatricaMasculino)
+    (bedcirurgiabariatrica CamaCirurgiaBariatricaFeminino)
+    (bedcirurgiabariatrica CamaCirurgiaBariatricaMasculino)
+    (patientgender PacienteCirurgiaBariatricaFeminino feminino)
+    (patientgender PacienteCirurgiaBariatricaMasculino masculino)
+    (bedgender CamaCirurgiaBariatricaFeminino feminino)
+    (bedgender CamaCirurgiaBariatricaMasculino masculino)
+    ;Ginecologia
+    (bedfree CamaGinecologiaClinico) 
+    (bedfree CamaGinecologiaCirurgico) 
+    (patientginecologia PacienteGinecologiaClinico)
+    (patientginecologia PacienteGinecologiaCirurgico)
+    (bedginecologia CamaGinecologiaClinico)
+    (bedginecologia CamaGinecologiaCirurgico)
+    (patientroomtype PacienteGinecologiaClinico clinico)
+    (patientroomtype PacienteGinecologiaCirurgico cirurgico)
+    (bedroomtype CamaGinecologiaClinico clinico)
+    (bedroomtype CamaGinecologiaCirurgico cirurgico)
+    ;Geral
+    (bedfree camaGeralMinimoLongaPermanencia) 
+    (bedfree camaGeralIntensivoGiroRapido) 
+    (patientspecialty PacienteGeralMinimoLongaPermanencia geral) 
+    (patientspecialty PacienteGeralIntensivoGiroRapido geral) 
+    (patientstay PacienteGeralMinimoLongaPermanencia longapermanencia)
+    (patientstay PacienteGeralIntensivoGiroRapido girorapido)
+    (patientroomtype PacienteGeralMinimoLongaPermanencia clinico)
+    (patientroomtype PacienteGeralIntensivoGiroRapido clinico)
+    (patientorigin PacienteGeralMinimoLongaPermanencia eletivo)
+    (patientorigin PacienteGeralIntensivoGiroRapido eletivo)
+    (patientgender PacienteGeralMinimoLongaPermanencia masculino)
+    (patientgender PacienteGeralIntensivoGiroRapido masculino)
+    (patientage PacienteGeralMinimoLongaPermanencia adulto)
+    (patientage PacienteGeralIntensivoGiroRapido adulto)
+    (patientcare PacienteGeralMinimoLongaPermanencia minimo)
+    (patientcare PacienteGeralIntensivoGiroRapido intensivo)
+    (bedspecialty camaGeralMinimoLongaPermanencia geral)
+    (bedspecialty camaGeralIntensivoGiroRapido geral)
+    (bedstay camaGeralMinimoLongaPermanencia longapermanencia)
+    (bedstay camaGeralIntensivoGiroRapido girorapido)
+    (bedroomtype camaGeralMinimoLongaPermanencia clinico)
+    (bedroomtype camaGeralIntensivoGiroRapido clinico)
+    (bedorigin camaGeralMinimoLongaPermanencia eletivo)
+    (bedorigin camaGeralIntensivoGiroRapido eletivo)
+    (bedgender camaGeralMinimoLongaPermanencia masculino)
+    (bedgender camaGeralIntensivoGiroRapido masculino)
+    (bedage camaGeralMinimoLongaPermanencia adulto)
+    (bedage camaGeralIntensivoGiroRapido adulto)
+    (bedcare camaGeralMinimoLongaPermanencia minimo)
+    (bedcare camaGeralIntensivoGiroRapido intensivo)
+  
   )
-  (:goal (and (donotallocate pacienteUti);UTI
-              (allocated pacienteIsolamento);Isolamento
-              (allocated PacienteObstetriciaAborto);Obstetricia
+  (:goal (and ;(donotallocate pacienteUti) ;UTI
+              ;(allocated pacienteIsolamento) ;Isolamento
+              ;(allocated PacienteObstetriciaAborto) ;Obstetricia
               ;(allocated PacienteObstetriciaNascimento)
-              (allocated PacienteUCLAdulto) ;UCL
-              (allocated PacienteUCLCrianca)
-              (allocated PacienteAVCFeminino) ;AVC
-              (allocated PacienteAVCMasculino)
-              (allocated PacientePsiquiatriaFeminino) ;Psiquiatria
-              (allocated PacientePsiquiatriaMasculino)
-              (allocated PacienteMedicinaInternaMinimo);Medicina Interna
-              (allocated PacienteMedicinaInternaIntensivo)              
+              ;(allocated PacienteUCLAdulto) ;UCL
+              ;(allocated PacienteUCLCrianca)
+              ;(allocated PacienteAVCFeminino) ;AVC
+              ;(allocated PacienteAVCMasculino)
+              ;(allocated PacientePsiquiatriaFeminino) ;Psiquiatria
+              ;(allocated PacientePsiquiatriaMasculino)
+              ;(allocated PacienteCirurgiaBariatricaFeminino) ;Cirurgia Bariátrica
+              ;(allocated PacienteCirurgiaBariatricaMasculino)
+              ;(allocated PacienteGinecologiaClinico) ;Ginecologia
+              ;(allocated PacienteGinecologiaCirurgico)
+              (allocated PacienteGeralMinimoLongaPermanencia) ;Geral
+              (allocated PacienteGeralIntensivoGiroRapido)              
          )
   )
 )

@@ -9,10 +9,10 @@ type
 
 	 TIME_type: real(7,2);
 
-	patient : Enum {pacienteuti,pacienteisolamento,pacienteobstetriciaaborto,pacienteobstetricianascimento,pacienteucladulto,pacienteuclcrianca,pacienteavcfeminino,pacienteavcmasculino,pacientepsiquiatriafeminino,pacientepsiquiatriamasculino,pacientemedicinainternaminimo,pacientemedicinainternaintensivo};
-	bed : Enum {camaisolamento,camaobstetriciaaborto,camaobstetricianascimento,camaucladulto,camauclcrianca,camaavcfeminino,camaavcmasculino,camapsiquiatriafeminino,camapsiquiatriamasculino,camamedicinainternaminimo,camamedicinainternaintensivo};
+	patient : Enum {pacienteuti,pacienteisolamento,pacienteobstetriciaaborto,pacienteobstetricianascimento,pacienteucladulto,pacienteuclcrianca,pacienteavcfeminino,pacienteavcmasculino,pacientepsiquiatriafeminino,pacientepsiquiatriamasculino,pacientecirurgiabariatricafeminino,pacientecirurgiabariatricamasculino,pacienteginecologiaclinico,pacienteginecologiacirurgico,pacientegeralminimolongapermanencia,pacientegeralintensivogirorapido};
+	bed : Enum {camaisolamento,camaobstetriciaaborto,camaobstetricianascimento,camaucladulto,camauclcrianca,camaavcfeminino,camaavcmasculino,camapsiquiatriafeminino,camapsiquiatriamasculino,camacirurgiabariatricafeminino,camacirurgiabariatricamasculino,camaginecologiaclinico,camaginecologiacirurgico,camageralminimolongapermanencia,camageralintensivogirorapido};
 	care : Enum {minimo,intensivo,semiintensivo};
-	specialty : Enum {medicinainterna};
+	specialty : Enum {geral};
 	birthtype : Enum {aborto,nascimento};
 	age : Enum {crianca,adulto,adolescente};
 	gender : Enum {masculino,feminino};
@@ -33,6 +33,9 @@ var
 	agefunc[pddlname:"agefunc";] : Array [patient] of  real_type;
 
 
+	bedstay[pddlname: "bedstay";] : Array [bed] of Array [stay] of  boolean;
+	bedroomtype[pddlname: "bedroomtype";] : Array [bed] of Array [roomtype] of  boolean;
+	bedorigin[pddlname: "bedorigin";] : Array [bed] of Array [origin] of  boolean;
 	bedgender[pddlname: "bedgender";] : Array [bed] of Array [gender] of  boolean;
 	bedage[pddlname: "bedage";] : Array [bed] of Array [age] of  boolean;
 	bedbirthtype[pddlname: "bedbirthtype";] : Array [bed] of Array [birthtype] of  boolean;
@@ -42,6 +45,9 @@ var
 	bedfree[pddlname: "bedfree";] : Array [bed] of  boolean;
 	busybed[pddlname: "busybed";] : Array [bed] of  boolean;
 	in_[pddlname: "in";] : Array [patient] of Array [bed] of  boolean;
+	patientstay[pddlname: "patientstay";] : Array [patient] of Array [stay] of  boolean;
+	patientroomtype[pddlname: "patientroomtype";] : Array [patient] of Array [roomtype] of  boolean;
+	patientorigin[pddlname: "patientorigin";] : Array [patient] of Array [origin] of  boolean;
 	patientgender[pddlname: "patientgender";] : Array [patient] of Array [gender] of  boolean;
 	patientage[pddlname: "patientage";] : Array [patient] of Array [age] of  boolean;
 	patientbirthtype[pddlname: "patientbirthtype";] : Array [patient] of Array [birthtype] of  boolean;
@@ -51,8 +57,6 @@ var
 	allocated[pddlname: "allocated";] : Array [patient] of  boolean;
 	donotallocate[pddlname: "donotallocate";] : Array [patient] of  boolean;
 	patientuti[pddlname: "patientuti";] : Array [patient] of  boolean;
-	bedmedicinainterna[pddlname: "bedmedicinainterna";] : Array [bed] of  boolean;
-	patientmedicinainterna[pddlname: "patientmedicinainterna";] : Array [patient] of  boolean;
 	bedobstetricia[pddlname: "bedobstetricia";] : Array [bed] of  boolean;
 	patientobstetricia[pddlname: "patientobstetricia";] : Array [patient] of  boolean;
 	beducl[pddlname: "beducl";] : Array [bed] of  boolean;
@@ -61,11 +65,45 @@ var
 	patientavc[pddlname: "patientavc";] : Array [patient] of  boolean;
 	bedpsiquiatria[pddlname: "bedpsiquiatria";] : Array [bed] of  boolean;
 	patientpsiquiatria[pddlname: "patientpsiquiatria";] : Array [patient] of  boolean;
+	bedcirurgiabariatrica[pddlname: "bedcirurgiabariatrica";] : Array [bed] of  boolean;
+	patientcirurgiabariatrica[pddlname: "patientcirurgiabariatrica";] : Array [patient] of  boolean;
+	bedginecologia[pddlname: "bedginecologia";] : Array [bed] of  boolean;
+	patientginecologia[pddlname: "patientginecologia";] : Array [patient] of  boolean;
 
 
 -- External function declaration 
 
 externfun ext_assignment(value : real_type) : real_type;
+procedure set_bedstay( varbed : bed ; varstay : stay ;  value : boolean);
+BEGIN
+	bedstay[varbed][varstay] := value;
+END;
+
+function get_bedstay( varbed : bed ; varstay : stay): boolean;
+BEGIN
+	return 	bedstay[varbed][varstay];
+END;
+
+procedure set_bedroomtype( varbed : bed ; varroomtype : roomtype ;  value : boolean);
+BEGIN
+	bedroomtype[varbed][varroomtype] := value;
+END;
+
+function get_bedroomtype( varbed : bed ; varroomtype : roomtype): boolean;
+BEGIN
+	return 	bedroomtype[varbed][varroomtype];
+END;
+
+procedure set_bedorigin( varbed : bed ; varorigin : origin ;  value : boolean);
+BEGIN
+	bedorigin[varbed][varorigin] := value;
+END;
+
+function get_bedorigin( varbed : bed ; varorigin : origin): boolean;
+BEGIN
+	return 	bedorigin[varbed][varorigin];
+END;
+
 procedure set_bedgender( varbed : bed ; vargender : gender ;  value : boolean);
 BEGIN
 	bedgender[varbed][vargender] := value;
@@ -154,6 +192,36 @@ END;
 function get_in_( p : patient ; varbed : bed): boolean;
 BEGIN
 	return 	in_[p][varbed];
+END;
+
+procedure set_patientstay( p : patient ; varstay : stay ;  value : boolean);
+BEGIN
+	patientstay[p][varstay] := value;
+END;
+
+function get_patientstay( p : patient ; varstay : stay): boolean;
+BEGIN
+	return 	patientstay[p][varstay];
+END;
+
+procedure set_patientroomtype( p : patient ; varroomtype : roomtype ;  value : boolean);
+BEGIN
+	patientroomtype[p][varroomtype] := value;
+END;
+
+function get_patientroomtype( p : patient ; varroomtype : roomtype): boolean;
+BEGIN
+	return 	patientroomtype[p][varroomtype];
+END;
+
+procedure set_patientorigin( p : patient ; varorigin : origin ;  value : boolean);
+BEGIN
+	patientorigin[p][varorigin] := value;
+END;
+
+function get_patientorigin( p : patient ; varorigin : origin): boolean;
+BEGIN
+	return 	patientorigin[p][varorigin];
 END;
 
 procedure set_patientgender( p : patient ; vargender : gender ;  value : boolean);
@@ -246,26 +314,6 @@ BEGIN
 	return 	patientuti[p];
 END;
 
-procedure set_bedmedicinainterna( varbed : bed ;  value : boolean);
-BEGIN
-	bedmedicinainterna[varbed] := value;
-END;
-
-function get_bedmedicinainterna( varbed : bed): boolean;
-BEGIN
-	return 	bedmedicinainterna[varbed];
-END;
-
-procedure set_patientmedicinainterna( p : patient ;  value : boolean);
-BEGIN
-	patientmedicinainterna[p] := value;
-END;
-
-function get_patientmedicinainterna( p : patient): boolean;
-BEGIN
-	return 	patientmedicinainterna[p];
-END;
-
 procedure set_bedobstetricia( varbed : bed ;  value : boolean);
 BEGIN
 	bedobstetricia[varbed] := value;
@@ -344,6 +392,46 @@ END;
 function get_patientpsiquiatria( p : patient): boolean;
 BEGIN
 	return 	patientpsiquiatria[p];
+END;
+
+procedure set_bedcirurgiabariatrica( varbed : bed ;  value : boolean);
+BEGIN
+	bedcirurgiabariatrica[varbed] := value;
+END;
+
+function get_bedcirurgiabariatrica( varbed : bed): boolean;
+BEGIN
+	return 	bedcirurgiabariatrica[varbed];
+END;
+
+procedure set_patientcirurgiabariatrica( p : patient ;  value : boolean);
+BEGIN
+	patientcirurgiabariatrica[p] := value;
+END;
+
+function get_patientcirurgiabariatrica( p : patient): boolean;
+BEGIN
+	return 	patientcirurgiabariatrica[p];
+END;
+
+procedure set_bedginecologia( varbed : bed ;  value : boolean);
+BEGIN
+	bedginecologia[varbed] := value;
+END;
+
+function get_bedginecologia( varbed : bed): boolean;
+BEGIN
+	return 	bedginecologia[varbed];
+END;
+
+procedure set_patientginecologia( p : patient ;  value : boolean);
+BEGIN
+	patientginecologia[p] := value;
+END;
+
+function get_patientginecologia( p : patient): boolean;
+BEGIN
+	return 	patientginecologia[p];
 END;
 
 
@@ -489,10 +577,10 @@ END;
 
 ruleset p:patient do 
  ruleset varbed:bed do 
- ruleset varcare:care do 
- action rule " allocatemedicinainterna " 
-(!(allocated[p])) & (bedfree[varbed]) & (bedmedicinainterna[varbed]) & (bedcare[varbed][varcare]) & (patientcare[p][varcare]) & (patientmedicinainterna[p]) ==> 
-pddlname: " allocatemedicinainterna"; 
+ ruleset vargender:gender do 
+ action rule " allocatecirurgiabariatrica " 
+(!(allocated[p])) & (bedfree[varbed]) & (patientcirurgiabariatrica[p]) & (bedcirurgiabariatrica[varbed]) & (patientgender[p][vargender]) & (bedgender[varbed][vargender]) ==> 
+pddlname: " allocatecirurgiabariatrica"; 
 BEGIN
 in_[p][varbed]:= true; 
 allocated[p]:= true; 
@@ -506,16 +594,45 @@ END;
 
 ruleset p:patient do 
  ruleset varbed:bed do 
- ruleset varbirthtype:birthtype do 
- action rule " actionteste " 
-(!(allocated[p])) & (bedfree[varbed]) & (bedbirthtype[varbed][varbirthtype]) & (patientbirthtype[p][varbirthtype]) & (!(patientmedicinainterna[p])) ==> 
-pddlname: " actionteste"; 
+ ruleset varroomtype:roomtype do 
+ action rule " allocateginecologia " 
+(!(allocated[p])) & (bedfree[varbed]) & (patientginecologia[p]) & (bedginecologia[varbed]) & (patientroomtype[p][varroomtype]) & (bedroomtype[varbed][varroomtype]) ==> 
+pddlname: " allocateginecologia"; 
 BEGIN
 in_[p][varbed]:= true; 
 allocated[p]:= true; 
 busybed[varbed]:= true; 
 bedfree[varbed]:= false; 
 
+END; 
+END; 
+END; 
+END;
+
+ruleset p:patient do 
+ ruleset varbed:bed do 
+ ruleset varspecialty:specialty do 
+ ruleset varstay:stay do 
+ ruleset varroomtype:roomtype do 
+ ruleset varorigin:origin do 
+ ruleset vargender:gender do 
+ ruleset varage:age do 
+ ruleset varcare:care do 
+ action rule " allocate " 
+(!(allocated[p])) & (bedfree[varbed]) & (patientspecialty[p][varspecialty]) & (patientstay[p][varstay]) & (patientroomtype[p][varroomtype]) & (patientorigin[p][varorigin]) & (patientgender[p][vargender]) & (patientage[p][varage]) & (patientcare[p][varcare]) & (bedspecialty[varbed][varspecialty]) & (bedstay[varbed][varstay]) & (bedroomtype[varbed][varroomtype]) & (bedorigin[varbed][varorigin]) & (bedgender[varbed][vargender]) & (bedage[varbed][varage]) & (bedcare[varbed][varcare]) ==> 
+pddlname: " allocate"; 
+BEGIN
+in_[p][varbed]:= true; 
+allocated[p]:= true; 
+busybed[varbed]:= true; 
+bedfree[varbed]:= false; 
+
+END; 
+END; 
+END; 
+END; 
+END; 
+END; 
 END; 
 END; 
 END; 
@@ -536,8 +653,20 @@ startstate "start"
 BEGIN 
 TIME := 0.0;
 for varbed : bed do 
-  for vargender : gender do 
-    set_bedgender(varbed,vargender, false);
+  for varstay : stay do 
+    set_bedstay(varbed,varstay, false);
+END; END;  -- close for
+   for varbed : bed do 
+     for varroomtype : roomtype do 
+       set_bedroomtype(varbed,varroomtype, false);
+END; END;  -- close for
+   for varbed : bed do 
+     for varorigin : origin do 
+       set_bedorigin(varbed,varorigin, false);
+END; END;  -- close for
+   for varbed : bed do 
+     for vargender : gender do 
+       set_bedgender(varbed,vargender, false);
 END; END;  -- close for
    for varbed : bed do 
      for varage : age do 
@@ -567,6 +696,18 @@ END;  -- close for
    for p : patient do 
      for varbed : bed do 
        set_in_(p,varbed, false);
+END; END;  -- close for
+   for p : patient do 
+     for varstay : stay do 
+       set_patientstay(p,varstay, false);
+END; END;  -- close for
+   for p : patient do 
+     for varroomtype : roomtype do 
+       set_patientroomtype(p,varroomtype, false);
+END; END;  -- close for
+   for p : patient do 
+     for varorigin : origin do 
+       set_patientorigin(p,varorigin, false);
 END; END;  -- close for
    for p : patient do 
      for vargender : gender do 
@@ -601,12 +742,6 @@ END;  -- close for
      set_patientuti(p, false);
 END;  -- close for
    for varbed : bed do 
-     set_bedmedicinainterna(varbed, false);
-END;  -- close for
-   for p : patient do 
-     set_patientmedicinainterna(p, false);
-END;  -- close for
-   for varbed : bed do 
      set_bedobstetricia(varbed, false);
 END;  -- close for
    for p : patient do 
@@ -629,6 +764,18 @@ END;  -- close for
 END;  -- close for
    for p : patient do 
      set_patientpsiquiatria(p, false);
+END;  -- close for
+   for varbed : bed do 
+     set_bedcirurgiabariatrica(varbed, false);
+END;  -- close for
+   for p : patient do 
+     set_patientcirurgiabariatrica(p, false);
+END;  -- close for
+   for varbed : bed do 
+     set_bedginecologia(varbed, false);
+END;  -- close for
+   for p : patient do 
+     set_patientginecologia(p, false);
 END;  -- close for
    for p : patient do 
      agefunc[p] := 0.0 ;
@@ -676,18 +823,56 @@ patientgender[pacientepsiquiatriafeminino][feminino]:= true;
 patientgender[pacientepsiquiatriamasculino][masculino]:= true; 
 bedgender[camapsiquiatriafeminino][feminino]:= true; 
 bedgender[camapsiquiatriamasculino][masculino]:= true; 
-bedfree[camamedicinainternaminimo]:= true; 
-bedfree[camamedicinainternaintensivo]:= true; 
-patientmedicinainterna[pacientemedicinainternaminimo]:= true; 
-patientmedicinainterna[pacientemedicinainternaintensivo]:= true; 
-patientcare[pacientemedicinainternaminimo][minimo]:= true; 
-patientcare[pacientemedicinainternaintensivo][intensivo]:= true; 
-bedcare[camamedicinainternaminimo][minimo]:= true; 
-bedcare[camamedicinainternaintensivo][intensivo]:= true; 
-bedspecialty[camamedicinainternaminimo][medicinainterna]:= true; 
-bedspecialty[camamedicinainternaintensivo][medicinainterna]:= true; 
-bedmedicinainterna[camamedicinainternaminimo]:= true; 
-bedmedicinainterna[camamedicinainternaintensivo]:= true; 
+bedfree[camacirurgiabariatricafeminino]:= true; 
+bedfree[camacirurgiabariatricamasculino]:= true; 
+patientcirurgiabariatrica[pacientecirurgiabariatricafeminino]:= true; 
+patientcirurgiabariatrica[pacientecirurgiabariatricamasculino]:= true; 
+bedcirurgiabariatrica[camacirurgiabariatricafeminino]:= true; 
+bedcirurgiabariatrica[camacirurgiabariatricamasculino]:= true; 
+patientgender[pacientecirurgiabariatricafeminino][feminino]:= true; 
+patientgender[pacientecirurgiabariatricamasculino][masculino]:= true; 
+bedgender[camacirurgiabariatricafeminino][feminino]:= true; 
+bedgender[camacirurgiabariatricamasculino][masculino]:= true; 
+bedfree[camaginecologiaclinico]:= true; 
+bedfree[camaginecologiacirurgico]:= true; 
+patientginecologia[pacienteginecologiaclinico]:= true; 
+patientginecologia[pacienteginecologiacirurgico]:= true; 
+bedginecologia[camaginecologiaclinico]:= true; 
+bedginecologia[camaginecologiacirurgico]:= true; 
+patientroomtype[pacienteginecologiaclinico][clinico]:= true; 
+patientroomtype[pacienteginecologiacirurgico][cirurgico]:= true; 
+bedroomtype[camaginecologiaclinico][clinico]:= true; 
+bedroomtype[camaginecologiacirurgico][cirurgico]:= true; 
+bedfree[camageralminimolongapermanencia]:= true; 
+bedfree[camageralintensivogirorapido]:= true; 
+patientspecialty[pacientegeralminimolongapermanencia][geral]:= true; 
+patientspecialty[pacientegeralintensivogirorapido][geral]:= true; 
+patientstay[pacientegeralminimolongapermanencia][longapermanencia]:= true; 
+patientstay[pacientegeralintensivogirorapido][girorapido]:= true; 
+patientroomtype[pacientegeralminimolongapermanencia][clinico]:= true; 
+patientroomtype[pacientegeralintensivogirorapido][clinico]:= true; 
+patientorigin[pacientegeralminimolongapermanencia][eletivo]:= true; 
+patientorigin[pacientegeralintensivogirorapido][eletivo]:= true; 
+patientgender[pacientegeralminimolongapermanencia][masculino]:= true; 
+patientgender[pacientegeralintensivogirorapido][masculino]:= true; 
+patientage[pacientegeralminimolongapermanencia][adulto]:= true; 
+patientage[pacientegeralintensivogirorapido][adulto]:= true; 
+patientcare[pacientegeralminimolongapermanencia][minimo]:= true; 
+patientcare[pacientegeralintensivogirorapido][intensivo]:= true; 
+bedspecialty[camageralminimolongapermanencia][geral]:= true; 
+bedspecialty[camageralintensivogirorapido][geral]:= true; 
+bedstay[camageralminimolongapermanencia][longapermanencia]:= true; 
+bedstay[camageralintensivogirorapido][girorapido]:= true; 
+bedroomtype[camageralminimolongapermanencia][clinico]:= true; 
+bedroomtype[camageralintensivogirorapido][clinico]:= true; 
+bedorigin[camageralminimolongapermanencia][eletivo]:= true; 
+bedorigin[camageralintensivogirorapido][eletivo]:= true; 
+bedgender[camageralminimolongapermanencia][masculino]:= true; 
+bedgender[camageralintensivogirorapido][masculino]:= true; 
+bedage[camageralminimolongapermanencia][adulto]:= true; 
+bedage[camageralintensivogirorapido][adulto]:= true; 
+bedcare[camageralminimolongapermanencia][minimo]:= true; 
+bedcare[camageralintensivogirorapido][intensivo]:= true; 
 all_event_true := true;
 g_n := 0;
 h_n := 0;
@@ -695,7 +880,7 @@ f_n := 0;
 END; -- close startstate
 
 goal "enjoy" 
- (donotallocate[pacienteuti]) & (allocated[pacienteisolamento]) & (allocated[pacienteobstetriciaaborto]) & (allocated[pacienteucladulto]) & (allocated[pacienteuclcrianca]) & (allocated[pacienteavcfeminino]) & (allocated[pacienteavcmasculino]) & (allocated[pacientepsiquiatriafeminino]) & (allocated[pacientepsiquiatriamasculino]) & (allocated[pacientemedicinainternaminimo]) & (allocated[pacientemedicinainternaintensivo])& !DAs_ongoing_in_goal_state(); 
+ (allocated[pacientegeralminimolongapermanencia]) & (allocated[pacientegeralintensivogirorapido])& !DAs_ongoing_in_goal_state(); 
 
 invariant "todo bien" 
  all_event_true & !DAs_violate_duration();
