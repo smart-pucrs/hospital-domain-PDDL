@@ -6,8 +6,8 @@ Usar com o planejador DiNo `https://github.com/KCL-Planning/DiNo` e com o valida
 
 ```
 Executed command line: 
-$ "/home/debo/planejador/DiNo/bin/pddl2upm" hospital.pddl problem.pddl
-$ "/home/debo/planejador/DiNo/bin/dino" hospital.pddl problem.pddl
+$ "<yourPath>/DiNo/bin/pddl2upm" hospital.pddl problem.pddl
+$ "<yourPath>/DiNo/bin/dino" hospital.pddl problem.pddl
 $ ./hospital_planner
 ```
 
@@ -18,4 +18,6 @@ $ ./hospital_planner -val
 ```
 ###Para rodar o Val
 
-"/home/debo/planejador/VAL-master/validate" -v hospital.pddl problem1.pddl problem1_plan.pddl
+```
+$ "<yourPath>/VAL-master/validate" -v hospital.pddl problem1.pddl problem1_plan.pddl
+```
