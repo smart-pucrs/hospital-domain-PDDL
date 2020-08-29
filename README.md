@@ -1,3 +1,6 @@
+By [Débora Cristina Engelmann](https://github.com/DeboraEngelmann) and
+[Rafael H. Bordini](https://github.com/rbordini)
+
 #Hospital Domain
 
 Usar com o planejador DiNo `https://github.com/KCL-Planning/DiNo` e com o validador VAL `https://github.com/KCL-Planning/VAL`.
